@@ -44,7 +44,7 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
     };
   }, []);
 
-  const { minPrice, maxPrice, range, path, fillPath, points } = useMemo(() => {
+  const { path, fillPath, points } = useMemo(() => {
     const minP = Math.min(...data.map(d => d.price));
     const maxP = Math.max(...data.map(d => d.price));
     // Pad the range slightly so lines don't hit the absolute edges

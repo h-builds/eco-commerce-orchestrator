@@ -85,6 +85,15 @@ export default function Home() {
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
+                href="/admin/dashboard"
+                className="group inline-flex items-center gap-2 rounded-full border border-primary bg-primary/10 px-8 py-4 text-base font-bold text-primary shadow-lg shadow-primary/10 transition-all hover:bg-primary/20 hover:shadow-xl hover:shadow-primary/20 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
+                aria-label="View the global analytics dashboard">
+                <span className="material-symbols-outlined" aria-hidden="true">
+                  query_stats
+                </span>
+                Admin Dashboard
+              </Link>
+              <Link
                 href="/shop"
                 className="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-bold text-white shadow-lg shadow-primary/25 transition-all hover:brightness-110 hover:shadow-xl hover:shadow-primary/30 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
                 aria-label="Enter the product showcase shop">

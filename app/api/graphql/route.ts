@@ -37,11 +37,11 @@ const resolvers = {
     ) => {
       // Access Cloudflare D1 Binding via getRequestContext (next-on-pages standard)
       const env = getRequestContext().env as unknown as {
-        ECO_DB: D1Database;
+        eco_db: D1Database;
         PRICING_AGENT: Fetcher;
         INTERNAL_SECRET: string;
       };
-      const db = env.ECO_DB;
+      const db = env.eco_db;
 
       if (!db) {
         throw new Error("Database connection is not configured.");

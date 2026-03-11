@@ -1,5 +1,8 @@
+"use client";
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { memo } from 'react';
 
 export interface Product {
   id: string;
@@ -15,7 +18,13 @@ export interface Product {
   image_url: string;
 }
 
-export function ProductCard({ product }: { product: Product }) {
+interface ProductCardProps {
+  product: Product;
+  /** When true, changes the Go-Wasm badge to an amber "simulation" state */
+  isSimulating?: boolean;
+}
+
+function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
   // Pure functional component (React Compiler target)
   const isOutOfStock = product.stock === 0;
   const isLowStock = product.stock > 0 && product.stock <= 5;
@@ -31,6 +40,21 @@ export function ProductCard({ product }: { product: Product }) {
     confidencePercent >= 90 ? "bg-emerald-500 text-white"
     : confidencePercent >= 75 ? "bg-amber-500 text-white"
     : "bg-rose-500 text-white";
+
+  // Simulation badge classes vs live badge classes
+  const verifiedBadgeClass = isSimulating
+    ? "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 animate-pulse"
+    : "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 animate-pulse";
+
+  const verifiedDotClass = isSimulating
+    ? "size-1.5 rounded-full bg-amber-400 shrink-0"
+    : "size-1.5 rounded-full bg-emerald-400 shrink-0";
+
+  const verifiedLabel = isSimulating
+    ? "Price seeded by simulated hour"
+    : "Price verified by Go-Wasm edge agent";
+
+  const verifiedText = isSimulating ? "Sim: Go-Wasm Seed" : "Live: Go-Wasm Verified";
 
   return (
     <article className="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-shadow focus-within:ring-4 focus-within:ring-primary/20">
@@ -73,13 +97,13 @@ export function ProductCard({ product }: { product: Product }) {
                 {formattedOriginalPrice}
               </span>
             )}
-            {/* Go-Wasm verification badge */}
+            {/* Go-Wasm verification badge — amber in sim mode, emerald when live */}
             <span
-              className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 animate-pulse"
-              aria-label="Price verified by Go-Wasm edge agent"
+              className={verifiedBadgeClass}
+              aria-label={verifiedLabel}
             >
-              <span className="size-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true" />
-              Live: Go-Wasm Verified
+              <span className={verifiedDotClass} aria-hidden="true" />
+              {verifiedText}
             </span>
           </div>
         </div>
@@ -124,3 +148,11 @@ export function ProductCard({ product }: { product: Product }) {
     </article>
   );
 }
+
+// Memoised so that the 1,000-card grid does not re-render on every
+// slider tick — only re-renders when the product data or simulation
+// flag actually changes.
+export const ProductCard = memo(ProductCardBase, (prev, next) => (
+  prev.isSimulating === next.isSimulating &&
+  prev.product === next.product
+));

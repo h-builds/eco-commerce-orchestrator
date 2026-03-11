@@ -1,4 +1,5 @@
-import { ProductCard, type Product } from '@/components/molecules/ProductCard';
+import { SimulatingProductCard } from '@/components/molecules/SimulatingProductCard';
+import { type Product } from '@/components/molecules/ProductCard';
 import { graphql } from 'graphql';
 import { schema } from '@/app/api/graphql/route';
 
@@ -26,6 +27,10 @@ const GET_PRODUCTS_QUERY = `
  * so this component simply awaits its data and renders. No inner
  * Suspense wrapper needed; throwing a Promise here bubbles correctly
  * to the route-level boundary and its <Loading /> fallback.
+ *
+ * Renders SimulatingProductCard (a 'use client' component) so that
+ * the memoised ProductCard can receive the simulation flag from
+ * SimulationContext without polluting the RSC boundary.
  */
 export async function ProductGrid() {
   try {
@@ -65,7 +70,10 @@ export async function ProductGrid() {
       aria-label="Product Catalog"
     >
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        // Spread into a plain object: D1 row objects have a non-null prototype
+        // which React's RSC→Client serializer rejects when crossing to a
+        // 'use client' component. `{...product}` creates a serializable POJO.
+        <SimulatingProductCard key={product.id} product={{ ...product }} />
       ))}
     </div>
   );

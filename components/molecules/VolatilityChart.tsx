@@ -124,10 +124,10 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
                       <line x1={p[0]} y1={p[1]} x2={p[0]} y2="100" stroke="#10b981" strokeWidth="0.5" strokeDasharray="2 2" className="opacity-70" />
                    )}
 
-                   {/* Current hour pulsing dot */}
+                   {/* Current hour marker */}
                    {isCurrent && (
                      <>
-                       <circle cx={p[0]} cy={p[1]} r="4" className="fill-emerald-500 animate-ping opacity-75" />
+                       <circle cx={p[0]} cy={p[1]} r="4" className="fill-emerald-500 opacity-50" />
                        <circle cx={p[0]} cy={p[1]} r="2" className="fill-white" />
                      </>
                    )}

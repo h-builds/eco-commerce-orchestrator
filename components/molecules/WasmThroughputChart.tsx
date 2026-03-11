@@ -43,6 +43,24 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
     return pts;
   }, [averageLatency]);
 
+  let themeColor = "rgb(148, 163, 184)"; // slate-400 default
+  let themeClass = "text-slate-400";
+  let glowClass = "text-slate-500/60";
+
+  if (averageLatency < 5) {
+    themeColor = "#10b981"; // emerald-500
+    themeClass = "text-emerald-500";
+    glowClass = "text-emerald-500/60";
+  } else if (averageLatency < 15) {
+    themeColor = "#f59e0b"; // amber-500
+    themeClass = "text-amber-500";
+    glowClass = "text-amber-500/60";
+  } else {
+    themeColor = "#f43f5e"; // rose-500
+    themeClass = "text-rose-500";
+    glowClass = "text-rose-500/60";
+  }
+
   // Build SVG path
   const pathD = useMemo(() => {
     if (points.length === 0) return '';
@@ -93,8 +111,8 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
             >
               <defs>
                  <linearGradient id="latencyGlow" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(56, 189, 248, 0.2)" />
-                    <stop offset="100%" stopColor="rgba(56, 189, 248, 0)" />
+                    <stop offset="0%" stopColor={themeColor.replace(')', ', 0.2)').replace('rgb', 'rgba')} />
+                    <stop offset="100%" stopColor={themeColor.replace(')', ', 0)').replace('rgb', 'rgba')} />
                  </linearGradient>
               </defs>
               {/* Fill */}
@@ -106,17 +124,17 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
               <path 
                 d={pathD}
                 fill="none"
-                stroke="#38bdf8"
+                stroke={themeColor}
                 strokeWidth="2"
-                className="drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]"
+                style={{ filter: `drop-shadow(0 0 8px ${themeColor}80)` }}
               />
             </svg>
          </div>
        </div>
        <div className="mt-4 flex items-center justify-between">
            <div className="flex flex-col">
-             <span className="text-xl font-black text-sky-400 tabular-nums">
-               {averageLatency.toFixed(2)}<span className="text-sm font-bold text-sky-500/60 ml-0.5">ms</span>
+             <span className={`text-xl font-black tabular-nums ${themeClass}`} title="Execution time of the Go-Wasm logic at the Edge">
+               {averageLatency.toFixed(2)}<span className={`text-sm font-bold ml-0.5 ${glowClass}`}>ms</span>
              </span>
              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Avg Latency</span>
            </div>

@@ -2,40 +2,40 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shop",
+  title: "Eco-Commerce Orchestrator — AI Production Stack",
 };
 
 // --- Data: architecture pillars rendered as cards ---
 const PILLARS = [
   {
     icon: "memory",
-    label: "React Compiler",
+    label: "React 19 Compiler",
     description:
-      "Zero-hook, pure-function components that the React 19 Compiler auto-memoizes without a single useMemo or useCallback.",
+      "Zero-hook, pure-function components auto-memoized by the React 19 Compiler. No useMemo, no useCallback — correctness is enforced by the compiler, not conventions.",
   },
   {
     icon: "ssid_chart",
-    label: "AI Pricing Agent",
+    label: "Go Wasm Pricing Agent",
     description:
-      "Deterministic Go microservice compiled to Wasm. Seed-based volatility guarantees identical prices across all stateless Worker instances within the same hour.",
+      "Deterministic pricing microservice compiled to WebAssembly. Seed-based volatility guarantees bit-identical prices across all stateless Worker instances within the same hour.",
   },
   {
-    icon: "speed",
-    label: "Edge-first Streaming",
+    icon: "cloud",
+    label: "OpenNext on Workers",
     description:
-      "Async RSC + Suspense boundaries push the LCP below 0.8 s. Skeleton states stream immediately; data hydrates on the edge without a round-trip to origin.",
+      "Deployed via @opennextjs/cloudflare — the official Cloudflare adapter. Static pages prerender at build time; API routes run as Cloudflare Workers with D1 + KV bindings.",
   },
   {
     icon: "verified_user",
     label: "WCAG 2.1 AA",
     description:
-      "Every interactive element ships with context-sensitive aria-labels, focus-visible rings, and keyboard navigation—audited to WCAG 2.1 Level AA.",
+      "Every interactive element ships with context-sensitive aria-labels, focus-visible rings, and full keyboard navigation — audited to WCAG 2.1 Level AA.",
   },
 ] as const;
 
 // --- Stat bar ---
 const STATS = [
-  { value: "< 0.8 s", label: "Target LCP" },
+  { value: "OpenNext", label: "CF Workers Adapter" },
   { value: "React 19", label: "RSC + Compiler" },
   { value: "Go Wasm", label: "Pricing Agent" },
   { value: "D1 + KV", label: "Edge Storage" },
@@ -110,9 +110,9 @@ export default function Home() {
 
             <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed">
               A production-grade orchestrator uniting React&nbsp;19 Server
-              Components, deterministic Go pricing agents, and Cloudflare Edge
-              infrastructure — built to the highest standards for Senior &amp;
-              Lead engineering roles.
+              Components, a deterministic Go&nbsp;Wasm pricing agent, and
+              Cloudflare&nbsp;Workers via OpenNext — built to the highest
+              standards for Senior &amp; Lead engineering roles.
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -131,7 +131,7 @@ export default function Home() {
                 </span>
               </Link>
               <a
-                href="https://github.com"
+                href="https://github.com/h-builds/eco-commerce-orchestrator"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-8 py-4 text-base font-bold text-slate-700 dark:text-slate-200 transition-all hover:border-primary hover:text-primary focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30">
@@ -227,8 +227,8 @@ export default function Home() {
               Ready to explore?
             </h2>
             <p className="mt-3 text-slate-500 dark:text-slate-400">
-              Browse the live product catalog with real-time AI prices generated
-              on the Edge.
+              Browse the live product catalog with AI-computed prices generated
+              by the Go&nbsp;Wasm agent on every request.
             </p>
             <Link
               href="/shop"
@@ -248,7 +248,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <p>
             &copy; 2026 Eco-Commerce Orchestrator. Built with Next.js&nbsp;16,
-            React&nbsp;19, and Go&nbsp;Wasm on Cloudflare&nbsp;Workers.
+            React&nbsp;19, Go&nbsp;Wasm, and OpenNext on Cloudflare&nbsp;Workers.
           </p>
           <p aria-label="WCAG compliance badge">WCAG 2.1 AA Compliant</p>
         </div>

@@ -2,8 +2,6 @@ import { Suspense } from 'react';
 import { ProductGrid } from '@/components/organisms/ProductGrid';
 import Loading from './loading';
 
-export const runtime = 'edge';
-
 export default function ShopPage() {
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden pt-12">
@@ -17,7 +15,9 @@ export default function ShopPage() {
             Eco-Friendly Essentials
           </h1>
           <p className="mt-4 text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-            Discover our carefully curated selection of sustainable products designed to reduce your carbon footprint without compromising on quality or aesthetics.
+            Sustainable products priced in real-time by our Go&nbsp;Wasm AI agent.
+            Every price reflects live supply &amp; demand — seeded hourly for
+            deterministic, edge-consistent results.
           </p>
         </header>
 

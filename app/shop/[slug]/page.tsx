@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { getProductBySlug, getTopProducts } from '@/lib/db';
 import { getLivePrice, getVolatilityData } from '@/lib/pricing';
 import { VolatilityChart } from '@/components/molecules/VolatilityChart';
+import { PredictivePriceAlert } from '@/components/molecules/PredictivePriceAlert';
 import { TechnicalAudit } from '@/components/molecules/TechnicalAudit';
 import { BackButton } from '@/components/molecules/BackButton';
 
@@ -93,6 +94,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
             <Suspense fallback={<div className="h-40 w-full animate-pulse bg-slate-100 dark:bg-slate-900 rounded-2xl" />}>
               <VolatilityChart dataPromise={volatilityPromise} />
+            </Suspense>
+
+            <Suspense fallback={<div className="h-40 w-full animate-pulse bg-slate-100 dark:bg-slate-900 rounded-2xl border border-amber-500/30" />}>
+              <PredictivePriceAlert currentPrice={livePrice ?? product.price} dataPromise={volatilityPromise} />
             </Suspense>
           </div>
 

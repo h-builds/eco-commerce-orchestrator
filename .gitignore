@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — ignore all variants, but always commit the example template
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -50,11 +51,14 @@ next-env.d.ts
 *.db
 *.db-journal
 
-# Go (Microservices)
+# Go (Microservices) — compiled output
 services/pricing/bin/
 services/pricing/obj/
 services/pricing/*.exe
 services/pricing/*.test
+# Extensionless Linux binary produced by `go build` (e.g. `go build -o main .`)
+services/pricing/main
+services/pricing/main.wasm
 
 # IDEs and Editors
 .idea/

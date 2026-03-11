@@ -7,11 +7,15 @@ const eslintConfig = defineConfig([
   ...nextTs,
   // Override default ignores of eslint-config-next.
   globalIgnores([
-    // Default ignores of eslint-config-next:
+    // Next.js build output
     ".next/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vercel / Cloudflare build artifacts — minified bundles, Wasm shims
+    ".vercel/**",
+    // Go microservice directory — wasm_exec.js & index.js are generated, not source
+    "services/pricing/**",
   ]),
 ]);
 

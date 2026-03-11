@@ -140,7 +140,7 @@ const resolvers = {
                     `Pricing agent returned non-ok status: ${res.status}`,
                   );
                 }
-              } catch (_) {
+              } catch {
                 attempt++;
                 if (attempt >= maxRetries) break; // no delay on the final failure
                 // Delay only between genuine retries: 100ms, 200ms (attempt 1→2, 2→3)

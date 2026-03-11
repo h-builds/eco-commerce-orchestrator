@@ -1,6 +1,7 @@
 name = "eco-commerce-orchestrator"
-pages_build_output_dir = ".vercel/output"
+pages_build_output_dir = ".vercel/output/static"
 compatibility_date = "2026-03-01"
+compatibility_flags = ["nodejs_compat"]
 
 [[d1_databases]]
 binding = "eco_db"

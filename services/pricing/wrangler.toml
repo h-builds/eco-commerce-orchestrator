@@ -1,5 +1,6 @@
 name = "eco-pricing-agent"
 compatibility_date = "2026-03-01"
+compatibility_flags = ["nodejs_compat"]
 
 # JS entry point — bootstraps the Go Wasm runtime via wasm_exec.js
 main = "index.js"

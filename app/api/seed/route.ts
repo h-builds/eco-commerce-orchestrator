@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   try {
     const context = getRequestContext();
     const env = context.env as unknown as {
-      eco_db: D1Database; // ✅ Cambiado a minúsculas para coincidir con wrangler.toml
+      eco_db: D1Database;
       SEED_SECRET: string | undefined;
     };
 
@@ -27,8 +27,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Usar el binding correcto
-    const db = env.eco_db; // ✅ Sincronizado
+    const db = env.eco_db;
     if (!db) {
       return NextResponse.json(
         { error: "ECO_DB binding missing" },

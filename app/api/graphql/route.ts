@@ -4,16 +4,9 @@ import type { D1Database } from '@cloudflare/workers-types';
 
 export const runtime = 'edge';
 
-// Extend process.env type for Cloudflare binding
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      ECO_DB: D1Database;
-    }
-  }
-}
 
-const typeDefs = `
+
+const typeDefs = /* GraphQL */ `
   type Product {
     id: ID!
     name: String!
@@ -34,14 +27,13 @@ const typeDefs = `
 const resolvers = {
   Query: {
     products: async (
-      _: any,
-      { limit = 50, offset = 0, category }: { limit?: number; offset?: number; category?: string },
-      context: any
+      _: unknown,
+      { limit = 50, offset = 0, category }: { limit?: number; offset?: number; category?: string }
     ) => {
       // Access Cloudflare D1 Binding
       // In a Next.js Edge environment hosted on Cloudflare Pages, bindings are often
       // exposed on process.env (or next req.ext context). We'll access it directly.
-      const db = process.env.ECO_DB as unknown as D1Database;
+      const db = (process.env as unknown as { ECO_DB: D1Database }).ECO_DB;
 
       if (!db) {
         console.error('Database binding ECO_DB is missing');
@@ -50,7 +42,7 @@ const resolvers = {
 
       try {
         let query = 'SELECT * FROM products';
-        const params: any[] = [];
+        const params: (string | number)[] = [];
 
         if (category) {
           query += ' WHERE category = ?';
@@ -68,7 +60,7 @@ const resolvers = {
         }
 
         return results;
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error('Error fetching products from D1:', e);
         throw new Error('Internal Server Error fetching products');
       }
@@ -76,7 +68,7 @@ const resolvers = {
   },
 };
 
-const schema = createSchema({
+export const schema = createSchema({
   typeDefs,
   resolvers,
 });
@@ -87,14 +79,19 @@ const yoga = createYoga({
   fetchAPI: { Response: globalThis.Response },
 });
 
-export async function GET(request: NextRequest, ctx: any) {
-  return yoga.handleRequest(request, ctx);
+// Next.js App Router context type
+interface NextContext {
+  params: Promise<Record<string, string>>;
 }
 
-export async function POST(request: NextRequest, ctx: any) {
-  return yoga.handleRequest(request, ctx);
+export async function GET(request: NextRequest, ctx: NextContext) {
+  return yoga.handleRequest(request, ctx as unknown as Record<string, unknown>);
 }
 
-export async function OPTIONS(request: NextRequest, ctx: any) {
-  return yoga.handleRequest(request, ctx);
+export async function POST(request: NextRequest, ctx: NextContext) {
+  return yoga.handleRequest(request, ctx as unknown as Record<string, unknown>);
+}
+
+export async function OPTIONS(request: NextRequest, ctx: NextContext) {
+  return yoga.handleRequest(request, ctx as unknown as Record<string, unknown>);
 }

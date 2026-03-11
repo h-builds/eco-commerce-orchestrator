@@ -4,6 +4,7 @@ import type { D1Database, Fetcher } from "@cloudflare/workers-types";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 const typeDefs = /* GraphQL */ `
   type Product {
@@ -86,7 +87,10 @@ const resolvers = {
           stock: p.stock,
         }));
 
-        const pricingMap: Record<string, { live_price: number; agent_confidence: number }> = {};
+        const pricingMap: Record<
+          string,
+          { live_price: number; agent_confidence: number }
+        > = {};
 
         try {
           if (pricingRequests.length > 0) {
@@ -97,23 +101,30 @@ const resolvers = {
 
             while (attempt < maxRetries && !pricingSucceeded) {
               try {
-                const res = await env.PRICING_AGENT.fetch("http://pricing-agent/rpc", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${env.INTERNAL_SECRET}`,
+                const res = await env.PRICING_AGENT.fetch(
+                  "http://pricing-agent/rpc",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${env.INTERNAL_SECRET}`,
+                    },
+                    body: JSON.stringify({
+                      jsonrpc: "2.0",
+                      method: "calculate_price",
+                      params: pricingRequests,
+                      id: "batch",
+                    }),
                   },
-                  body: JSON.stringify({
-                    jsonrpc: "2.0",
-                    method: "calculate_price",
-                    params: pricingRequests,
-                    id: "batch",
-                  }),
-                });
+                );
 
                 if (res.ok) {
                   const data = (await res.json()) as {
-                    result?: { product_id: string; live_price: number; agent_confidence: number }[];
+                    result?: {
+                      product_id: string;
+                      live_price: number;
+                      agent_confidence: number;
+                    }[];
                   };
                   if (data?.result && Array.isArray(data.result)) {
                     for (const pr of data.result) {
@@ -125,30 +136,37 @@ const resolvers = {
                   }
                   pricingSucceeded = true;
                 } else {
-                  throw new Error(`Pricing agent returned non-ok status: ${res.status}`);
+                  throw new Error(
+                    `Pricing agent returned non-ok status: ${res.status}`,
+                  );
                 }
               } catch (_) {
                 attempt++;
                 if (attempt >= maxRetries) break; // no delay on the final failure
                 // Delay only between genuine retries: 100ms, 200ms (attempt 1→2, 2→3)
                 await new Promise((resolve) =>
-                  setTimeout(resolve, baseDelayMs * Math.pow(2, attempt - 1))
+                  setTimeout(resolve, baseDelayMs * Math.pow(2, attempt - 1)),
                 );
               }
             }
           }
         } catch (err) {
           // Fall back to base price and emit a structured log for Cloudflare Logpush / Workers Tail.
-          console.error(JSON.stringify({
-            event: "pricing_agent_failure",
-            error: String(err),
-            productCount: pricingRequests.length,
-            timestamp: new Date().toISOString(),
-          }));
+          console.error(
+            JSON.stringify({
+              event: "pricing_agent_failure",
+              error: String(err),
+              productCount: pricingRequests.length,
+              timestamp: new Date().toISOString(),
+            }),
+          );
         }
 
         const productsWithLivePrices = (results as DBProduct[]).map((p) => {
-          const liveData = pricingMap[p.id] || { live_price: p.price, agent_confidence: 0.0 };
+          const liveData = pricingMap[p.id] || {
+            live_price: p.price,
+            agent_confidence: 0.0,
+          };
           return {
             ...p,
             live_price: liveData.live_price,

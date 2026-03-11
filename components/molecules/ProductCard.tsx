@@ -57,13 +57,18 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
   const verifiedText = isSimulating ? "Sim: Go-Wasm Seed" : "Live: Go-Wasm Verified";
 
   return (
-    <article className="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-shadow focus-within:ring-4 focus-within:ring-primary/20">
-      <Link href={`/products/${product.slug}`} tabIndex={-1} aria-hidden="true" className="relative h-64 w-full block bg-slate-100 dark:bg-slate-800 overflow-hidden outline-none">
+    <Link
+      href={`/shop/${product.slug}`}
+      prefetch={false}
+      className="group relative flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:scale-[1.02] hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300 ease-in-out focus-within:ring-4 focus-within:ring-primary/20"
+      aria-label={`View details for ${product.name}`}
+    >
+      <div className="relative h-64 w-full block bg-slate-100 dark:bg-slate-800 overflow-hidden outline-none">
         <Image 
           src={product.image_url} 
           alt={`Image of ${product.name}`}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
         {isLowStock && (
@@ -75,19 +80,13 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
             Low Stock
           </span>
         )}
-      </Link>
+      </div>
       
       <div className="p-4 flex flex-col flex-1 gap-2">
         <div className="flex items-start justify-between gap-4">
-          <Link 
-            href={`/products/${product.slug}`} 
-            className="outline-none focus-visible:underline decoration-2 decoration-primary underline-offset-4 rounded"
-            aria-label={`View details for ${product.name}`}
-          >
-            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-primary transition-colors">
-              {product.name}
-            </h3>
-          </Link>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-500 transition-colors">
+            {product.name}
+          </h3>
           <div className="flex flex-col items-end shrink-0" role="region" aria-label={`Live Price: ${formattedPrice}`}>
             <span className="font-bold text-slate-900 dark:text-slate-100 text-lg">
               {formattedPrice}
@@ -134,18 +133,33 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
           </span>
         </div>
         
-        <button
-          className="mt-4 w-full px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:brightness-110 active:scale-95 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          aria-label={isOutOfStock ? `Out of stock: ${product.name}` : `Add ${product.name} to cart`}
-          disabled={isOutOfStock}
-        >
-          <span className="material-symbols-outlined text-sm" aria-hidden="true">
-            {isOutOfStock ? 'remove_shopping_cart' : 'shopping_cart'}
-          </span>
-          {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-        </button>
+        <div className="mt-4 flex flex-col gap-2 relative">
+          {/* Analyze Edge Pricing CTA */}
+          <div className="flex items-center justify-between px-4 py-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold uppercase tracking-wider opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 border border-emerald-500/20">
+            <span className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-sm animate-pulse">query_stats</span>
+              Analyze Edge Pricing
+            </span>
+            <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+          </div>
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              // Add to cart logic
+            }}
+            className="w-full px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:brightness-110 active:scale-95 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 relative z-10"
+            aria-label={isOutOfStock ? `Out of stock: ${product.name}` : `Add ${product.name} to cart`}
+            disabled={isOutOfStock}
+          >
+            <span className="material-symbols-outlined text-sm" aria-hidden="true">
+              {isOutOfStock ? 'remove_shopping_cart' : 'shopping_cart'}
+            </span>
+            {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+          </button>
+        </div>
       </div>
-    </article>
+    </Link>
   );
 }
 

@@ -4,11 +4,11 @@ compatibility_date = "2026-03-01"
 [[d1_databases]]
 binding = "ECO_DB"
 database_name = "eco_db"
-database_id = "a1b2c3d4-e5f6-7890-abcd-ef1234567890" # Replace with real ID from `wrangler d1 create eco_db`
+database_id = "bca243c1-f8f7-4132-9037-3aa90fe303a0" # Replace with real ID from `wrangler d1 create eco_db`
 
 [[kv_namespaces]]
 binding = "ECO_CACHE"
-id = "a1b2c3d4e5f67890abcdef1234567890" # Replace with real ID from `wrangler kv namespace create ECO_CACHE`
+id = "8686050a16574f539554432f6336d756" # Replace with real ID from `wrangler kv namespace create ECO_CACHE`
 
 # Pricing Agent — Go Wasm microservice deployed as a separate Cloudflare Worker
 [[services]]

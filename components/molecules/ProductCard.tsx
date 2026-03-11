@@ -7,6 +7,8 @@ export interface Product {
   slug: string;
   description: string;
   price: number;
+  live_price: number;
+  agent_confidence: number;
   category: string;
   stock: number;
   rating: number;
@@ -17,8 +19,21 @@ export function ProductCard({ product }: { product: Product }) {
   // Pure functional component (React Compiler target)
   const isOutOfStock = product.stock === 0;
   const isLowStock = product.stock > 0 && product.stock <= 5;
-  const formattedPrice = `$${product.price.toFixed(2)}`;
+  const formattedPrice = `$${product.live_price.toFixed(2)}`;
+  const formattedOriginalPrice = `$${product.price.toFixed(2)}`;
+  const hasPriceChanged = product.price !== product.live_price;
   const formattedRating = product.rating.toFixed(1);
+  const confidencePercent = Math.round(product.agent_confidence * 100);
+
+  // Determine confidence badge color based on score
+  let confidenceColor = "bg-primary text-white";
+  if (confidencePercent >= 90) {
+    confidenceColor = "bg-emerald-500 text-white";
+  } else if (confidencePercent >= 75) {
+    confidenceColor = "bg-amber-500 text-white";
+  } else {
+    confidenceColor = "bg-rose-500 text-white";
+  }
 
   return (
     <article className="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-shadow focus-within:ring-4 focus-within:ring-primary/20">
@@ -48,9 +63,28 @@ export function ProductCard({ product }: { product: Product }) {
               {product.name}
             </h3>
           </Link>
-          <p className="font-bold text-slate-900 dark:text-slate-100 shrink-0" aria-label={`Price: ${formattedPrice}`}>
-            {formattedPrice}
-          </p>
+          <div className="flex flex-col items-end shrink-0" aria-label={`Live Price: ${formattedPrice}`}>
+            <span className="font-bold text-slate-900 dark:text-slate-100 text-lg">
+              {formattedPrice}
+            </span>
+            {hasPriceChanged && (
+              <span className="text-xs text-slate-500 line-through" aria-label={`Original Price: ${formattedOriginalPrice}`}>
+                {formattedOriginalPrice}
+              </span>
+            )}
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-2 mt-1">
+          <span
+            className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 ${confidenceColor}`}
+            aria-label={`AI Pricing Agent Confidence: ${confidencePercent}%`}
+          >
+            <span className="material-symbols-outlined text-[10px]" aria-hidden="true">
+              auto_awesome
+            </span>
+            AI Price • {confidencePercent}%
+          </span>
         </div>
         
         <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mt-1 flex-1">

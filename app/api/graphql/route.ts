@@ -11,6 +11,8 @@ const typeDefs = /* GraphQL */ `
     slug: String!
     description: String!
     price: Float!
+    live_price: Float!
+    agent_confidence: Float!
     category: String!
     stock: Int!
     rating: Float!
@@ -64,7 +66,66 @@ const resolvers = {
           throw new Error("Failed to fetch products");
         }
 
-        return results;
+        // --- Call the Go Dynamic Pricing Agent ---
+        // Fetch real-time prices for each product via the Wasm-powered JSON-RPC interface
+        interface DBProduct {
+          id: string;
+          price: number;
+          stock: number;
+          [key: string]: unknown;
+        }
+
+        const productsWithLivePrices = await Promise.all(
+          (results as DBProduct[]).map(async (p) => {
+            let livePrice = p.price;
+            let agentConfidence = 0.0;
+
+            try {
+              // Hitting the local binding or dev server of the Workers Go service
+              const res = await fetch("http://127.0.0.1:8787/rpc", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer eco-orchestrator-internal",
+                },
+                body: JSON.stringify({
+                  jsonrpc: "2.0",
+                  method: "calculate_price",
+                  params: [
+                    {
+                      product_id: p.id,
+                      base_price: p.price,
+                      stock: p.stock,
+                    },
+                  ],
+                  id: p.id,
+                }),
+              });
+
+              if (res.ok) {
+                const data = (await res.json()) as {
+                  result?: { live_price: number; agent_confidence: number };
+                };
+                if (data && data.result) {
+                  livePrice = data.result.live_price;
+                  agentConfidence = data.result.agent_confidence;
+                }
+              } else {
+                console.warn("Pricing agent returned non-ok status:", res.status);
+              }
+            } catch (err) {
+              console.warn("Failed to reach pricing agent, falling back to original price.", err);
+            }
+
+            return {
+              ...p,
+              live_price: livePrice,
+              agent_confidence: agentConfidence,
+            };
+          }),
+        );
+
+        return productsWithLivePrices;
       } catch (e: unknown) {
         console.error("Error fetching products from D1:", e);
         throw new Error("Internal Server Error fetching products");

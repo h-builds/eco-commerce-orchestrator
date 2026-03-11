@@ -14,6 +14,8 @@ const GET_PRODUCTS = parse(`
       stock
       rating
       image_url
+      live_price
+      agent_confidence
     }
   }
 `);

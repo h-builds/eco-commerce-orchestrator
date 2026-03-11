@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+export const runtime = "edge";
+
 // Material Symbols — required by all components that use icon ligatures.
 // Loaded via a <link> in <head> rather than next/font because the Symbols
 // font has variable-font axes (Fill, Weight, Grade, Size) not supported by
@@ -37,7 +39,11 @@ export default function RootLayout({
       <head>
         {/* Preconnect to Google Fonts CDN for faster font load */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         {/* Material Symbols Outlined — variable font with display:block to prevent FOUT */}
         <link rel="stylesheet" href={MATERIAL_SYMBOLS_HREF} />
       </head>

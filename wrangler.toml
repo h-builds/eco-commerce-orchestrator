@@ -2,7 +2,7 @@ name = "eco-commerce-orchestrator"
 compatibility_date = "2026-03-01"
 
 [[d1_databases]]
-binding = "ECO_DB"
+binding = "eco_db"
 database_name = "eco_db"
 database_id = "bca243c1-f8f7-4132-9037-3aa90fe303a0" # Replace with real ID from `wrangler d1 create eco_db`
 

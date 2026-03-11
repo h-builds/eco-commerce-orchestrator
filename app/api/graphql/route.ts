@@ -1,6 +1,7 @@
 import { createSchema, createYoga } from "graphql-yoga";
 import { NextRequest } from "next/server";
-import type { D1Database } from "@cloudflare/workers-types";
+import type { D1Database, Fetcher } from "@cloudflare/workers-types";
+import { getRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
 
@@ -34,13 +35,15 @@ const resolvers = {
         category,
       }: { limit?: number; offset?: number; category?: string },
     ) => {
-      // Access Cloudflare D1 Binding
-      // In a Next.js Edge environment hosted on Cloudflare Pages, bindings are often
-      // exposed on process.env (or next req.ext context). We'll access it directly.
-      const db = (process.env as unknown as { ECO_DB: D1Database }).ECO_DB;
+      // Access Cloudflare D1 Binding via getRequestContext (next-on-pages standard)
+      const env = getRequestContext().env as unknown as {
+        ECO_DB: D1Database;
+        PRICING_AGENT: Fetcher;
+        INTERNAL_SECRET: string;
+      };
+      const db = env.ECO_DB;
 
       if (!db) {
-        console.error("Database binding ECO_DB is missing");
         throw new Error("Database connection is not configured.");
       }
 
@@ -53,16 +56,18 @@ const resolvers = {
           params.push(category);
         }
 
-        query += " ORDER BY created_at DESC LIMIT ? OFFSET ?";
-        params.push(limit, offset);
+        const finalLimit = Math.max(1, Math.min(50, Math.floor(limit)));
+        const finalOffset = Math.max(0, Math.floor(offset));
 
-        const { results, success, error } = await db
+        query += " ORDER BY created_at DESC LIMIT ? OFFSET ?";
+        params.push(finalLimit, finalOffset);
+
+        const { results, success } = await db
           .prepare(query)
           .bind(...params)
           .all();
 
         if (!success) {
-          console.error("Failed to execute D1 query:", error);
           throw new Error("Failed to fetch products");
         }
 
@@ -75,59 +80,84 @@ const resolvers = {
           [key: string]: unknown;
         }
 
-        const productsWithLivePrices = await Promise.all(
-          (results as DBProduct[]).map(async (p) => {
-            let livePrice = p.price;
-            let agentConfidence = 0.0;
+        const pricingRequests = (results as DBProduct[]).map((p) => ({
+          product_id: p.id,
+          base_price: p.price,
+          stock: p.stock,
+        }));
 
-            try {
-              // Hitting the local binding or dev server of the Workers Go service
-              const res = await fetch("http://127.0.0.1:8787/rpc", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer eco-orchestrator-internal",
-                },
-                body: JSON.stringify({
-                  jsonrpc: "2.0",
-                  method: "calculate_price",
-                  params: [
-                    {
-                      product_id: p.id,
-                      base_price: p.price,
-                      stock: p.stock,
-                    },
-                  ],
-                  id: p.id,
-                }),
-              });
+        const pricingMap: Record<string, { live_price: number; agent_confidence: number }> = {};
 
-              if (res.ok) {
-                const data = (await res.json()) as {
-                  result?: { live_price: number; agent_confidence: number };
-                };
-                if (data && data.result) {
-                  livePrice = data.result.live_price;
-                  agentConfidence = data.result.agent_confidence;
+        try {
+          if (pricingRequests.length > 0) {
+            const maxRetries = 3;
+            const baseDelayMs = 100;
+            let attempt = 0;
+            let pricingSucceeded = false;
+
+            while (attempt < maxRetries && !pricingSucceeded) {
+              try {
+                const res = await env.PRICING_AGENT.fetch("http://pricing-agent/rpc", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${env.INTERNAL_SECRET}`,
+                  },
+                  body: JSON.stringify({
+                    jsonrpc: "2.0",
+                    method: "calculate_price",
+                    params: pricingRequests,
+                    id: "batch",
+                  }),
+                });
+
+                if (res.ok) {
+                  const data = (await res.json()) as {
+                    result?: { product_id: string; live_price: number; agent_confidence: number }[];
+                  };
+                  if (data?.result && Array.isArray(data.result)) {
+                    for (const pr of data.result) {
+                      pricingMap[pr.product_id] = {
+                        live_price: pr.live_price,
+                        agent_confidence: pr.agent_confidence,
+                      };
+                    }
+                  }
+                  pricingSucceeded = true;
+                } else {
+                  throw new Error(`Pricing agent returned non-ok status: ${res.status}`);
                 }
-              } else {
-                console.warn("Pricing agent returned non-ok status:", res.status);
+              } catch (_) {
+                attempt++;
+                if (attempt >= maxRetries) break; // no delay on the final failure
+                // Delay only between genuine retries: 100ms, 200ms (attempt 1→2, 2→3)
+                await new Promise((resolve) =>
+                  setTimeout(resolve, baseDelayMs * Math.pow(2, attempt - 1))
+                );
               }
-            } catch (err) {
-              console.warn("Failed to reach pricing agent, falling back to original price.", err);
             }
+          }
+        } catch (err) {
+          // Fall back to base price and emit a structured log for Cloudflare Logpush / Workers Tail.
+          console.error(JSON.stringify({
+            event: "pricing_agent_failure",
+            error: String(err),
+            productCount: pricingRequests.length,
+            timestamp: new Date().toISOString(),
+          }));
+        }
 
-            return {
-              ...p,
-              live_price: livePrice,
-              agent_confidence: agentConfidence,
-            };
-          }),
-        );
+        const productsWithLivePrices = (results as DBProduct[]).map((p) => {
+          const liveData = pricingMap[p.id] || { live_price: p.price, agent_confidence: 0.0 };
+          return {
+            ...p,
+            live_price: liveData.live_price,
+            agent_confidence: liveData.agent_confidence,
+          };
+        });
 
         return productsWithLivePrices;
-      } catch (e: unknown) {
-        console.error("Error fetching products from D1:", e);
+      } catch {
         throw new Error("Internal Server Error fetching products");
       }
     },

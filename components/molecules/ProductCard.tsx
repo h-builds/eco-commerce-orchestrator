@@ -25,19 +25,16 @@ export function ProductCard({ product }: { product: Product }) {
   const formattedRating = product.rating.toFixed(1);
   const confidencePercent = Math.round(product.agent_confidence * 100);
 
-  // Determine confidence badge color based on score
-  let confidenceColor = "bg-primary text-white";
-  if (confidencePercent >= 90) {
-    confidenceColor = "bg-emerald-500 text-white";
-  } else if (confidencePercent >= 75) {
-    confidenceColor = "bg-amber-500 text-white";
-  } else {
-    confidenceColor = "bg-rose-500 text-white";
-  }
+  // Determine confidence badge color — ternary keeps the compiler's
+  // memoization path clean and removes the misleading dead-code default.
+  const confidenceColor =
+    confidencePercent >= 90 ? "bg-emerald-500 text-white"
+    : confidencePercent >= 75 ? "bg-amber-500 text-white"
+    : "bg-rose-500 text-white";
 
   return (
     <article className="group flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-shadow focus-within:ring-4 focus-within:ring-primary/20">
-      <Link href={`/products/${product.slug}`} className="relative h-64 w-full block bg-slate-100 dark:bg-slate-800 overflow-hidden outline-none">
+      <Link href={`/products/${product.slug}`} tabIndex={-1} aria-hidden="true" className="relative h-64 w-full block bg-slate-100 dark:bg-slate-800 overflow-hidden outline-none">
         <Image 
           src={product.image_url} 
           alt={`Image of ${product.name}`}
@@ -46,7 +43,11 @@ export function ProductCard({ product }: { product: Product }) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
         {isLowStock && (
-          <span className="absolute top-4 left-4 bg-amber-400 text-slate-900 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shadow-sm">
+          <span
+            className="absolute top-4 left-4 bg-amber-400 text-slate-900 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shadow-sm"
+            role="status"
+            aria-label={`Low stock warning for ${product.name}`}
+          >
             Low Stock
           </span>
         )}
@@ -63,7 +64,7 @@ export function ProductCard({ product }: { product: Product }) {
               {product.name}
             </h3>
           </Link>
-          <div className="flex flex-col items-end shrink-0" aria-label={`Live Price: ${formattedPrice}`}>
+          <div className="flex flex-col items-end shrink-0" role="region" aria-label={`Live Price: ${formattedPrice}`}>
             <span className="font-bold text-slate-900 dark:text-slate-100 text-lg">
               {formattedPrice}
             </span>

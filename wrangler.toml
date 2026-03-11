@@ -1,11 +1,17 @@
 name = "eco-commerce-orchestrator"
-compatibility_date = "2024-03-29"
+compatibility_date = "2026-03-01"
 
 [[d1_databases]]
-binding = "ECO_DB" # i.e. available in your Worker on env.ECO_DB
+binding = "ECO_DB"
 database_name = "eco_db"
-database_id = "00000000-0000-0000-0000-000000000000" # Placeholder UUID
+database_id = "a1b2c3d4-e5f6-7890-abcd-ef1234567890" # Replace with real ID from `wrangler d1 create eco_db`
 
 [[kv_namespaces]]
 binding = "ECO_CACHE"
-id = "00000000000000000000000000000000" # Placeholder ID
+id = "a1b2c3d4e5f67890abcdef1234567890" # Replace with real ID from `wrangler kv namespace create ECO_CACHE`
+
+# Pricing Agent — Go Wasm microservice deployed as a separate Cloudflare Worker
+[[services]]
+binding = "PRICING_AGENT"
+service = "eco-pricing-agent"
+environment = "production"

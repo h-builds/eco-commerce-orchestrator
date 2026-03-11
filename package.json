@@ -1,5 +1,5 @@
 {
-  "name": "temp_app",
+  "name": "eco-commerce-orchestrator",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,6 +17,7 @@
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@cloudflare/workers-types": "^4.20260310.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

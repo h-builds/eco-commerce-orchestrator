@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
 import { ProductGrid } from '@/components/organisms/ProductGrid';
+import { PricingStatus } from '@/components/molecules/PricingStatus';
 import Loading from './loading';
 
 export default function ShopPage() {
   return (
-    <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden pt-12">
+    <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12">
       <div className="mx-auto max-w-6xl w-full px-4 md:px-10">
-        <header className="mb-12">
+        <header className="mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
             <span className="material-symbols-outlined text-sm" aria-hidden="true">eco</span>
             New Arrivals
@@ -21,11 +22,13 @@ export default function ShopPage() {
           </p>
         </header>
 
-        <main className="mb-20">
+        <PricingStatus />
+
+        <section className="mb-20">
           <Suspense fallback={<Loading />}>
             <ProductGrid />
           </Suspense>
-        </main>
+        </section>
       </div>
     </div>
   );

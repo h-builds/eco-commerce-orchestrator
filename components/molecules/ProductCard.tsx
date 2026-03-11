@@ -73,6 +73,14 @@ export function ProductCard({ product }: { product: Product }) {
                 {formattedOriginalPrice}
               </span>
             )}
+            {/* Go-Wasm verification badge */}
+            <span
+              className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 animate-pulse"
+              aria-label="Price verified by Go-Wasm edge agent"
+            >
+              <span className="size-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true" />
+              Live: Go-Wasm Verified
+            </span>
           </div>
         </div>
         

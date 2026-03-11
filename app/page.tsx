@@ -43,41 +43,9 @@ const STATS = [
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950 font-sans">
-      {/* ── Skip-to-content for keyboard / AT users ────────────────────── */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-white focus:font-bold focus:shadow-lg">
-        Skip to main content
-      </a>
-
-      {/* ── Top nav bar ────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-10">
-          <div className="flex items-center gap-2 text-primary font-black text-lg tracking-tight">
-            <span className="material-symbols-outlined" aria-hidden="true">
-              eco
-            </span>
-            Eco-Commerce
-          </div>
-          <nav aria-label="Primary navigation">
-            <Link
-              href="/shop"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-bold text-white transition-all hover:brightness-110 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30">
-              <span
-                className="material-symbols-outlined text-sm"
-                aria-hidden="true">
-                shopping_bag
-              </span>
-              Enter Shop
-            </Link>
-          </nav>
-        </div>
-      </header>
-
+    <>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <main id="main-content">
-        <section
+      <section
           aria-labelledby="hero-heading"
           className="relative overflow-hidden border-b border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white via-slate-50 to-emerald-50 dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950/20 py-24 md:py-36">
           {/* Decorative blobs */}
@@ -241,18 +209,6 @@ export default function Home() {
             </Link>
           </div>
         </section>
-      </main>
-
-      {/* ── Footer ─────────────────────────────────────────────────────── */}
-      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8">
-        <div className="mx-auto max-w-6xl px-4 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>
-            &copy; 2026 Eco-Commerce Orchestrator. Built with Next.js&nbsp;16,
-            React&nbsp;19, Go&nbsp;Wasm, and OpenNext on Cloudflare&nbsp;Workers.
-          </p>
-          <p aria-label="WCAG compliance badge">WCAG 2.1 AA Compliant</p>
-        </div>
-      </footer>
-    </div>
+    </>
   );
 }

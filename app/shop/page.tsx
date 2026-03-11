@@ -2,6 +2,8 @@ import { Suspense } from 'react';
 import { ProductGrid } from '@/components/organisms/ProductGrid';
 import { PricingStatus } from '@/components/molecules/PricingStatus';
 import { SimulationProvider } from '@/lib/SimulationContext';
+import { CompareProvider } from '@/lib/CompareContext';
+import { ComparisonModal } from '@/components/organisms/ComparisonModal';
 import Loading from './loading';
 
 export const dynamic = 'force-dynamic';
@@ -9,8 +11,8 @@ export const dynamic = 'force-dynamic';
 export default function ShopPage() {
   return (
     <SimulationProvider>
-      <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12">
-        <div className="mx-auto max-w-6xl w-full px-4 md:px-10">
+      <CompareProvider>
+        <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12">
           <header className="mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
               <span className="material-symbols-outlined text-sm" aria-hidden="true">eco</span>
@@ -34,7 +36,8 @@ export default function ShopPage() {
             </Suspense>
           </section>
         </div>
-      </div>
+        <ComparisonModal />
+      </CompareProvider>
     </SimulationProvider>
   );
 }

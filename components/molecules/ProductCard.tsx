@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { memo } from 'react';
+import { useCompare } from '@/lib/CompareContext';
 
 export interface Product {
   id: string;
@@ -33,6 +34,10 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
   const hasPriceChanged = product.price !== product.live_price;
   const formattedRating = product.rating.toFixed(1);
   const confidencePercent = Math.round(product.agent_confidence * 100);
+
+  const { selectedProducts, toggleProduct, isCompareModalOpen } = useCompare();
+  const isSelected = selectedProducts.some((p) => p.id === product.id);
+  const canSelectMore = selectedProducts.length < 3;
 
   // Determine confidence badge color — ternary keeps the compiler's
   // memoization path clean and removes the misleading dead-code default.
@@ -71,6 +76,28 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
+        {/* Compare Checkbox */}
+        <button
+          className={`absolute top-4 right-4 z-20 flex size-8 items-center justify-center rounded-full  transition-all focus:outline-none focus-visible:ring-4 ${
+            isSelected
+              ? "bg-emerald-500 text-white hover:bg-emerald-600 focus-visible:ring-emerald-500/30"
+              : "bg-white/80 dark:bg-slate-900/80 text-slate-400 hover:text-emerald-500 hover:bg-white dark:hover:bg-slate-900 focus-visible:ring-emerald-500/30 backdrop-blur"
+          } ${
+            !isSelected && !canSelectMore ? "opacity-50 cursor-not-allowed hidden group-hover:flex" : "hidden group-hover:flex" 
+          } md:flex`}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleProduct(product);
+          }}
+          aria-label={isSelected ? `Remove ${product.name} from comparison` : `Add ${product.name} to comparison`}
+          title={isSelected ? "Remove from comparison" : canSelectMore ? "Compare" : "Comparison limit reached"}
+        >
+          <span className="material-symbols-outlined text-sm font-bold" aria-hidden="true">
+            {isSelected ? "check" : "compare_arrows"}
+          </span>
+        </button>
+
         {isLowStock && (
           <span
             className="absolute top-4 left-4 bg-amber-400 text-slate-900 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shadow-sm"

@@ -6,6 +6,7 @@ import { SimulatingProductCard } from '@/components/molecules/SimulatingProductC
 import { SearchBar } from '@/components/molecules/SearchBar';
 import { ProductSkeleton } from '@/components/molecules/ProductSkeleton';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { ComparisonBar } from '@/components/organisms/ComparisonBar';
 
 const SEARCH_QUERY = `
   query SearchProducts($search: String, $offset: Int) {
@@ -188,6 +189,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
           </>
         )}
       </div>
+      <ComparisonBar />
     </div>
   );
 }

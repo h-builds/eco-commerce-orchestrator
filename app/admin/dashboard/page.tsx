@@ -7,6 +7,7 @@ import { DownloadExecutiveReportButton } from '../../../components/molecules/Dow
 import { SimulationProvider } from '../../../lib/SimulationContext';
 import { ReportDataProvider } from '../../../lib/ReportDataContext';
 import { BackButton } from '../../../components/molecules/BackButton';
+import { StressTestTrigger } from '../../../components/molecules/StressTestTrigger';
 
 export const dynamic = 'force-dynamic';
 
@@ -66,6 +67,7 @@ export default async function DashboardPage() {
               </div>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-4">
+                <StressTestTrigger products={products} />
                 <ExecutiveBrief />
                 <DownloadExecutiveReportButton />
               </div>

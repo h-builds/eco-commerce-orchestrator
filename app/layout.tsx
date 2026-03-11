@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { DebugBridge } from "@/components/providers/DebugBridge";
+import { StressTestRegistryProvider } from "@/components/providers/StressTestRegistryProvider";
 import "./globals.css";
 
 // All fonts loaded via <link> tags for Cloudflare edge compatibility.
@@ -47,6 +48,7 @@ export default function RootLayout({
         <link rel="stylesheet" href={JETBRAINS_MONO_HREF} />
       </head>
       <body className="font-sans antialiased text-slate-900 dark:text-slate-50 bg-slate-50 dark:bg-slate-950 flex min-h-screen flex-col">
+        <StressTestRegistryProvider>
         {/* ── Skip-to-content for keyboard / AT users ────────────────────── */}
         <a
           href="#main-content"
@@ -97,6 +99,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <DebugBridge />
         </Suspense>
+        </StressTestRegistryProvider>
       </body>
     </html>
   );

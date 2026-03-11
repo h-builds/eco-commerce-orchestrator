@@ -4,6 +4,7 @@ import { useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSimulation } from '../../lib/SimulationContext';
 import { useReportData } from '../../lib/ReportDataContext';
+import { useStressTestRegistry } from '../providers/StressTestRegistryProvider';
 import { simulatePrice } from '../../lib/pricingEngine';
 import { runPricingBatch } from '../../lib/runPricingBatch';
 import { PricingStatus } from '../molecules/PricingStatus';
@@ -28,6 +29,11 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
   const debugEnabled = searchParams.get('debug') === 'true';
   const { simulatedHour } = useSimulation();
   const { setReportData, chartContainerRef } = useReportData();
+  const { setProducts: setStressTestProducts } = useStressTestRegistry();
+
+  useEffect(() => {
+    setStressTestProducts(initialProducts, simulatedHour);
+  }, [initialProducts, simulatedHour, setStressTestProducts]);
 
   // Run the pricing engine locally on all 1,000 products instantly.
   // When ?debug=true, use batched runner and report to WasmTelemetry for the Debug Console.

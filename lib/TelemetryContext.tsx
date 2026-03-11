@@ -8,16 +8,31 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { startTransition } from 'react';
 import { WasmTelemetry } from './wasmTelemetry';
-import type { TelemetryEntry, SessionMetrics } from './wasmTelemetry';
+import type {
+  TelemetryEntry,
+  SessionMetrics,
+  StressTestStatus,
+} from './wasmTelemetry';
+import { triggerGlobalRevaluation } from './stressTest';
+
+interface StressTestProduct {
+  id: string;
+  price: number;
+  stock: number;
+  name?: string;
+}
 
 interface TelemetryContextValue {
   logs: TelemetryEntry[];
   sessionMetrics: SessionMetrics | null;
+  stressTestStatus: StressTestStatus;
   clearLogs: () => void;
   pauseStream: boolean;
   setPauseStream: (v: boolean) => void;
   exportSessionMetrics: () => void;
+  launchStressTest: (products: StressTestProduct[], simulatedHour: number | null) => void;
 }
 
 const TelemetryContext = createContext<TelemetryContextValue | null>(null);
@@ -26,6 +41,9 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
   const [logs, setLogs] = useState<TelemetryEntry[]>(() => WasmTelemetry.getLogs());
   const [sessionMetrics, setSessionMetrics] = useState<SessionMetrics | null>(() =>
     WasmTelemetry.getSessionMetrics(),
+  );
+  const [stressTestStatus, setStressTestStatus] = useState<StressTestStatus>(() =>
+    WasmTelemetry.getStressTestStatus(),
   );
   const [pauseStream, setPauseStream] = useState(false);
 
@@ -38,10 +56,19 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
     return unsubscribe;
   }, [pauseStream]);
 
+  useEffect(() => {
+    const unsubscribe = WasmTelemetry.subscribeStressTest((status) => {
+      setStressTestStatus(status);
+    });
+    return unsubscribe;
+  }, []);
+
   const clearLogs = useCallback(() => {
     WasmTelemetry.clear();
+    WasmTelemetry.setStressTestStatus({ summary: null });
     setLogs([]);
     setSessionMetrics(WasmTelemetry.getSessionMetrics());
+    setStressTestStatus(WasmTelemetry.getStressTestStatus());
   }, []);
 
   const exportSessionMetrics = useCallback(() => {
@@ -57,13 +84,25 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
     URL.revokeObjectURL(url);
   }, []);
 
+  const launchStressTest = useCallback(
+    (products: StressTestProduct[], simulatedHour: number | null) => {
+      if (products.length === 0) return;
+      startTransition(() => {
+        triggerGlobalRevaluation(products, simulatedHour);
+      });
+    },
+    [],
+  );
+
   const value: TelemetryContextValue = {
     logs,
     sessionMetrics,
+    stressTestStatus,
     clearLogs,
     pauseStream,
     setPauseStream,
     exportSessionMetrics,
+    launchStressTest,
   };
 
   return (

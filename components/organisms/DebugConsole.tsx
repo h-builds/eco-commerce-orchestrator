@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useTelemetry } from '@/lib/TelemetryContext';
+import { useStressTestRegistry } from '@/components/providers/StressTestRegistryProvider';
 import type { TelemetryEntry } from '@/lib/wasmTelemetry';
 
 const LOG_ROW_HEIGHT = 24;
@@ -103,8 +104,23 @@ interface DebugConsoleProps {
 }
 
 export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProps) {
-  const { logs, clearLogs, pauseStream, setPauseStream, exportSessionMetrics } =
-    useTelemetry();
+  const {
+    logs,
+    clearLogs,
+    pauseStream,
+    setPauseStream,
+    exportSessionMetrics,
+    stressTestStatus,
+    launchStressTest,
+  } = useTelemetry();
+  const { products: stressTestProducts, simulatedHour } = useStressTestRegistry();
+
+  const canRunStressTest =
+    stressTestProducts.length > 0 && !stressTestStatus.active;
+  const progressPercent =
+    stressTestStatus.total > 0
+      ? Math.round((stressTestStatus.progress / stressTestStatus.total) * 100)
+      : 0;
 
   if (!isConsoleOpen) {
     return (
@@ -123,15 +139,31 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
 
   return (
     <div
-      className="fixed bottom-0 right-0 z-[9999] flex w-full max-w-lg flex-col rounded-tl-2xl border border-cyan-500/30 bg-black shadow-2xl shadow-cyan-500/10 md:max-w-xl"
+      className={`fixed bottom-0 right-0 z-[9999] flex w-full max-w-lg flex-col rounded-tl-2xl bg-black shadow-2xl md:max-w-xl ${
+        stressTestStatus.active
+          ? 'border-2 border-red-500/80 shadow-red-500/20'
+          : 'border border-cyan-500/30 shadow-cyan-500/10'
+      }`}
       style={{ fontFamily: CONSOLE_FONT }}
       role="region"
       aria-label="Developer Debug Console"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-cyan-500/30 bg-slate-950/90 px-4 py-2">
-        <span className="text-sm font-bold tracking-wider text-cyan-400">
-          Tech Pulse — Wasm Pricing Telemetry
+      {/* Header — color indicates stress test active */}
+      <div
+        className={`flex items-center justify-between border-b px-4 py-2 ${
+          stressTestStatus.active
+            ? 'border-red-500/50 bg-red-950/40'
+            : 'border-cyan-500/30 bg-slate-950/90'
+        }`}
+      >
+        <span
+          className={`text-sm font-bold tracking-wider ${
+            stressTestStatus.active ? 'text-red-400' : 'text-cyan-400'
+          }`}
+        >
+          {stressTestStatus.active
+            ? 'System Overload Simulation — Running'
+            : 'Tech Pulse — Wasm Pricing Telemetry'}
         </span>
         <button
           type="button"
@@ -142,6 +174,38 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
           <span className="material-symbols-outlined text-lg">remove</span>
         </button>
       </div>
+
+      {/* Stress test progress bar */}
+      {stressTestStatus.active && (
+        <div className="border-b border-red-500/30 bg-slate-950/90 px-4 py-2">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
+            <div
+              className="h-full rounded-full bg-red-500 transition-all duration-150"
+              style={{ width: `${progressPercent}%` }}
+              role="progressbar"
+              aria-valuenow={stressTestStatus.progress}
+              aria-valuemin={0}
+              aria-valuemax={stressTestStatus.total}
+              aria-label="Stress test progress"
+            />
+          </div>
+          <p className="mt-1 text-[10px] font-mono text-red-400/90">
+            {stressTestStatus.progress} / {stressTestStatus.total} items
+          </p>
+        </div>
+      )}
+
+      {/* Post-test summary */}
+      {stressTestStatus.summary && !stressTestStatus.active && (
+        <div className="border-b border-emerald-500/30 bg-emerald-950/20 px-4 py-2">
+          <p
+            className="text-xs font-mono text-emerald-400"
+            style={{ fontFamily: CONSOLE_FONT }}
+          >
+            {stressTestStatus.summary}
+          </p>
+        </div>
+      )}
 
       {/* Terminal area */}
       <div className="min-h-[200px] max-h-[320px] overflow-hidden border-b border-cyan-500/20 bg-black">
@@ -174,6 +238,27 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
           className="rounded bg-slate-800 px-3 py-1.5 text-xs font-medium text-cyan-400 hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
         >
           Export Session Metrics
+        </button>
+        <button
+          type="button"
+          onClick={() => launchStressTest(stressTestProducts, simulatedHour)}
+          disabled={!canRunStressTest}
+          title={
+            canRunStressTest
+              ? 'Re-calculate all products and stream to console'
+              : 'Navigate to Admin Dashboard to enable'
+          }
+          className="flex items-center gap-1.5 rounded border-2 border-red-500/80 bg-red-950/40 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-900/50 disabled:pointer-events-none disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+        >
+          <span
+            className={`material-symbols-outlined text-sm ${
+              stressTestStatus.active ? 'animate-pulse' : ''
+            }`}
+            aria-hidden="true"
+          >
+            rocket_launch
+          </span>
+          Launch Stress Test
         </button>
       </div>
     </div>

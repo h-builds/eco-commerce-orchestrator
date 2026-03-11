@@ -20,9 +20,35 @@ export interface SessionMetrics {
   logs: TelemetryEntry[];
 }
 
+export interface StressTestStatus {
+  active: boolean;
+  progress: number;
+  total: number;
+  summary: string | null;
+}
+
 const MAX_LOGS = 500;
 const logs: TelemetryEntry[] = [];
 const subscribers = new Set<(entries: TelemetryEntry[]) => void>();
+
+let stressTestState: StressTestStatus = {
+  active: false,
+  progress: 0,
+  total: 0,
+  summary: null,
+};
+const stressSubscribers = new Set<(status: StressTestStatus) => void>();
+
+function notifyStress(): void {
+  const snapshot = { ...stressTestState };
+  stressSubscribers.forEach((fn) => {
+    try {
+      fn(snapshot);
+    } catch (_) {
+      // ignore
+    }
+  });
+}
 
 function getMemoryMb(): number | undefined {
   if (typeof performance === 'undefined') return undefined;
@@ -90,6 +116,22 @@ export const WasmTelemetry = {
       avgMsPerBatch: totalBatches > 0 ? totalMs / totalBatches : 0,
       avgMsPerProduct: totalProducts > 0 ? totalMs / totalProducts : 0,
       logs: [...logs],
+    };
+  },
+
+  getStressTestStatus(): StressTestStatus {
+    return { ...stressTestState };
+  },
+
+  setStressTestStatus(status: Partial<StressTestStatus>): void {
+    stressTestState = { ...stressTestState, ...status };
+    notifyStress();
+  },
+
+  subscribeStressTest(fn: (status: StressTestStatus) => void): () => void {
+    stressSubscribers.add(fn);
+    return () => {
+      stressSubscribers.delete(fn);
     };
   },
 };

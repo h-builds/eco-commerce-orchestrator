@@ -1,14 +1,12 @@
 // app/api/seed/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { seedDatabase } from "@/lib/db/seed";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { D1Database } from "@cloudflare/workers-types";
-
-export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   try {
-    const context = getRequestContext();
+    const context = await getCloudflareContext({ async: true });
     const env = context.env as unknown as {
       eco_db: D1Database;
       SEED_SECRET: string | undefined;

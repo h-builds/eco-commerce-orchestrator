@@ -1,21 +1,30 @@
 name = "eco-commerce-orchestrator"
-pages_build_output_dir = ".vercel/output"
+main = ".open-next/worker.js"
 compatibility_date = "2026-03-01"
-compatibility_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+
+# Static assets served by the Worker (Next.js output)
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+# Self-reference binding required by OpenNext for ISR/revalidation
+[[services]]
+binding = "WORKER_SELF_REFERENCE"
+service = "eco-commerce-orchestrator"
 
 [[d1_databases]]
 binding = "eco_db"
 database_name = "eco_db"
-database_id = "bca243c1-f8f7-4132-9037-3aa90fe303a0" # Replace with real ID from `wrangler d1 create eco_db`
+database_id = "bca243c1-f8f7-4132-9037-3aa90fe303a0"
 
 [[kv_namespaces]]
 binding = "ECO_CACHE"
-id = "8686050a16574f539554432f6336d756" # Replace with real ID from `wrangler kv namespace create ECO_CACHE`
+id = "8686050a16574f539554432f6336d756"
 
 # Pricing Agent — Go Wasm microservice deployed as a separate Cloudflare Worker.
 # IMPORTANT: Uncomment ONLY after `eco-pricing-agent` has been deployed via
-# `wrangler deploy` inside services/pricing/. An unresolvable service binding
-# causes the entire Pages Worker to reject at startup (HTTP 404 on all routes).
+# `wrangler deploy` inside services/pricing/.
 #
 # [[services]]
 # binding = "PRICING_AGENT"

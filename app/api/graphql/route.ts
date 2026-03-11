@@ -1,10 +1,7 @@
 import { createSchema, createYoga } from "graphql-yoga";
 import { NextRequest } from "next/server";
 import type { D1Database, Fetcher } from "@cloudflare/workers-types";
-import { getRequestContext } from "@cloudflare/next-on-pages";
-
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 const typeDefs = /* GraphQL */ `
   type Product {
@@ -37,7 +34,7 @@ const resolvers = {
       }: { limit?: number; offset?: number; category?: string },
     ) => {
       // Access Cloudflare D1 Binding via getRequestContext (next-on-pages standard)
-      const env = getRequestContext().env as unknown as {
+      const env = (await getCloudflareContext({ async: true })).env as unknown as {
         eco_db: D1Database;
         PRICING_AGENT?: Fetcher;   // Optional — only present when eco-pricing-agent Worker is deployed
         INTERNAL_SECRET?: string;

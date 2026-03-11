@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-export const runtime = "edge";
-
-// All fonts loaded via <link> tags — next/font/google uses Node.js internals
-// that are unavailable on the Cloudflare Edge runtime and would crash the Worker.
+// All fonts loaded via <link> tags for Cloudflare edge compatibility.
 const GEIST_SANS_HREF =
   "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap";
 const GEIST_MONO_HREF =

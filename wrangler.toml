@@ -1,5 +1,5 @@
 name = "eco-commerce-orchestrator"
-pages_build_output_dir = ".vercel/output/static"
+pages_build_output_dir = ".vercel/output"
 compatibility_date = "2026-03-01"
 compatibility_flags = ["nodejs_compat"]
 

@@ -15,3 +15,5 @@ id = "8686050a16574f539554432f6336d756" # Replace with real ID from `wrangler kv
 binding = "PRICING_AGENT"
 service = "eco-pricing-agent"
 environment = "production"
+
+pages_build_output_dir = ".vercel/output"

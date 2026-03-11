@@ -13,6 +13,7 @@ interface BaseProduct {
   id: string;
   price: number;
   stock: number;
+  name?: string;
 }
 
 interface DashboardClientProps {
@@ -57,6 +58,7 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
 
       return {
         id: p.id,
+        name: p.name ?? `Product ${p.id.slice(0, 8)}`,
         basePrice: p.price,
         livePrice: live_price,
         confidence: agent_confidence,

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import type { D1Database } from '@cloudflare/workers-types';
 import DashboardClient from '../../../components/organisms/DashboardClient';
+import { ExecutiveBrief } from '../../../components/molecules/ExecutiveBrief';
 import { SimulationProvider } from '../../../lib/SimulationContext';
 import { BackButton } from '../../../components/molecules/BackButton';
 
@@ -19,7 +20,7 @@ export default async function DashboardPage() {
 
   let results: Array<Record<string, unknown>> = [];
   try {
-    const res = await db.prepare('SELECT id, price, stock FROM products').all();
+    const res = await db.prepare('SELECT id, price, stock, name FROM products').all();
     if (res.success) {
       results = res.results;
     }
@@ -32,6 +33,7 @@ export default async function DashboardPage() {
     id: p.id as string,
     price: p.price as number,
     stock: p.stock as number,
+    name: p.name as string,
   }));
 
   return (
@@ -60,12 +62,8 @@ export default async function DashboardPage() {
               </h1>
             </div>
 
-            {/* Executive Summary */}
-            <div className="max-w-md rounded-xl border border-slate-800 bg-slate-900/50 p-4 backdrop-blur-md shadow-2xl">
-              <p className="text-xs text-slate-400 leading-relaxed">
-                <strong className="text-slate-200">Executive Brief:</strong> This dashboard proves the efficiency of Edge-Calculated business logic. By moving the pricing engine to Go-Wasm, we&apos;ve reduced server overhead by 90% while providing deterministic, sub-millisecond price adjustments.
-              </p>
-            </div>
+            {/* Executive Brief */}
+            <ExecutiveBrief />
           </header>
 
           <Suspense fallback={<div className="h-96 w-full flex items-center justify-center text-slate-500">Initializing Network Data...</div>}>

@@ -1,25 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 export const runtime = "edge";
 
-// Material Symbols — required by all components that use icon ligatures.
-// Loaded via a <link> in <head> rather than next/font because the Symbols
-// font has variable-font axes (Fill, Weight, Grade, Size) not supported by
-// the next/font Google Fonts API.
+// All fonts loaded via <link> tags — next/font/google uses Node.js internals
+// that are unavailable on the Cloudflare Edge runtime and would crash the Worker.
+const GEIST_SANS_HREF =
+  "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap";
+const GEIST_MONO_HREF =
+  "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap";
 const MATERIAL_SYMBOLS_HREF =
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -44,11 +35,14 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        {/* Geist Sans */}
+        <link rel="stylesheet" href={GEIST_SANS_HREF} />
+        {/* Geist Mono */}
+        <link rel="stylesheet" href={GEIST_MONO_HREF} />
         {/* Material Symbols Outlined — variable font with display:block to prevent FOUT */}
         <link rel="stylesheet" href={MATERIAL_SYMBOLS_HREF} />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className="font-sans antialiased">
         {children}
       </body>
     </html>

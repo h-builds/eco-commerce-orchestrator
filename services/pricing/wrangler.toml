@@ -1,5 +1,19 @@
 name = "eco-pricing-agent"
-main = "main.go"
 compatibility_date = "2026-03-01"
+
+# JS entry point — bootstraps the Go Wasm runtime via wasm_exec.js
+main = "index.js"
+
 [build]
-command = "GOOS=js GOARCH=wasm go build -o main.wasm"
+# Build the Go source to Wasm, then copy the required runtime shim from the
+# local Go installation. wasm_exec.js provides the global `Go` class that
+# index.js depends on. Without it the Worker cannot instantiate the binary.
+command = "GOOS=js GOARCH=wasm go build -o main.wasm . && cp \"$(find $(go env GOROOT) -name wasm_exec.js | head -1)\" ."
+
+# Tell esbuild to embed .wasm files as raw bytes (ArrayBuffer).
+# "CompiledWasm" is for standalone WASI Wasm only.
+# "Data" is correct for GOOS=js output, which must pass through wasm_exec.js.
+[[rules]]
+type = "Data"
+globs = ["**/*.wasm"]
+fallthrough = false

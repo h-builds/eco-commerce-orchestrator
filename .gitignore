@@ -59,6 +59,8 @@ services/pricing/*.test
 # Extensionless Linux binary produced by `go build` (e.g. `go build -o main .`)
 services/pricing/main
 services/pricing/main.wasm
+# Copied from Go stdlib during wrangler build — not source, always regenerated
+services/pricing/wasm_exec.js
 
 # IDEs and Editors
 .idea/

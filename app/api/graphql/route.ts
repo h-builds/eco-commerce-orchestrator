@@ -39,8 +39,8 @@ const resolvers = {
       // Access Cloudflare D1 Binding via getRequestContext (next-on-pages standard)
       const env = getRequestContext().env as unknown as {
         eco_db: D1Database;
-        PRICING_AGENT: Fetcher;
-        INTERNAL_SECRET: string;
+        PRICING_AGENT?: Fetcher;   // Optional — only present when eco-pricing-agent Worker is deployed
+        INTERNAL_SECRET?: string;
       };
       const db = env.eco_db;
 
@@ -93,7 +93,7 @@ const resolvers = {
         > = {};
 
         try {
-          if (pricingRequests.length > 0) {
+          if (pricingRequests.length > 0 && env.PRICING_AGENT) {
             const maxRetries = 3;
             const baseDelayMs = 100;
             let attempt = 0;

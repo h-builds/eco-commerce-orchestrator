@@ -1,9 +1,11 @@
 'use client';
 
 import { useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useSimulation } from '../../lib/SimulationContext';
 import { useReportData } from '../../lib/ReportDataContext';
 import { simulatePrice } from '../../lib/pricingEngine';
+import { runPricingBatch } from '../../lib/runPricingBatch';
 import { PricingStatus } from '../molecules/PricingStatus';
 import { BigNumberMetric } from '../molecules/BigNumberMetric';
 import { EdgeMap } from '../molecules/EdgeMap';
@@ -22,11 +24,18 @@ interface DashboardClientProps {
 }
 
 export default function DashboardClient({ initialProducts }: DashboardClientProps) {
+  const searchParams = useSearchParams();
+  const debugEnabled = searchParams.get('debug') === 'true';
   const { simulatedHour } = useSimulation();
   const { setReportData, chartContainerRef } = useReportData();
 
-  // Run the pricing engine locally on all 1,000 products instantly
+  // Run the pricing engine locally on all 1,000 products instantly.
+  // When ?debug=true, use batched runner and report to WasmTelemetry for the Debug Console.
   const computedData = useMemo(() => {
+    if (debugEnabled) {
+      return runPricingBatch(initialProducts, simulatedHour, true);
+    }
+
     let totalSavings = 0;
     let peakDemandCount = 0;
     let sustainableSurplusCount = 0;
@@ -34,7 +43,6 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
     let totalLatency = 0;
 
     const nodes = initialProducts.map(p => {
-      // simulatePrice is pure and very fast. We can run it 1,000 times comfortably.
       const { live_price, agent_confidence } = simulatePrice(
         p.id,
         p.price,
@@ -45,7 +53,6 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
       const savings = p.price - live_price;
       totalSavings += savings;
 
-      // Classify
       if (live_price > p.price) {
         peakDemandCount++;
       } else if (live_price < p.price) {
@@ -54,7 +61,6 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
         neutralCount++;
       }
 
-      // We'll simulate latency hovering around 0.8ms
       const simulatedLatency = 0.6 + (Math.random() * 0.4);
       totalLatency += simulatedLatency;
 
@@ -64,7 +70,7 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
         basePrice: p.price,
         livePrice: live_price,
         confidence: agent_confidence,
-        volatility: live_price / p.price, // ratio
+        volatility: live_price / p.price,
       };
     });
 
@@ -78,7 +84,7 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
       neutralCount,
       averageLatency
     };
-  }, [initialProducts, simulatedHour]);
+  }, [initialProducts, simulatedHour, debugEnabled]);
 
   useEffect(() => {
     setReportData({

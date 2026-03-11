@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
+import { DebugBridge } from "@/components/providers/DebugBridge";
 import "./globals.css";
 
 // All fonts loaded via <link> tags for Cloudflare edge compatibility.
@@ -9,6 +11,8 @@ const GEIST_MONO_HREF =
   "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap";
 const MATERIAL_SYMBOLS_HREF =
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block";
+const JETBRAINS_MONO_HREF =
+  "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap";
 
 export const metadata: Metadata = {
   title: {
@@ -39,6 +43,8 @@ export default function RootLayout({
         <link rel="stylesheet" href={GEIST_MONO_HREF} />
         {/* Material Symbols Outlined — variable font with display:block to prevent FOUT */}
         <link rel="stylesheet" href={MATERIAL_SYMBOLS_HREF} />
+        {/* JetBrains Mono for Debug Console */}
+        <link rel="stylesheet" href={JETBRAINS_MONO_HREF} />
       </head>
       <body className="font-sans antialiased text-slate-900 dark:text-slate-50 bg-slate-50 dark:bg-slate-950 flex min-h-screen flex-col">
         {/* ── Skip-to-content for keyboard / AT users ────────────────────── */}
@@ -86,6 +92,11 @@ export default function RootLayout({
             <p aria-label="WCAG compliance badge">WCAG 2.1 AA Compliant</p>
           </div>
         </footer>
+
+        {/* Developer Debug Console — only when ?debug=true */}
+        <Suspense fallback={null}>
+          <DebugBridge />
+        </Suspense>
       </body>
     </html>
   );

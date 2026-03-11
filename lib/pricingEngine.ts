@@ -147,3 +147,24 @@ export function simulatePrice(
 
   return { live_price: livePrice, agent_confidence: agentConfidence };
 }
+
+/**
+ * Get a short hex representation of the seed used for a product at a given hour.
+ * Used by telemetry/debug console only; same hash as simulatePrice.
+ */
+export function getSeedHex(productId: string, simulatedHour: number | null): string {
+  const now = new Date();
+  const effectiveHour = simulatedHour !== null ? simulatedHour : now.getHours();
+  const truncated = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    effectiveHour,
+    0, 0, 0,
+  );
+  const unixHour = Math.floor(truncated.getTime() / 1000);
+  const hashKey = `${productId}-${unixHour}`;
+  const hashSum = fnv64a(hashKey);
+  const hex = hashSum.toString(16);
+  return hex.length > 6 ? `0x${hex.slice(0, 6)}...` : `0x${hex}`;
+}

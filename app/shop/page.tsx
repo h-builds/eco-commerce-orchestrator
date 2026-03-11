@@ -4,6 +4,8 @@ import { PricingStatus } from '@/components/molecules/PricingStatus';
 import { SimulationProvider } from '@/lib/SimulationContext';
 import Loading from './loading';
 
+export const dynamic = 'force-dynamic';
+
 export default function ShopPage() {
   return (
     <SimulationProvider>

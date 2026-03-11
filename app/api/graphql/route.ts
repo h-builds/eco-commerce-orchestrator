@@ -19,7 +19,7 @@ const typeDefs = /* GraphQL */ `
   }
 
   type Query {
-    products(limit: Int, offset: Int, category: String): [Product!]!
+    products(limit: Int, offset: Int, category: String, search: String): [Product!]!
   }
 `;
 
@@ -31,7 +31,8 @@ const resolvers = {
         limit = 50,
         offset = 0,
         category,
-      }: { limit?: number; offset?: number; category?: string },
+        search,
+      }: { limit?: number; offset?: number; category?: string; search?: string },
     ) => {
       // Access Cloudflare D1 Binding via getRequestContext (next-on-pages standard)
       const env = (await getCloudflareContext({ async: true })).env as unknown as {
@@ -48,10 +49,20 @@ const resolvers = {
       try {
         let query = "SELECT * FROM products";
         const params: (string | number)[] = [];
+        const conditions: string[] = [];
 
         if (category) {
-          query += " WHERE category = ?";
+          conditions.push("category = ?");
           params.push(category);
+        }
+
+        if (search) {
+          conditions.push("(name LIKE ? OR description LIKE ?)");
+          params.push(`%${search}%`, `%${search}%`);
+        }
+
+        if (conditions.length > 0) {
+          query += " WHERE " + conditions.join(" AND ");
         }
 
         const finalLimit = Math.max(1, Math.min(50, Math.floor(limit)));

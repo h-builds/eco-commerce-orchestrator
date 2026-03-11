@@ -19,8 +19,8 @@
 // Copied from $(go env GOROOT)/lib/wasm/wasm_exec.js during the build step.
 import "./wasm_exec.js";
 
-// main.wasm is embedded as an ArrayBuffer by esbuild (rules type = "Data").
-import wasmBytes from "./main.wasm";
+// main.wasm is embedded as a WebAssembly.Module by esbuild (rules type = "CompiledWasm").
+import wasmModule from "./main.wasm";
 
 // Lazy singleton — resolves once, shared across all requests in this isolate.
 let initPromise = null;
@@ -29,8 +29,9 @@ function initWasm() {
   if (!initPromise) {
     initPromise = (async () => {
       const go = new Go();
-      const { instance } = await WebAssembly.instantiate(
-        wasmBytes,
+      // wasmModule is already a compiled WebAssembly.Module
+      const instance = await WebAssembly.instantiate(
+        wasmModule,
         go.importObject,
       );
       // go.run() starts the Go runtime, which calls main() → http.HandleFunc

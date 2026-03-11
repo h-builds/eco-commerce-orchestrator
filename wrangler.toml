@@ -1,7 +1,11 @@
 name = "eco-commerce-orchestrator"
 main = ".open-next/worker.js"
 compatibility_date = "2026-03-01"
-compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+NEXT_PUBLIC_BASE_URL = "https://eco-commerce-orchestrator.achegideas.workers.dev"
+NODE_VERSION = "22"
 
 # Static assets served by the Worker (Next.js output)
 [assets]
@@ -23,9 +27,6 @@ binding = "ECO_CACHE"
 id = "8686050a16574f539554432f6336d756"
 
 # Pricing Agent — Go Wasm microservice deployed as a separate Cloudflare Worker.
-# IMPORTANT: Uncomment ONLY after `eco-pricing-agent` has been deployed via
-# `wrangler deploy` inside services/pricing/.
-#
-# [[services]]
-# binding = "PRICING_AGENT"
-# service = "eco-pricing-agent"
+[[services]]
+binding = "PRICING_AGENT"
+service = "eco-pricing-agent"

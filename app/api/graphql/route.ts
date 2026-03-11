@@ -137,10 +137,10 @@ const resolvers = {
                     `Pricing agent returned non-ok status: ${res.status}`,
                   );
                 }
-              } catch {
+              } catch (innerErr) {
                 attempt++;
-                if (attempt >= maxRetries) break; // no delay on the final failure
-                // Delay only between genuine retries: 100ms, 200ms (attempt 1→2, 2→3)
+                console.warn(`Pricing agent fetch attempt ${attempt} failed:`, innerErr);
+                if (attempt >= maxRetries) throw innerErr;
                 await new Promise((resolve) =>
                   setTimeout(resolve, baseDelayMs * Math.pow(2, attempt - 1)),
                 );
@@ -172,8 +172,9 @@ const resolvers = {
         });
 
         return productsWithLivePrices;
-      } catch {
-        throw new Error("Internal Server Error fetching products");
+      } catch (e) {
+        console.error("Resolver error:", e);
+        throw new Error(`Internal Server Error fetching products: ${e instanceof Error ? e.message : String(e)}`);
       }
     },
   },

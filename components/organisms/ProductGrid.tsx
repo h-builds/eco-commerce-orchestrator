@@ -1,4 +1,6 @@
 import { ProductCard, type Product } from '@/components/molecules/ProductCard';
+import { graphql } from 'graphql';
+import { schema } from '@/app/api/graphql/route';
 
 const GET_PRODUCTS_QUERY = `
   query GetFirstProducts {
@@ -26,44 +28,26 @@ const GET_PRODUCTS_QUERY = `
  * to the route-level boundary and its <Loading /> fallback.
  */
 export async function ProductGrid() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/graphql`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query: GET_PRODUCTS_QUERY }),
-    cache: 'no-store', // always fetch fresh live prices
-  });
+  try {
+    const result = await graphql({
+      schema,
+      source: GET_PRODUCTS_QUERY,
+    });
 
-  if (!res.ok) {
-    console.error('GraphQL fetch failed:', res.status, res.statusText);
-    return (
-      <div className="p-8 bg-red-50 dark:bg-red-900/10 border border-red-500 rounded-xl" role="alert">
-        <p className="text-red-600 font-bold flex items-center gap-2">
-          <span className="material-symbols-outlined" aria-hidden="true">error</span>
-          Failed to load products. Please try again later.
-        </p>
-      </div>
-    );
-  }
+    if (result.errors?.length) {
+      console.error('GraphQL Execution Errors:', result.errors);
+      return (
+        <div className="p-8 bg-red-50 dark:bg-red-900/10 border border-red-500 rounded-xl" role="alert">
+          <p className="text-red-600 font-bold flex items-center gap-2">
+            <span className="material-symbols-outlined" aria-hidden="true">error</span>
+            Failed to load products. Please try again later.
+          </p>
+        </div>
+      );
+    }
 
-  const { data, errors } = (await res.json()) as {
-    data?: { products: Product[] };
-    errors?: { message: string }[];
-  };
-
-  if (errors?.length) {
-    console.error('GraphQL Execution Errors:', errors);
-    return (
-      <div className="p-8 bg-red-50 dark:bg-red-900/10 border border-red-500 rounded-xl" role="alert">
-        <p className="text-red-600 font-bold flex items-center gap-2">
-          <span className="material-symbols-outlined" aria-hidden="true">error</span>
-          Failed to load products. Please try again later.
-        </p>
-      </div>
-    );
-  }
-
-  const products = data?.products ?? null;
+    const { data } = result as unknown as { data?: { products: Product[] } };
+    const products = data?.products ?? null;
 
   if (!products || products.length === 0) {
     return (
@@ -85,4 +69,15 @@ export async function ProductGrid() {
       ))}
     </div>
   );
+  } catch (error) {
+    console.error('Failed to execute GraphQL query:', error);
+    return (
+      <div className="p-8 bg-red-50 dark:bg-red-900/10 border border-red-500 rounded-xl" role="alert">
+        <p className="text-red-600 font-bold flex items-center gap-2">
+          <span className="material-symbols-outlined" aria-hidden="true">error</span>
+          Failed to load products. Please try again later.
+        </p>
+      </div>
+    );
+  }
 }

@@ -11,10 +11,9 @@ main = "index.js"
 # index.js depends on. Without it the Worker cannot instantiate the binary.
 command = "GOOS=js GOARCH=wasm go build -o main.wasm . && cp \"$(find $(go env GOROOT) -name wasm_exec.js | head -1)\" ."
 
-# Tell esbuild to embed .wasm files as raw bytes (ArrayBuffer).
-# "CompiledWasm" is for standalone WASI Wasm only.
-# "Data" is correct for GOOS=js output, which must pass through wasm_exec.js.
+# Tell esbuild to embed .wasm files natively as a WebAssembly.Module.
+# "CompiledWasm" avoids the runtime `WebAssembly.instantiate` block on Cloudflare.
 [[rules]]
-type = "Data"
+type = "CompiledWasm"
 globs = ["**/*.wasm"]
 fallthrough = false

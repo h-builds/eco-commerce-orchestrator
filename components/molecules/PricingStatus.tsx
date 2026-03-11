@@ -8,20 +8,7 @@ import {
   useMemo,
 } from "react";
 import { useSimulation } from "@/lib/SimulationContext";
-
-// ---------------------------------------------------------------------------
-// Deterministic hex seed — mirrors the Go agent's hourly seed derivation.
-// Input: "YYYY-MM-DD-HH" string → djb2-style hash → 8-char uppercase hex.
-// ---------------------------------------------------------------------------
-function deriveHexSeed(dateHourKey: string): string {
-  let hash = 5381;
-  for (let i = 0; i < dateHourKey.length; i++) {
-    // djb2: hash = hash * 33 ^ char
-    hash = ((hash << 5) + hash) ^ dateHourKey.charCodeAt(i);
-    hash = hash >>> 0; // keep it an unsigned 32-bit integer
-  }
-  return hash.toString(16).toUpperCase().padStart(8, "0");
-}
+import { getHexSeedForHour } from "@/lib/hexSeed";
 
 // ---------------------------------------------------------------------------
 // Clock state — everything derived from a given hour in one go.
@@ -54,11 +41,7 @@ function computeClockState(now: Date, simHour: number | null): ClockState {
   const secsLeft = totalSecsLeft % 60;
 
   // Hex seed uses the effective hour so simulated seeds are correct
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, "0");
-  const dd = String(now.getDate()).padStart(2, "0");
-  const hh = String(effectiveHour).padStart(2, "0");
-  const hexSeed = deriveHexSeed(`${yyyy}-${mm}-${dd}-${hh}`);
+  const hexSeed = getHexSeedForHour(now, effectiveHour);
 
   return { lastSyncLabel, minsLeft, secsLeft, hexSeed };
 }

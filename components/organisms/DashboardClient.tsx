@@ -1,7 +1,8 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useSimulation } from '../../lib/SimulationContext';
+import { useReportData } from '../../lib/ReportDataContext';
 import { simulatePrice } from '../../lib/pricingEngine';
 import { PricingStatus } from '../molecules/PricingStatus';
 import { BigNumberMetric } from '../molecules/BigNumberMetric';
@@ -22,6 +23,7 @@ interface DashboardClientProps {
 
 export default function DashboardClient({ initialProducts }: DashboardClientProps) {
   const { simulatedHour } = useSimulation();
+  const { setReportData, chartContainerRef } = useReportData();
 
   // Run the pricing engine locally on all 1,000 products instantly
   const computedData = useMemo(() => {
@@ -78,6 +80,17 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
     };
   }, [initialProducts, simulatedHour]);
 
+  useEffect(() => {
+    setReportData({
+      totalSavings: computedData.totalSavings,
+      averageLatency: computedData.averageLatency,
+      peakDemandCount: computedData.peakDemandCount,
+      sustainableSurplusCount: computedData.sustainableSurplusCount,
+      neutralCount: computedData.neutralCount,
+    });
+    return () => setReportData(null);
+  }, [computedData, setReportData]);
+
   return (
     <div className="space-y-8">
       {/* Time Controls */}
@@ -101,7 +114,10 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
              <EdgeMap nodes={computedData.nodes} />
            </div>
         </div>
-        <div className="h-96 rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md p-6 flex flex-col">
+        <div
+          ref={chartContainerRef}
+          className="h-96 rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md p-6 flex flex-col"
+        >
            <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase mb-4 shrink-0">Wasm Execution Latency Simulation</h3>
            <div className="flex-1 overflow-hidden">
              <WasmThroughputChart averageLatency={computedData.averageLatency} />

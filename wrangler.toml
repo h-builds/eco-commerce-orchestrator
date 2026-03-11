@@ -1,4 +1,6 @@
+#:schema node_modules/wrangler/config-schema.json
 name = "eco-commerce-orchestrator"
+pages_build_output_dir = ".vercel/output"
 compatibility_date = "2026-03-01"
 
 [[d1_databases]]
@@ -14,6 +16,3 @@ id = "8686050a16574f539554432f6336d756" # Replace with real ID from `wrangler kv
 [[services]]
 binding = "PRICING_AGENT"
 service = "eco-pricing-agent"
-environment = "production"
-
-pages_build_output_dir = ".vercel/output"

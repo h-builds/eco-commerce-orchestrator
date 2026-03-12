@@ -70,7 +70,7 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
 
       {/* Visualizations Floor */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="h-96 rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md p-6 flex flex-col">
+        <div className="h-96 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 flex flex-col">
            <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase mb-4 shrink-0">Network Edge Map</h3>
            <div className="flex-1 overflow-hidden">
              <EdgeMap nodes={computedData.nodes} />
@@ -78,7 +78,7 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
         </div>
         <div
           ref={chartContainerRef}
-          className="h-96 rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md p-6 flex flex-col"
+          className="h-96 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 flex flex-col"
         >
            <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase mb-4 shrink-0">Wasm Execution Latency Simulation</h3>
            <div className="flex-1 overflow-hidden">

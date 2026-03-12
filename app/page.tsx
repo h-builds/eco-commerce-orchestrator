@@ -58,7 +58,7 @@ export default function Home() {
             className="pointer-events-none absolute -bottom-32 -left-32 h-[400px] w-[400px] rounded-full bg-emerald-400/10 blur-3xl"
           />
 
-          <div className="relative mx-auto max-w-6xl px-4 md:px-10 text-center">
+          <div className="relative mx-auto w-full px-4 md:px-10 lg:px-20 text-center">
             {/* Eyebrow pill */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
               <span
@@ -127,7 +127,7 @@ export default function Home() {
         <section
           aria-label="Architecture at a glance"
           className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-          <div className="mx-auto max-w-6xl px-4 md:px-10">
+          <div className="mx-auto w-full px-4 md:px-10 lg:px-20">
             <dl className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200 dark:divide-slate-800">
               {STATS.map(({ value, label }) => (
                 <div
@@ -149,7 +149,7 @@ export default function Home() {
         <section
           aria-labelledby="pillars-heading"
           className="py-24 bg-slate-50 dark:bg-slate-950">
-          <div className="mx-auto max-w-6xl px-4 md:px-10">
+          <div className="mx-auto w-full px-4 md:px-10 lg:px-20">
             <div className="mb-12 text-center">
               <h2
                 id="pillars-heading"

@@ -155,10 +155,10 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
 
   return (
     <div
-      className={`fixed bottom-0 right-0 z-[9999] flex w-full max-w-lg flex-col rounded-tl-2xl bg-black shadow-2xl md:max-w-xl ${
+      className={`fixed bottom-0 right-0 z-[9999] flex w-[min(100vw,600px)] flex-col rounded-tl-2xl bg-white/5 backdrop-blur-md shadow-2xl ${
         stressTestStatus.active
           ? 'border-2 border-red-500/80 shadow-red-500/20'
-          : 'border border-cyan-500/30 shadow-cyan-500/10'
+          : 'border border-white/10 shadow-black/50'
       }`}
       style={{ fontFamily: CONSOLE_FONT }}
       role="region"
@@ -169,7 +169,7 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
         className={`flex items-center justify-between border-b px-4 py-2 ${
           stressTestStatus.active
             ? 'border-red-500/50 bg-red-950/40'
-            : 'border-cyan-500/30 bg-slate-950/90'
+            : 'border-white/10 bg-transparent'
         }`}
       >
         <span

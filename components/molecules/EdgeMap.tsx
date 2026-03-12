@@ -108,7 +108,7 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
   return (
     <div className="tour-edge-map w-full h-full pb-8 relative" ref={containerRef}>
       <div
-        className="w-full h-full grid gap-[2px] p-2 bg-slate-950/50 rounded-lg border border-slate-800 overflow-hidden"
+        className="w-full h-full grid gap-[2px] p-2 bg-white/5 backdrop-blur-md rounded-lg border border-white/10 overflow-hidden"
         style={{
           gridTemplateColumns: 'repeat(auto-fill, minmax(12px, 1fr))',
           gridAutoRows: 'min-content',
@@ -123,7 +123,7 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
         {hoveredNode && (
           <motion.div
             key={hoveredIndex}
-            className="absolute z-50 pointer-events-none px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 shadow-xl text-xs text-slate-200 min-w-[140px] max-w-[220px]"
+            className="absolute z-50 pointer-events-none px-3 py-2 rounded-lg border border-white/10 bg-slate-900/90 backdrop-blur-md shadow-xl text-xs text-slate-200 min-w-[140px] max-w-[220px]"
             style={{
               left: tooltipPosition.x,
               top: tooltipPosition.y,
@@ -148,14 +148,14 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
       </AnimatePresence>
 
       <div className="mt-4 flex items-center justify-between text-xs text-slate-500 font-mono px-2">
-        <div className="flex items-center gap-2 border border-slate-800 rounded bg-slate-900 px-2 py-1">
+        <div className="flex items-center gap-2 border border-white/10 rounded bg-white/5 backdrop-blur-md px-2 py-1">
           <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)] block" />
           <span>Surplus</span>
         </div>
         <div>
           <span>1,000 Wasm Nodes Active</span>
         </div>
-        <div className="flex items-center gap-2 border border-slate-800 rounded bg-slate-900 px-2 py-1">
+        <div className="flex items-center gap-2 border border-white/10 rounded bg-white/5 backdrop-blur-md px-2 py-1">
           <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_4px_rgba(251,191,36,0.5)] block" />
           <span>Surge</span>
         </div>

@@ -64,7 +64,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="min-h-screen pt-24 pb-12 w-full flex justify-center">
-      <div className="max-w-5xl w-full px-6 md:px-12">
+      <div className="w-full px-6 md:px-12 lg:px-20">
         <BackButton />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">

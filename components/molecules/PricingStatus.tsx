@@ -117,11 +117,11 @@ export function PricingStatus() {
   const dotColor = isSimulating ? "bg-amber-500" : "bg-emerald-500";
   const labelColor = isSimulating ? "text-amber-400" : "text-emerald-400";
   const glowClass = isSimulating
-    ? "shadow-[0_0_24px_-4px_rgba(245,158,11,0.2)]"
-    : "shadow-[0_0_24px_-4px_rgba(16,185,129,0.15)]";
+    ? "shadow-[0_0_12px_-4px_rgba(245,158,11,0.1)]"
+    : "shadow-[0_0_12px_-4px_rgba(16,185,129,0.1)]";
   const borderClass = isSimulating
     ? "border-amber-700/40"
-    : "border-slate-700/60";
+    : "border-white/10";
   const sliderPercent = ((sliderHour / 23) * 100).toFixed(1);
 
   return (
@@ -130,7 +130,7 @@ export function PricingStatus() {
       className={[
         "w-full rounded-xl border",
         borderClass,
-        "bg-slate-900 dark:bg-slate-950",
+        "bg-white/5 backdrop-blur-md",
         "px-4 py-3 mb-8",
         glowClass,
         "transition-all duration-500",

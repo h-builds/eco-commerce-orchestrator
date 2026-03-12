@@ -32,9 +32,8 @@ export function BigNumberMetric({ value }: { value: number }) {
   const isPositive = displayValue >= 0;
   
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-8 backdrop-blur-xl shadow-2xl h-full flex flex-col justify-center">
-      {/* Glow */}
-      <div className={`absolute -top-24 -right-24 h-48 w-48 rounded-full blur-[80px] transition-colors duration-1000 ${isPositive ? 'bg-emerald-500/20' : 'bg-red-500/20'}`} />
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-md shadow-2xl h-full flex flex-col justify-center group">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
       
       <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">Total Live Savings</h2>
       

@@ -49,7 +49,7 @@ export default async function DashboardPage() {
             <div className="absolute top-[20%] -right-[10%] h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]" />
           </div>
 
-          <div className="relative z-10 mx-auto max-w-7xl w-full px-4 md:px-10">
+          <div className="relative z-10 mx-auto w-full px-4 md:px-10 lg:px-20">
             <BackButton />
 
             <header className="tour-orchestrator mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">

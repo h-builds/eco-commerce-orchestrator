@@ -16,8 +16,8 @@ export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScor
     <div className="grid grid-rows-3 gap-4 h-full">
       
       {/* Carbon Offset Card */}
-      <div className="rounded-xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/60 to-slate-900 p-5 flex flex-col justify-center relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all duration-700" />
+      <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-5 flex flex-col justify-center relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">
           <h3 className="text-xs font-bold uppercase tracking-widest text-emerald-400/80">Total Carbon Offset</h3>
           <span className="material-symbols-outlined text-emerald-500/50 text-xl">eco</span>
@@ -31,8 +31,8 @@ export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScor
       </div>
 
       {/* Network ROI Card */}
-      <div className="rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-950/60 to-slate-900 p-5 flex flex-col justify-center relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl group-hover:bg-cyan-500/20 transition-all duration-700" />
+      <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-5 flex flex-col justify-center relative overflow-hidden group hover:border-cyan-500/50 transition-colors">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">
           <h3 className="text-xs font-bold uppercase tracking-widest text-cyan-400/80">Network ROI</h3>
           <span className="material-symbols-outlined text-cyan-500/50 text-xl">account_balance_wallet</span>
@@ -46,8 +46,8 @@ export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScor
       </div>
 
       {/* System Uptime Card */}
-      <div className="rounded-xl border border-violet-500/30 bg-gradient-to-br from-violet-950/60 to-slate-900 p-5 flex flex-col justify-center relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/10 rounded-full blur-3xl group-hover:bg-violet-500/20 transition-all duration-700" />
+      <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-5 flex flex-col justify-center relative overflow-hidden group hover:border-violet-500/50 transition-colors">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">
           <h3 className="text-xs font-bold uppercase tracking-widest text-violet-400/80">Edge System Uptime</h3>
           <span className="material-symbols-outlined text-violet-500/50 text-xl">memory</span>

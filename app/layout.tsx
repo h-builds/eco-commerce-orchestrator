@@ -62,7 +62,7 @@ export default function RootLayout({
 
         {/* ── Top nav bar ────────────────────────────────────────────────── */}
         <header className="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
-          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-10">
+          <div className="mx-auto flex h-16 w-full items-center justify-between px-4 md:px-10 lg:px-20">
             <Link href="/" className="flex items-center gap-2 text-primary font-black text-lg tracking-tight hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 rounded-lg">
               <span className="material-symbols-outlined" aria-hidden="true">
                 eco
@@ -79,7 +79,7 @@ export default function RootLayout({
 
         {/* ── Footer ─────────────────────────────────────────────────────── */}
         <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 mt-auto">
-          <div className="mx-auto max-w-6xl px-4 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+          <div className="mx-auto w-full px-4 md:px-10 lg:px-20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
             <p>
               &copy; 2026 Eco-Commerce Orchestrator. Built with Next.js&nbsp;16,
               React&nbsp;19, Go&nbsp;Wasm, and OpenNext on Cloudflare&nbsp;Workers.

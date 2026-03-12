@@ -12,7 +12,7 @@ export default function ShopPage() {
   return (
     <SimulationProvider>
       <CompareProvider>
-        <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12">
+        <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12 px-4 md:px-10 lg:px-20">
           <header className="mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
               <span className="material-symbols-outlined text-sm" aria-hidden="true">eco</span>

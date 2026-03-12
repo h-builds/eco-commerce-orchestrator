@@ -35,7 +35,7 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
   const formattedRating = product.rating.toFixed(1);
   const confidencePercent = Math.round(product.agent_confidence * 100);
 
-  const { selectedProducts, toggleProduct, isCompareModalOpen } = useCompare();
+  const { selectedProducts, toggleProduct } = useCompare();
   const isSelected = selectedProducts.some((p) => p.id === product.id);
   const canSelectMore = selectedProducts.length < 3;
 
@@ -65,7 +65,7 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
     <Link
       href={`/shop/${product.slug}`}
       prefetch={false}
-      className="group relative flex flex-col bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:scale-[1.02] hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300 ease-in-out focus-within:ring-4 focus-within:ring-primary/20"
+      className="group relative flex flex-col bg-white/5 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 hover:scale-[1.02] hover:border-emerald-500/50 hover:bg-white/10 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300 ease-in-out focus-within:ring-4 focus-within:ring-primary/20"
       aria-label={`View details for ${product.name}`}
     >
       <div className="relative h-64 w-full block bg-slate-100 dark:bg-slate-800 overflow-hidden outline-none">
@@ -115,7 +115,7 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
             {product.name}
           </h3>
           <div className="flex flex-col items-end shrink-0" role="region" aria-label={`Live Price: ${formattedPrice}`}>
-            <span className="font-bold text-slate-900 dark:text-slate-100 text-lg">
+            <span className="font-mono font-bold text-slate-900 dark:text-slate-100 text-lg">
               {formattedPrice}
             </span>
             {hasPriceChanged && (

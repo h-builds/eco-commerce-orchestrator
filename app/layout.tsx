@@ -60,8 +60,11 @@ export default function RootLayout({
           Skip to main content
         </a>
 
-        {/* ── Top nav bar ────────────────────────────────────────────────── */}
-        <header className="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
+        {/* ── Boxed Architecture Main Frame ──────────────────────────────── */}
+        <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col border-x border-white/5 relative">
+          
+          {/* ── Top Floating Nav Bar HUD ───────────────────────────────────── */}
+          <header className="sticky top-4 z-40 mx-4 mt-4 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
           <div className="mx-auto flex h-16 w-full items-center justify-between px-4 md:px-10 lg:px-20">
             <Link href="/" className="flex items-center gap-2 text-primary font-black text-lg tracking-tight hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 rounded-lg">
               <span className="material-symbols-outlined" aria-hidden="true">
@@ -71,11 +74,11 @@ export default function RootLayout({
             </Link>
               <GlobalNav />
           </div>
-        </header>
+          </header>
 
-        <main id="main-content" className="flex-grow">
-          {children}
-        </main>
+          <main id="main-content" className="flex-grow pt-8">
+            {children}
+          </main>
 
         {/* ── Footer ─────────────────────────────────────────────────────── */}
         <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 mt-auto">
@@ -85,8 +88,9 @@ export default function RootLayout({
               React&nbsp;19, Go&nbsp;Wasm, and OpenNext on Cloudflare&nbsp;Workers.
             </p>
             <p aria-label="WCAG compliance badge">WCAG 2.1 AA Compliant</p>
-          </div>
-        </footer>
+            </div>
+          </footer>
+        </div>
 
         {/* Developer Debug Console — Ctrl+Shift+D or Cmd+Shift+D to toggle */}
           <DebugBridge />

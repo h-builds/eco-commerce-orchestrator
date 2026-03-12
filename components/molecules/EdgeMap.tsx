@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface EdgeMapNode {
@@ -23,6 +23,7 @@ function getStatus(volatility: number): 'Surplus' | 'Nominal' | 'Surge' {
 export function EdgeMap({ nodes }: EdgeMapProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleGridMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -35,17 +36,20 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
       if (raw == null) return;
       const index = parseInt(raw, 10);
       if (Number.isNaN(index) || index < 0 || index >= nodes.length) return;
+      if (!containerRef.current) return;
       
       setHoveredIndex(index);
 
-      let x = e.clientX;
-      const y = e.clientY - 12;
+      const rect = containerRef.current.getBoundingClientRect();
+      let x = e.clientX - rect.left;
+      const y = e.clientY - rect.top - 12;
       
       const tooltipWidth = 220;
       const halfWidth = tooltipWidth / 2;
 
-      if (x + halfWidth > window.innerWidth) {
-        x = window.innerWidth - halfWidth - 16;
+      // Local boundary checks
+      if (x + halfWidth > rect.width) {
+        x = rect.width - halfWidth - 16;
       } else if (x - halfWidth < 0) {
         x = halfWidth + 16;
       }
@@ -87,7 +91,7 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
   const hoveredNode = hoveredIndex !== null ? nodes[hoveredIndex] : null;
 
   return (
-    <div className="w-full h-full pb-8 relative">
+    <div className="w-full h-full pb-8 relative" ref={containerRef}>
       <div
         className="w-full h-full grid gap-[2px] p-2 bg-slate-950/50 rounded-lg border border-slate-800 overflow-hidden"
         style={{
@@ -104,7 +108,7 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
         {hoveredNode && (
           <motion.div
             key={hoveredIndex}
-            className="fixed z-50 pointer-events-none px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 shadow-xl text-xs text-slate-200 min-w-[140px] max-w-[220px]"
+            className="absolute z-50 pointer-events-none px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 shadow-xl text-xs text-slate-200 min-w-[140px] max-w-[220px]"
             style={{
               left: tooltipPosition.x,
               top: tooltipPosition.y,

@@ -1,40 +1,59 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { TelemetryProvider } from '@/lib/TelemetryContext';
+import { useEffect, useCallback, useSyncExternalStore } from 'react';
 import { DebugConsole } from '@/components/organisms/DebugConsole';
 
-const DEBUG_STORAGE_KEY = 'eco-debug-console';
+const STORAGE_KEY = 'isConsoleOpen';
 
-function useDebugEnabled(): boolean {
-  const searchParams = useSearchParams();
-  const fromUrl = searchParams.get('debug') === 'true';
+// ---------------------------------------------------------------------------
+// useSyncExternalStore wiring for localStorage
+// The `storage` event fires for other-tab changes automatically.
+// For same-tab mutations we manually dispatch a StorageEvent so the snapshot
+// is re-read and the UI stays in sync without calling setState inside an effect.
+// ---------------------------------------------------------------------------
+function subscribeToStorage(callback: () => void): () => void {
+  window.addEventListener('storage', callback);
+  return () => window.removeEventListener('storage', callback);
+}
 
-  const [fromStorage, setFromStorage] = useState(false);
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    setFromStorage(localStorage.getItem(DEBUG_STORAGE_KEY) === 'true');
-  }, []);
+function getSnapshot(): boolean {
+  return localStorage.getItem(STORAGE_KEY) === 'true';
+}
 
-  const enabled = fromUrl || fromStorage;
-  useEffect(() => {
-    if (typeof window === 'undefined' || !enabled) return;
-    localStorage.setItem(DEBUG_STORAGE_KEY, 'true');
-  }, [enabled]);
+function getServerSnapshot(): boolean {
+  return false; // always start closed on the server / during SSR
+}
 
-  return enabled;
+function writeStorage(value: boolean): void {
+  localStorage.setItem(STORAGE_KEY, String(value));
+  // Notify the same-tab subscription (storage events don't fire for same-tab writes)
+  window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
 }
 
 export function DebugBridge() {
-  const debugEnabled = useDebugEnabled();
-  const [isConsoleOpen, setConsoleOpen] = useState(true);
+  const isConsoleOpen = useSyncExternalStore(
+    subscribeToStorage,
+    getSnapshot,
+    getServerSnapshot,
+  );
 
-  if (!debugEnabled) return null;
+  // Global keyboard shortcut: Ctrl+Shift+D (Linux/Windows) or Cmd+Shift+D (Mac)
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        writeStorage(!getSnapshot());
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const setConsoleOpen = useCallback((open: boolean) => {
+    writeStorage(open);
+  }, []);
 
   return (
-    <TelemetryProvider>
-      <DebugConsole isConsoleOpen={isConsoleOpen} setConsoleOpen={setConsoleOpen} />
-    </TelemetryProvider>
+    <DebugConsole isConsoleOpen={isConsoleOpen} setConsoleOpen={setConsoleOpen} />
   );
 }

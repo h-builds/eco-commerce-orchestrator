@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
+import { TelemetryProvider } from "@/lib/TelemetryContext";
 import { DebugBridge } from "@/components/providers/DebugBridge";
 import { StressTestRegistryProvider } from "@/components/providers/StressTestRegistryProvider";
 import "./globals.css";
@@ -48,6 +48,7 @@ export default function RootLayout({
         <link rel="stylesheet" href={JETBRAINS_MONO_HREF} />
       </head>
       <body className="font-sans antialiased text-slate-900 dark:text-slate-50 bg-slate-50 dark:bg-slate-950 flex min-h-screen flex-col">
+        <TelemetryProvider>
         <StressTestRegistryProvider>
         {/* ── Skip-to-content for keyboard / AT users ────────────────────── */}
         <a
@@ -95,11 +96,10 @@ export default function RootLayout({
           </div>
         </footer>
 
-        {/* Developer Debug Console — only when ?debug=true */}
-        <Suspense fallback={null}>
+        {/* Developer Debug Console — Ctrl+Shift+D or Cmd+Shift+D to toggle */}
           <DebugBridge />
-        </Suspense>
         </StressTestRegistryProvider>
+        </TelemetryProvider>
       </body>
     </html>
   );

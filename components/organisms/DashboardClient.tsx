@@ -1,11 +1,9 @@
 'use client';
 
 import { useMemo, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useSimulation } from '../../lib/SimulationContext';
 import { useReportData } from '../../lib/ReportDataContext';
 import { useStressTestRegistry } from '../providers/StressTestRegistryProvider';
-import { simulatePrice } from '../../lib/pricingEngine';
 import { runPricingBatch } from '../../lib/runPricingBatch';
 import { PricingStatus } from '../molecules/PricingStatus';
 import { BigNumberMetric } from '../molecules/BigNumberMetric';
@@ -25,8 +23,6 @@ interface DashboardClientProps {
 }
 
 export default function DashboardClient({ initialProducts }: DashboardClientProps) {
-  const searchParams = useSearchParams();
-  const debugEnabled = searchParams.get('debug') === 'true';
   const { simulatedHour } = useSimulation();
   const { setReportData, chartContainerRef } = useReportData();
   const { setProducts: setStressTestProducts } = useStressTestRegistry();
@@ -35,62 +31,11 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
     setStressTestProducts(initialProducts, simulatedHour);
   }, [initialProducts, simulatedHour, setStressTestProducts]);
 
-  // Run the pricing engine locally on all 1,000 products instantly.
-  // When ?debug=true, use batched runner and report to WasmTelemetry for the Debug Console.
+  // Run the pricing engine on all products, always reporting to WasmTelemetry
+  // so sliders and page loads both stream logs to the Debug Console.
   const computedData = useMemo(() => {
-    if (debugEnabled) {
-      return runPricingBatch(initialProducts, simulatedHour, true);
-    }
-
-    let totalSavings = 0;
-    let peakDemandCount = 0;
-    let sustainableSurplusCount = 0;
-    let neutralCount = 0;
-    let totalLatency = 0;
-
-    const nodes = initialProducts.map(p => {
-      const { live_price, agent_confidence } = simulatePrice(
-        p.id,
-        p.price,
-        p.stock,
-        simulatedHour
-      );
-
-      const savings = p.price - live_price;
-      totalSavings += savings;
-
-      if (live_price > p.price) {
-        peakDemandCount++;
-      } else if (live_price < p.price) {
-        sustainableSurplusCount++;
-      } else {
-        neutralCount++;
-      }
-
-      const simulatedLatency = 0.6 + (Math.random() * 0.4);
-      totalLatency += simulatedLatency;
-
-      return {
-        id: p.id,
-        name: p.name ?? `Product ${p.id.slice(0, 8)}`,
-        basePrice: p.price,
-        livePrice: live_price,
-        confidence: agent_confidence,
-        volatility: live_price / p.price,
-      };
-    });
-
-    const averageLatency = totalLatency / initialProducts.length;
-
-    return {
-      nodes,
-      totalSavings,
-      peakDemandCount,
-      sustainableSurplusCount,
-      neutralCount,
-      averageLatency
-    };
-  }, [initialProducts, simulatedHour, debugEnabled]);
+    return runPricingBatch(initialProducts, simulatedHour, true);
+  }, [initialProducts, simulatedHour]);
 
   useEffect(() => {
     setReportData({

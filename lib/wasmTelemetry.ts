@@ -10,6 +10,8 @@ export interface TelemetryEntry {
   executionTimeMs: number;
   seedHex?: string;
   memoryMb?: number;
+  /** When set, LogLine renders this as a system message instead of timing data */
+  message?: string;
 }
 
 export interface SessionMetrics {
@@ -44,7 +46,7 @@ function notifyStress(): void {
   stressSubscribers.forEach((fn) => {
     try {
       fn(snapshot);
-    } catch (_) {
+    } catch {
       // ignore
     }
   });
@@ -64,7 +66,7 @@ function notify(): void {
   subscribers.forEach((fn) => {
     try {
       fn(snapshot);
-    } catch (_) {
+    } catch {
       // ignore subscriber errors
     }
   });
@@ -139,4 +141,24 @@ export const WasmTelemetry = {
 /** Helper to capture memory when pushing from batch runner */
 export function captureMemoryMb(): number | undefined {
   return getMemoryMb();
+}
+
+// ---------------------------------------------------------------------------
+// System-init sentinel — pushed once when the module first loads in the browser.
+// Uses a microtask so TelemetryProvider has time to subscribe before the entry
+// triggers notify(), ensuring the "Pipeline Connected" message appears immediately.
+// ---------------------------------------------------------------------------
+if (typeof window !== 'undefined') {
+  Promise.resolve().then(() => {
+    if (logs.length === 0) {
+      logs.push({
+        id: 'sys-init',
+        timestamp: Date.now(),
+        batchSize: 0,
+        executionTimeMs: 0,
+        message: '[System] Wasm Telemetry Pipeline Connected — Monitoring Edge-Orchestrator',
+      });
+      notify();
+    }
+  });
 }

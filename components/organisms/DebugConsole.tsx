@@ -11,6 +11,19 @@ const VIRTUAL_THRESHOLD = 100;
 const CONSOLE_FONT = 'JetBrains Mono, ui-monospace, monospace';
 
 function LogLine({ entry }: { entry: TelemetryEntry }) {
+  // System/info messages (e.g. pipeline-init sentinel)
+  if (entry.message) {
+    return (
+      <div
+        className="font-mono text-xs leading-6 text-cyan-400 whitespace-nowrap"
+        style={{ fontFamily: CONSOLE_FONT }}
+        role="listitem"
+      >
+        {entry.message}
+      </div>
+    );
+  }
+
   const ms = entry.executionTimeMs;
   const colorClass =
     ms < 1
@@ -36,6 +49,7 @@ function LogLine({ entry }: { entry: TelemetryEntry }) {
 }
 
 function LogList({ logs }: { logs: TelemetryEntry[] }) {
+  'use no memo';
   const parentRef = useRef<HTMLDivElement>(null);
   const useVirtual = logs.length > VIRTUAL_THRESHOLD;
 
@@ -52,8 +66,10 @@ function LogList({ logs }: { logs: TelemetryEntry[] }) {
         className="text-slate-500 font-mono text-xs p-4"
         style={{ fontFamily: CONSOLE_FONT }}
       >
-        No logs yet. Navigate to the Admin Dashboard with ?debug=true to stream
-        Wasm pricing metrics.
+        No logs yet. Visit the Analytics Dashboard or browse the Shop to stream
+        live Wasm pricing metrics. Press{' '}
+        <kbd className="rounded bg-slate-800 px-1 py-0.5 text-cyan-400">Ctrl+Shift+D</kbd>{' '}
+        to toggle this console at any time.
       </div>
     );
   }
@@ -245,8 +261,8 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
           disabled={!canRunStressTest}
           title={
             canRunStressTest
-              ? 'Re-calculate all products and stream to console'
-              : 'Navigate to Admin Dashboard to enable'
+              ? 'Re-calculate all 1,000 items and stream results to console'
+              : 'Visit the Analytics Dashboard first to load the product batch'
           }
           className="flex items-center gap-1.5 rounded border-2 border-red-500/80 bg-red-950/40 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-900/50 disabled:pointer-events-none disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
         >

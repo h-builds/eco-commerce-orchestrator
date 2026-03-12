@@ -7,6 +7,8 @@ import { SearchBar } from '@/components/molecules/SearchBar';
 import { ProductSkeleton } from '@/components/molecules/ProductSkeleton';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ComparisonBar } from '@/components/organisms/ComparisonBar';
+import { simulatePrice, getSeedHex } from '@/lib/pricingEngine';
+import { WasmTelemetry, captureMemoryMb } from '@/lib/wasmTelemetry';
 
 const SEARCH_QUERY = `
   query SearchProducts($search: String, $offset: Int) {
@@ -142,6 +144,27 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
     rootMargin: '400px', // Trigger load slightly before pushing into view
     threshold: 0.1
   });
+
+  // ── Shop telemetry probe ────────────────────────────────────────────────
+  // Prices on the Shop page are computed server-side (Server Action) and can't
+  // reach the browser-scope WasmTelemetry singleton directly. This probe
+  // re-runs simulatePrice client-side as a measurement pass — it does NOT
+  // change the displayed live_price — and pushes one aggregated batch entry
+  // per product list change (initial load, search, infinite scroll page).
+  useEffect(() => {
+    if (products.length === 0) return;
+    const t0 = performance.now();
+    for (const p of products) {
+      simulatePrice(p.id, p.price, p.stock, null);
+    }
+    const executionTimeMs = performance.now() - t0;
+    WasmTelemetry.pushEntry({
+      batchSize: products.length,
+      executionTimeMs,
+      seedHex: getSeedHex(products[0].id, null),
+      memoryMb: captureMemoryMb(),
+    });
+  }, [products]);
 
   return (
     <div className="flex flex-col w-full">

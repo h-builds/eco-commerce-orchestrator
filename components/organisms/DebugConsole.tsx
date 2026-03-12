@@ -143,7 +143,7 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
       <button
         type="button"
         onClick={() => setConsoleOpen(true)}
-        className="fixed bottom-6 right-6 z-[9999] flex h-12 w-12 items-center justify-center rounded-full bg-black border-2 border-emerald-500/80 text-emerald-400 shadow-lg shadow-emerald-500/20 hover:bg-emerald-950/80 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/50"
+        className="tour-debug-console fixed bottom-6 right-6 z-[9999] flex h-12 w-12 items-center justify-center rounded-full bg-black border-2 border-emerald-500/80 text-emerald-400 shadow-lg shadow-emerald-500/20 hover:bg-emerald-950/80 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/50"
         aria-label="Open debug console"
       >
         <span className="material-symbols-outlined" aria-hidden="true">

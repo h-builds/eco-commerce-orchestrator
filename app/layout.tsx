@@ -3,6 +3,8 @@ import Link from "next/link";
 import { TelemetryProvider } from "@/lib/TelemetryContext";
 import { DebugBridge } from "@/components/providers/DebugBridge";
 import { StressTestRegistryProvider } from "@/components/providers/StressTestRegistryProvider";
+import { TourProvider } from "@/components/providers/TourProvider";
+import { GlobalNav } from "@/components/organisms/GlobalNav";
 import "./globals.css";
 
 // All fonts loaded via <link> tags for Cloudflare edge compatibility.
@@ -48,6 +50,7 @@ export default function RootLayout({
         <link rel="stylesheet" href={JETBRAINS_MONO_HREF} />
       </head>
       <body className="font-sans antialiased text-slate-900 dark:text-slate-50 bg-slate-50 dark:bg-slate-950 flex min-h-screen flex-col">
+        <TourProvider>
         <TelemetryProvider>
         <StressTestRegistryProvider>
         {/* ── Skip-to-content for keyboard / AT users ────────────────────── */}
@@ -66,18 +69,7 @@ export default function RootLayout({
               </span>
               Eco-Commerce
             </Link>
-            <nav aria-label="Primary navigation">
-              <Link
-                href="/shop"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-bold text-white transition-all hover:brightness-110 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30">
-                <span
-                  className="material-symbols-outlined text-sm"
-                  aria-hidden="true">
-                  shopping_bag
-                </span>
-                Enter Shop
-              </Link>
-            </nav>
+              <GlobalNav />
           </div>
         </header>
 
@@ -100,6 +92,7 @@ export default function RootLayout({
           <DebugBridge />
         </StressTestRegistryProvider>
         </TelemetryProvider>
+        </TourProvider>
       </body>
     </html>
   );

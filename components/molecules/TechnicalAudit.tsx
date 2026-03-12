@@ -17,7 +17,7 @@ export function TechnicalAudit({ cacheStatus, latencyPromise }: TechnicalAuditPr
   }
 
   return (
-    <div className="p-5 mt-8 rounded-2xl bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 font-mono text-sm space-y-3 text-slate-600 dark:text-slate-400">
+    <div className="tour-technical-audit p-5 mt-8 rounded-2xl bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 font-mono text-sm space-y-3 text-slate-600 dark:text-slate-400">
       <h3 className="text-slate-900 dark:text-slate-100 font-bold uppercase tracking-widest mb-4 text-xs flex items-center gap-2">
         <span className="material-symbols-outlined text-emerald-500 text-[1.1rem]">analytics</span>
         Technical Audit

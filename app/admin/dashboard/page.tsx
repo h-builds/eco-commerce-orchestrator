@@ -52,7 +52,7 @@ export default async function DashboardPage() {
           <div className="relative z-10 mx-auto max-w-7xl w-full px-4 md:px-10">
             <BackButton />
 
-            <header className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <header className="tour-orchestrator mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold uppercase tracking-wider mb-4 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
                   <span className="relative flex h-2 w-2">

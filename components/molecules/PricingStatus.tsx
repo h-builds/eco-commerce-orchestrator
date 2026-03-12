@@ -200,7 +200,7 @@ export function PricingStatus() {
       {/* ── Time Machine ──────────────────────────────────────────── */}
       <div
         className={[
-          "mt-4 pt-4 border-t transition-colors duration-300",
+          "tour-time-machine mt-4 pt-4 border-t transition-colors duration-300",
           isSimulating ? "border-amber-700/30" : "border-slate-700/40",
         ].join(" ")}
         role="group"

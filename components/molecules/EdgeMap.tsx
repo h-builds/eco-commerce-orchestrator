@@ -106,7 +106,7 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
   const hoveredNode = hoveredIndex !== null ? nodes[hoveredIndex] : null;
 
   return (
-    <div className="w-full h-full pb-8 relative" ref={containerRef}>
+    <div className="tour-edge-map w-full h-full pb-8 relative" ref={containerRef}>
       <div
         className="w-full h-full grid gap-[2px] p-2 bg-slate-950/50 rounded-lg border border-slate-800 overflow-hidden"
         style={{

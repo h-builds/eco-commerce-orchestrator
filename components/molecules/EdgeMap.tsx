@@ -27,20 +27,32 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
   const handleGridMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       const cell = (e.target as HTMLElement).closest('[data-index]');
-      if (!cell) return;
+      if (!cell) {
+        setHoveredIndex(null);
+        return;
+      }
       const raw = cell.getAttribute('data-index');
       if (raw == null) return;
       const index = parseInt(raw, 10);
       if (Number.isNaN(index) || index < 0 || index >= nodes.length) return;
-      if (hoveredIndex === index) return;
-      const rect = cell.getBoundingClientRect();
+      
       setHoveredIndex(index);
-      setTooltipPosition({
-        x: rect.left + rect.width / 2,
-        y: rect.top - 4,
-      });
+
+      let x = e.clientX;
+      const y = e.clientY - 12;
+      
+      const tooltipWidth = 220;
+      const halfWidth = tooltipWidth / 2;
+
+      if (x + halfWidth > window.innerWidth) {
+        x = window.innerWidth - halfWidth - 16;
+      } else if (x - halfWidth < 0) {
+        x = halfWidth + 16;
+      }
+
+      setTooltipPosition({ x, y });
     },
-    [nodes.length, hoveredIndex],
+    [nodes.length],
   );
 
   const handleGridMouseLeave = useCallback(() => {

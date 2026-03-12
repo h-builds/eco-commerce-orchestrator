@@ -20,9 +20,16 @@ function getStatus(volatility: number): 'Surplus' | 'Nominal' | 'Surge' {
   return 'Nominal';
 }
 
+function getStatusColorClass(volatility: number): string {
+  if (volatility < 1.0) return 'text-emerald-400';
+  if (volatility > 1.1) return 'text-red-500';
+  if (volatility > 1.0) return 'text-amber-400';
+  return 'text-slate-400';
+}
+
 export function EdgeMap({ nodes }: EdgeMapProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number; flipY: boolean }>({ x: 0, y: 0, flipY: false });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleGridMouseMove = useCallback(
@@ -42,10 +49,18 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
 
       const rect = containerRef.current.getBoundingClientRect();
       let x = e.clientX - rect.left;
-      const y = e.clientY - rect.top - 12;
+      let y = e.clientY - rect.top - 12;
+      let flipY = false;
       
       const tooltipWidth = 220;
+      const tooltipHeight = 100; // approximate
       const halfWidth = tooltipWidth / 2;
+
+      // Vertical boundary check
+      if (y < tooltipHeight) {
+        flipY = true;
+        y = e.clientY - rect.top + 24; // Push below the cursor
+      }
 
       // Local boundary checks
       if (x + halfWidth > rect.width) {
@@ -54,7 +69,7 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
         x = halfWidth + 16;
       }
 
-      setTooltipPosition({ x, y });
+      setTooltipPosition({ x, y, flipY });
     },
     [nodes.length],
   );
@@ -112,17 +127,17 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
             style={{
               left: tooltipPosition.x,
               top: tooltipPosition.y,
-              transform: 'translate(-50%, -100%)',
+              transform: tooltipPosition.flipY ? 'translate(-50%, 0)' : 'translate(-50%, -100%)',
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
           >
-            <div className="font-semibold text-slate-100 truncate" title={hoveredNode.name}>
+            <div className="font-semibold text-slate-100 break-words leading-tight" title={hoveredNode.name}>
               {hoveredNode.name}
             </div>
-            <div className="mt-1 font-mono tabular-nums text-emerald-400">
+            <div className={`mt-1 font-mono tabular-nums ${getStatusColorClass(hoveredNode.volatility)}`}>
               ${hoveredNode.livePrice.toFixed(2)}
             </div>
             <div className="mt-0.5 text-slate-400">

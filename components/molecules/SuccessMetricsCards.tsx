@@ -1,10 +1,16 @@
+import { AnimatedCounter } from '../atoms/AnimatedCounter';
+
 interface SuccessMetricsCardsProps {
   surplusCount: number;
+  totalSavings: number;
+  efficiencyScore: number;
 }
 
-export function SuccessMetricsCards({ surplusCount }: SuccessMetricsCardsProps) {
+export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScore }: SuccessMetricsCardsProps) {
   // Rough estimate logic: each surplus item bought offsets ~2.5kg of carbon
-  const carbonOffset = (surplusCount * 2.5).toFixed(1);
+  const carbonOffset = surplusCount * 2.5;
+  const networkROI = Math.round((totalSavings / 1500) * 100);
+  const uptime = 99.990 + (efficiencyScore / 10000);
   
   return (
     <div className="grid grid-rows-3 gap-4 h-full">
@@ -17,7 +23,9 @@ export function SuccessMetricsCards({ surplusCount }: SuccessMetricsCardsProps) 
           <span className="material-symbols-outlined text-emerald-500/50 text-xl">eco</span>
         </div>
         <div className="flex items-baseline gap-1">
-          <span className="text-3xl font-black text-emerald-400 tabular-nums">{carbonOffset}</span>
+          <span className="text-3xl font-black text-emerald-400 tabular-nums">
+            <AnimatedCounter value={carbonOffset} decimals={1} />
+          </span>
           <span className="text-sm font-bold text-emerald-500/60">kg CO₂</span>
         </div>
       </div>
@@ -30,7 +38,9 @@ export function SuccessMetricsCards({ surplusCount }: SuccessMetricsCardsProps) 
           <span className="material-symbols-outlined text-cyan-500/50 text-xl">account_balance_wallet</span>
         </div>
         <div className="flex items-baseline gap-1">
-          <span className="text-3xl font-black text-cyan-400 tabular-nums">+412</span>
+          <span className="text-3xl font-black text-cyan-400 tabular-nums">
+            {networkROI >= 0 ? '+' : ''}<AnimatedCounter value={networkROI} decimals={0} />
+          </span>
           <span className="text-sm font-bold text-cyan-500/60">%</span>
         </div>
       </div>
@@ -43,7 +53,9 @@ export function SuccessMetricsCards({ surplusCount }: SuccessMetricsCardsProps) 
           <span className="material-symbols-outlined text-violet-500/50 text-xl">memory</span>
         </div>
         <div className="flex items-baseline gap-1">
-          <span className="text-3xl font-black text-violet-400 tabular-nums">99.999</span>
+          <span className="text-3xl font-black text-violet-400 tabular-nums">
+            <AnimatedCounter value={uptime} decimals={3} />
+          </span>
           <span className="text-sm font-bold text-violet-500/60">%</span>
         </div>
       </div>

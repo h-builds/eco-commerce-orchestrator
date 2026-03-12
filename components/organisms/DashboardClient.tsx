@@ -10,6 +10,7 @@ import { BigNumberMetric } from '../molecules/BigNumberMetric';
 import { EdgeMap } from '../molecules/EdgeMap';
 import { WasmThroughputChart } from '../molecules/WasmThroughputChart';
 import { SuccessMetricsCards } from '../molecules/SuccessMetricsCards';
+import { getEfficiencyForHour } from '../../lib/efficiencyScore';
 
 interface BaseProduct {
   id: string;
@@ -59,7 +60,11 @@ export default function DashboardClient({ initialProducts }: DashboardClientProp
           <BigNumberMetric value={computedData.totalSavings} />
         </div>
         <div className="flex flex-col gap-6">
-          <SuccessMetricsCards surplusCount={computedData.sustainableSurplusCount} />
+          <SuccessMetricsCards 
+            surplusCount={computedData.sustainableSurplusCount}
+            totalSavings={computedData.totalSavings}
+            efficiencyScore={getEfficiencyForHour(simulatedHour !== null ? simulatedHour : new Date().getHours())}
+          />
         </div>
       </div>
 

@@ -62,6 +62,18 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+             __html: JSON.stringify({
+               "@context": "https://schema.org",
+               "@type": "Organization",
+               "name": "Eco-Commerce Orchestrator",
+               "url": BASE_URL,
+               "logo": `${BASE_URL}/eco-logo.png`,
+             })
+          }}
+        />
         {/* Preconnect to Google Fonts CDN — only needed for Material Symbols now */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -121,7 +133,7 @@ export default function RootLayout({
                   </div>
                 </header>
 
-                <main id="main-content" className="flex-grow pt-8">
+                <main id="main-content" className="flex-grow pt-8" tabIndex={-1}>
                   {children}
                 </main>
 

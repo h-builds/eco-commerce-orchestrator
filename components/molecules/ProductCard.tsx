@@ -67,15 +67,13 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
     : "Live: Go-Wasm Verified";
 
   return (
-    <Link
-      href={`/shop/${product.slug}`}
-      prefetch={false}
+    <article
       className="group relative flex flex-col bg-white/5 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 hover:scale-[1.02] hover:border-emerald-500/50 hover:bg-white/10 hover:shadow-xl hover:shadow-emerald-500/10 transition-all duration-300 ease-in-out focus-within:ring-4 focus-within:ring-primary/20"
       aria-label={`View details for ${product.name}`}>
       <div className="relative h-64 w-full block bg-slate-100 dark:bg-slate-800 overflow-hidden outline-none">
         <Image
           src={product.image_url}
-          alt={`Image of ${product.name}`}
+          alt={product.name}
           fill
           priority={priority}
           className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -129,7 +127,9 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
       <div className="p-4 flex flex-col flex-1 gap-2">
         <div className="flex items-start justify-between gap-4">
           <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-500 transition-colors">
-            {product.name}
+            <Link href={`/shop/${product.slug}`} prefetch={false} className="before:absolute before:inset-0 before:z-10 focus:outline-none">
+              {product.name}
+            </Link>
           </h3>
           <div
             className="flex flex-col items-end shrink-0"
@@ -203,7 +203,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
           </div>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
 

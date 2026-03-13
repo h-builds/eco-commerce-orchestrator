@@ -15,6 +15,7 @@ export function SearchBar({ value, onChange, isPending }: SearchBarProps) {
           search
         </span>
       </div>
+      <label htmlFor={id} className="sr-only">Search sustainable products</label>
       <input
         id={id}
         type="text"

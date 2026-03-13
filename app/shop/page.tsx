@@ -6,12 +6,34 @@ import { CompareProvider } from '@/lib/CompareContext';
 import { ComparisonModal } from '@/components/organisms/ComparisonModal';
 import Loading from './loading';
 
+import type { Metadata } from 'next';
+
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Shop eco-friendly products | Eco-Commerce',
+  description: 'Sustainable products priced in real-time by our Go Wasm AI agent. Every price reflects live supply & demand.',
+  alternates: {
+    canonical: '/shop',
+  },
+};
 
 export default function ShopPage() {
   return (
     <SimulationProvider>
       <CompareProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              "name": "Shop eco-friendly products",
+              "description": "Sustainable products priced in real-time by our Go Wasm AI agent.",
+              "url": "https://eco-commerce-orchestrator.pages.dev/shop"
+            })
+          }}
+        />
         <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12 px-4 md:px-10 lg:px-20">
           <header className="mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">

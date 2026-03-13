@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Eco-Commerce Orchestrator — AI Production Stack",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 // --- Data: architecture pillars rendered as cards ---
@@ -44,6 +47,17 @@ const STATS = [
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Eco-Commerce Orchestrator",
+            "url": "https://eco-commerce-orchestrator.pages.dev/",
+          })
+        }}
+      />
       {/* ── Hero ───────────────────────────────────────────────────────── */}
       <section
           aria-labelledby="hero-heading"

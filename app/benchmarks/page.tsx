@@ -15,6 +15,11 @@ interface MetricData {
   internalTimeUs?: number; // Wasm internal time in microseconds
 }
 
+/**
+ * Parallel execution environment contrasting local V8 JIT optimization against 
+ * deterministic Go-Wasm execution. Focuses on measuring latency offsets and 
+ * computational parity under sustained load.
+ */
 export default function BenchmarksPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -32,7 +37,6 @@ export default function BenchmarksPage() {
 
   const snapshotRef = useRef<HTMLDivElement>(null);
 
-  // Run JS benchmark purely client-side for accurate browser timing
   const runJSBatchLocally = (batchSize: number): number => {
     const start = performance.now();
     for (let i = 0; i < batchSize; i++) {
@@ -52,20 +56,17 @@ export default function BenchmarksPage() {
 
     let jsTotalMs = 0;
 
-    // Run JS batches client-side for accurate timing
     for (let i = 0; i < BATCH_COUNT; i++) {
       const batchMs = runJSBatchLocally(BATCH_SIZE);
       jsTotalMs += batchMs;
       setJsProgress((prev) => prev + BATCH_SIZE);
       setJsMetrics({ timeMs: jsTotalMs });
-      // Small delay to allow UI to update
       await new Promise((r) => setTimeout(r, 0));
     }
 
     let wasmTotalMs = 0;
     let wasmInternalTotalUs = 0;
 
-    // Run Wasm
     for (let i = 0; i < BATCH_COUNT; i++) {
       try {
         const res = await runWasmBenchmarkChunk(BATCH_SIZE);
@@ -90,7 +91,6 @@ export default function BenchmarksPage() {
         setIsRunning(false);
         return;
       }
-      // Small delay for UI update
       await new Promise((r) => setTimeout(r, 0));
     }
 
@@ -98,7 +98,6 @@ export default function BenchmarksPage() {
     setIsFinished(true);
   };
 
-  // ops/s calculations (live, used in gauges)
   const currentWasmOps =
     wasmProgress > 0 && wasmMetrics.timeMs > 0
       ? (wasmProgress / wasmMetrics.timeMs) * 1000
@@ -108,8 +107,10 @@ export default function BenchmarksPage() {
       ? (jsProgress / jsMetrics.timeMs) * 1000
       : 0;
 
-  // Final metrics — only meaningful when isFinished is true.
-  // Computed here but only RENDERED inside the isFinished guard to avoid race conditions.
+  /**
+   * Computed here to avoid hydration/render race conditions while
+   * benchmarks are asynchronously updating.
+   */
   const finalJsTimeUs = jsMetrics.timeMs * 1000;
   const finalWasmInternalUs = wasmMetrics.internalTimeUs || 0;
   const computeRatio =
@@ -140,7 +141,6 @@ export default function BenchmarksPage() {
 
     return (
       <div className="flex flex-col gap-4 p-6 bg-slate-800/50 rounded-2xl border border-slate-700 backdrop-blur-md relative overflow-hidden">
-        {/* Glow overlay */}
         <div
           className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-20 ${color}`}
         />
@@ -154,7 +154,6 @@ export default function BenchmarksPage() {
           </span>
         </div>
 
-        {/* Progress bar container */}
         <div className="w-full h-8 bg-slate-950 rounded-full overflow-hidden border border-slate-800 relative z-10 shadow-inner">
           <motion.div
             className={`h-full ${color} ${shadowColor}`}
@@ -281,7 +280,6 @@ export default function BenchmarksPage() {
         </p>
       </header>
 
-      {/* Inline Error State */}
       <AnimatePresence>
         {benchmarkError && (
           <motion.div
@@ -298,7 +296,6 @@ export default function BenchmarksPage() {
         )}
       </AnimatePresence>
 
-      {/* UI Lock Overlay */}
       <AnimatePresence>
         {isRunning && (
           <motion.div
@@ -366,7 +363,6 @@ export default function BenchmarksPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               className="bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl relative">
-              {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500 rounded-full blur-[100px] opacity-10 pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-500 rounded-full blur-[100px] opacity-10 pointer-events-none" />
 
@@ -447,7 +443,6 @@ export default function BenchmarksPage() {
               </div>
               )}
 
-              {/* Loading placeholder while running */}
               {isRunning && !isFinished && (
                 <div className="p-8 flex items-center justify-center gap-3 text-slate-500">
                   <span className="material-symbols-outlined animate-spin text-cyan-400" aria-hidden="true">
@@ -462,7 +457,6 @@ export default function BenchmarksPage() {
               {isFinished && (
                 <div className="border-t border-slate-800 p-6">
                   <div className="bg-slate-950 border border-slate-700 rounded-xl overflow-hidden font-mono text-sm shadow-inner">
-                    {/* Terminal title bar */}
                     <div className="flex items-center gap-2 px-4 py-2 bg-slate-900 border-b border-slate-700">
                       <div className="w-3 h-3 rounded-full bg-red-500/70" />
                       <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
@@ -471,7 +465,6 @@ export default function BenchmarksPage() {
                         technical_note.md
                       </span>
                     </div>
-                    {/* Terminal body */}
                     <div className="p-5 space-y-2 text-slate-300 leading-relaxed">
                       <p>
                         <span className="text-green-400 select-none">$ </span>
@@ -521,7 +514,6 @@ export default function BenchmarksPage() {
           )}
         </AnimatePresence>
 
-        {/* Export Report Button Group — only visible when completed */}
         <AnimatePresence>
           {isFinished && (
             <motion.div

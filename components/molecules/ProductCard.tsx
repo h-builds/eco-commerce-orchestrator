@@ -21,14 +21,17 @@ export interface Product {
 
 interface ProductCardProps {
   product: Product;
-  /** When true, changes the Go-Wasm badge to an amber "simulation" state */
   isSimulating?: boolean;
-  /** When true, uses priority rendering for the image (LCP optimization) */
+  /** Force-priority rendering to stabilize LCP metrics in the shop grid. */
   priority?: boolean;
 }
 
+/**
+ * Architectural entry for the shop grid. Utilizes a strict memoization boundary 
+ * to shield the document tree from massive re-render cycles during global 
+ * simulation state propagation (tick events).
+ */
 function ProductCardBase({ product, isSimulating = false, priority = false }: ProductCardProps) {
-  // Pure functional component (React Compiler target)
   const isLowStock = product.stock > 0 && product.stock <= 5;
   const formattedPrice = `$${product.live_price.toFixed(2)}`;
   const formattedOriginalPrice = `$${product.price.toFixed(2)}`;
@@ -40,8 +43,6 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
   const isSelected = selectedProducts.some((p) => p.id === product.id);
   const canSelectMore = selectedProducts.length < 3;
 
-  // Determine confidence badge color — ternary keeps the compiler's
-  // memoization path clean and removes the misleading dead-code default.
   const confidenceColor =
     confidencePercent >= 90
       ? "bg-emerald-500 text-white"
@@ -49,7 +50,6 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
         ? "bg-amber-500 text-white"
         : "bg-rose-500 text-white";
 
-  // Simulation badge classes vs live badge classes
   const verifiedBadgeClass = isSimulating
     ? "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 animate-pulse"
     : "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 animate-pulse";
@@ -79,7 +79,6 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
-        {/* Compare Checkbox */}
         <button
           className={`absolute top-4 right-4 z-20 flex size-8 items-center justify-center rounded-full  transition-all focus:outline-none focus-visible:ring-4 ${
             isSelected
@@ -145,7 +144,6 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
                 {formattedOriginalPrice}
               </span>
             )}
-            {/* Go-Wasm verification badge — amber in sim mode, emerald when live */}
             <span className={verifiedBadgeClass} aria-label={verifiedLabel}>
               <span className={verifiedDotClass} aria-hidden="true" />
               {verifiedText}
@@ -189,7 +187,6 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
         </div>
 
         <div className="mt-4 flex flex-col gap-2 relative">
-          {/* Analyze Edge Pricing CTA */}
           <div className="flex items-center justify-between px-4 py-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 border border-emerald-500/20">
             <span className="flex items-center gap-2">
               <span className="material-symbols-outlined text-sm animate-pulse" aria-hidden="true">
@@ -207,9 +204,10 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
   );
 }
 
-// Memoised so that the 1,000-card grid does not re-render on every
-// slider tick — only re-renders when the product data or simulation
-// flag actually changes.
+/** 
+ * Enforces a strict render boundary to lock the shop grid against high-frequency 
+ * simulation ticks, preserving 60 FPS scrolling and interaction logic.
+ */
 export const ProductCard = memo(
   ProductCardBase,
   (prev, next) =>

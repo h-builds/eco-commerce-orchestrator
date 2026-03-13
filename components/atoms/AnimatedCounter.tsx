@@ -8,6 +8,11 @@ interface AnimatedCounterProps {
   decimals?: number;
 }
 
+/**
+ * High-frequency value tweening via Motion springs. Decouples numerical 
+ * interpolation from the React reconciliation loop to preserve main-thread 
+ * performance under aggressive simulation loads.
+ */
 export function AnimatedCounter({ value, decimals = 0 }: AnimatedCounterProps) {
   const spring = useSpring(value, {
     bounce: 0,

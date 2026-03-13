@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Negotiates real-time pricing via the edge-native Wasm agent. 
+ * Seeding is decoupled from standard Edge caching to ensure 
+ * deterministic price consistency across distributed stateless workers.
+ */
 export default function ShopPage() {
   return (
     <SimulationProvider>

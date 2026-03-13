@@ -24,6 +24,11 @@ interface DashboardClientProps {
   initialProducts: BaseProduct[];
 }
 
+/**
+ * Isolates high-frequency client-side state (Wasm batch runs, telemetry 
+ * streaming) from the static Edge-shell to preserve L1/L2 cacheability 
+ * of the parent route at the Worker level.
+ */
 export default function DashboardClient({
   initialProducts,
 }: DashboardClientProps) {
@@ -35,8 +40,11 @@ export default function DashboardClient({
     setStressTestProducts(initialProducts, simulatedHour);
   }, [initialProducts, simulatedHour, setStressTestProducts]);
 
-  // Run the pricing engine on all products, always reporting to WasmTelemetry
-  // so sliders and page loads both stream logs to the Debug Console.
+  /**
+   * Dispatches the batch pricing loop. Reports to WasmTelemetry to ensure 
+   * simulation consistency between client-side re-computation and Edge 
+   * Worker logs.
+   */
   const computedData = useMemo(() => {
     return runPricingBatch(initialProducts, simulatedHour, true);
   }, [initialProducts, simulatedHour]);
@@ -54,10 +62,8 @@ export default function DashboardClient({
 
   return (
     <div className="space-y-8">
-      {/* Time Controls */}
       <PricingStatus />
 
-      {/* Primary Metrics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <BigNumberMetric value={computedData.totalSavings} />
@@ -91,7 +97,6 @@ export default function DashboardClient({
         </div>
       </div>
 
-      {/* Visualizations Floor */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 flex flex-col">
           <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase mb-4 shrink-0">

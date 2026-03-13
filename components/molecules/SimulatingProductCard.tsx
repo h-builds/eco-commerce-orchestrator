@@ -1,18 +1,5 @@
 'use client';
 
-// ---------------------------------------------------------------------------
-// SimulatingProductCard
-//
-// Responsibilities:
-//  1. LIVE mode (simulatedHour = null):
-//     - If the Go Wasm pricing agent succeeded (agent_confidence > 0),
-//       use the server-resolved prices as-is.
-//     - If the agent failed (agent_confidence === 0, the known Wasm fallback),
-//       transparently re-compute via the client-side pricing engine at the
-//       real current hour so the badge always shows a meaningful value.
-//  2. SIMULATION mode (simulatedHour = 0-23):
-//     - Always use the client-side engine seeded by the simulated hour.
-// ---------------------------------------------------------------------------
 
 import { useMemo } from 'react';
 import { useSimulation } from '@/lib/SimulationContext';
@@ -24,26 +11,33 @@ interface SimulatingProductCardProps {
   priority?: boolean;
 }
 
+/**
+ * Negotiates state reconciliation between server-resolved Edge pricing 
+ * and local client-side simulation. If the Edge agent fails or the 
+ * global 'Time Machine' is active, it transparently falls back to the 
+ * deterministic JS port to maintain UI integrity.
+ */
 export function SimulatingProductCard({ product, priority = false }: SimulatingProductCardProps) {
   const { simulatedHour } = useSimulation();
 
+  /**
+   * Reconciles Edge compute results with hot-swappable client simulation 
+   * blocks to bypass rendering artifacts during Wasm agent failure 
+   * or manual hour shifting.
+   */
   const displayProduct = useMemo((): Product => {
     const isSimulating = simulatedHour !== null;
     const agentFailed  = product.agent_confidence === 0;
 
     if (!isSimulating && !agentFailed) {
-      // Happy path: live mode + Wasm agent worked — trust server prices.
       return product;
     }
 
-    // Either simulating a different hour, or the Wasm agent failed in live mode.
-    // In both cases, compute deterministic prices client-side.
-    // simulatedHour = null → simulatePrice uses the real current hour.
     const { live_price, agent_confidence } = simulatePrice(
       product.id,
-      product.price,   // base price from DB (always accurate)
+      product.price,
       product.stock,
-      simulatedHour,   // null = real hour, 0-23 = simulated hour
+      simulatedHour,
     );
 
     return { ...product, live_price, agent_confidence };

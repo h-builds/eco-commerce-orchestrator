@@ -1,4 +1,5 @@
 'use client';
+
 import { use } from 'react';
 
 interface TechnicalAuditProps {
@@ -6,6 +7,11 @@ interface TechnicalAuditProps {
   latencyPromise: Promise<number>;
 }
 
+/**
+ * Surfaces Edge-native telemetry for cache hit ratios and Wasm execution 
+ * latency. Orchestrates asynchronous metric delivery via React 19 `use()` 
+ * to synchronize the UI with real-time Edge compute performance markers.
+ */
 export function TechnicalAudit({ cacheStatus, latencyPromise }: TechnicalAuditProps) {
   const latency = use(latencyPromise);
 

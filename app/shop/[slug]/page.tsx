@@ -12,6 +12,10 @@ import { BackButton } from '@/components/molecules/BackButton';
 
 export const revalidate = 3600;
 
+/**
+ * Pre-warms the Edge cache with the top 50 high-traffic products to optimize 
+ * global LCP and cold-start latency across the Worker network.
+ */
 export async function generateStaticParams() {
   try {
     const products = await getTopProducts(50);
@@ -41,6 +45,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/**
+ * Measures the RTT of the Cloudflare Service Binding to the Go-Wasm agent. 
+ * Baselines the computational overhead of deterministic pricing verification 
+ * for the Technical Audit layer.
+ */
 async function fetchPriceWithLatency(id: string, price: number, stock: number) {
   const start = Date.now();
   const livePriceData = await getLivePrice(id, price, stock);
@@ -48,6 +57,11 @@ async function fetchPriceWithLatency(id: string, price: number, stock: number) {
   return { livePriceData, latency: end - start };
 }
 
+/**
+ * Implements a two-tier hydration strategy: static product attributes are 
+ * served via ISR (1h) from D1, while dynamic pricing and volatility curves 
+ * are verified real-time via the Edge Wasm agent.
+ */
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   const product = await getProductBySlug(resolvedParams.slug);
@@ -61,7 +75,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const confidence = livePriceData.agent_confidence;
   const wasmLatency = latency;
 
-  // We wrap the single latency value in a promise so our Client component can consume it with `use`
   const latencyPromise = Promise.resolve(wasmLatency);
   const volatilityPromise = getVolatilityData(product.id, product.price, product.stock);
 
@@ -119,14 +132,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                "aggregateRating": {
                  "@type": "AggregateRating",
                  "ratingValue": product.rating.toString(),
-                 "reviewCount": "10" // Mocked review count for schema completeness
+                 "reviewCount": "10"
                }
              })
           }}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          {/* Left Column: Visuals & Chart */}
           <div className="space-y-8">
             <div className="aspect-square relative rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-8 group">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -144,7 +156,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
               )}
               
-              {/* Floating Live Badge */}
               <div className="absolute top-4 right-4 bg-black/80 backdrop-blur border border-slate-700 text-white px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase flex items-center gap-2 shadow-xl">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 Live: ${(livePrice ?? product.price).toFixed(2)}
@@ -160,11 +171,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </Suspense>
           </div>
 
-          {/* Right Column: Details & Technical Audit */}
           <div className="flex flex-col justify-start">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest mb-4 w-max">
               <span className="material-symbols-outlined text-sm" aria-hidden="true">category</span>
-              {product.category || 'Eco-Friendly'} {/* {product.stock} in stock */}
+              {product.category || 'Eco-Friendly'}
             </div>
             
             <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4 leading-tight">

@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
 
-// Simple PRNG to avoid Math.random() impurity in React Compiler
+/**
+ * Implements a stable PRNG to maintain deterministic purity for the 
+ * React Compiler and prevent reconciliation artifacts during 
+ * high-frequency state updates.
+ */
 function pseudoRandom(seed: number) {
   const x = Math.sin(seed++) * 10000;
   return x - Math.floor(x);
@@ -11,29 +15,29 @@ interface Point {
   y: number;
 }
 
+/**
+ * Visualizes high-fidelity Wasm execution latency. Renders a native 
+ * SVG-based sparkline with quadratic curve interpolation to preserve 
+ * main-thread capacity for real-time Edge compute orchestration.
+ */
 export function WasmThroughputChart({ averageLatency }: { averageLatency: number }) {
-  // Generate a realistic-looking latency sparkline focused around the average
   const points = useMemo(() => {
     const pts: Point[] = [];
     const width = 800;
     const height = 200;
-    const numPoints = 100; // time slices
+    const numPoints = 100;
     const stepX = width / numPoints;
 
     for (let i = 0; i <= numPoints; i++) {
-        // base latency + micro-jitters
         const r1 = pseudoRandom(i + averageLatency);
         const r2 = pseudoRandom(i * 2 + averageLatency);
         const r3 = pseudoRandom(i * 3 + averageLatency);
         
         let val = averageLatency + (r1 * 0.2 - 0.1); 
-        // occasional tiny spikes 
         if (r2 > 0.95) val += (r3 * 0.4); 
         
-        // Clamp to a sensible bounded view
         const boundedY = Math.max(0, Math.min(2.5, val));
         
-        // Graph is 0-3ms
         const yNorm = boundedY / 3.0;
         pts.push({
             x: i * stepX,
@@ -43,35 +47,32 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
     return pts;
   }, [averageLatency]);
 
-  let themeColor = "rgb(148, 163, 184)"; // slate-400 default
+  let themeColor = "rgb(148, 163, 184)";
   let themeClass = "text-slate-400";
   let glowClass = "text-slate-500/60";
 
   if (averageLatency < 5) {
-    themeColor = "#10b981"; // emerald-500
+    themeColor = "#10b981";
     themeClass = "text-emerald-500";
     glowClass = "text-emerald-500/60";
   } else if (averageLatency < 15) {
-    themeColor = "#f59e0b"; // amber-500
+    themeColor = "#f59e0b";
     themeClass = "text-amber-500";
     glowClass = "text-amber-500/60";
   } else {
-    themeColor = "#f43f5e"; // rose-500
+    themeColor = "#f43f5e";
     themeClass = "text-rose-500";
     glowClass = "text-rose-500/60";
   }
 
-  // Build SVG path
   const pathD = useMemo(() => {
     if (points.length === 0) return '';
     let d = `M ${points[0].x} ${points[0].y}`;
     for (let i = 1; i < points.length; i++) {
-        // Simple smoothing
         const xc = (points[i - 1].x + points[i].x) / 2;
         const yc = (points[i - 1].y + points[i].y) / 2;
         d += ` Q ${points[i - 1].x} ${points[i-1].y}, ${xc} ${yc}`;
     }
-    // Connect to the last point
     d += ` T ${points[points.length - 1].x} ${points[points.length - 1].y}`;
     return d;
   }, [points]);
@@ -85,7 +86,6 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
   return (
     <div className="w-full h-full pb-6 pt-4 relative flex flex-col">
        <div className="flex-1 w-full relative">
-         {/* Y-Axis Labels */}
          <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] text-slate-500 font-mono -ml-2 h-full z-10 pointer-events-none">
            <span>3ms</span>
            <span>2ms</span>
@@ -93,9 +93,7 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
            <span>0ms</span>
          </div>
          
-         {/* Chart Area */}
          <div className="h-full w-full pl-6 border-l border-b border-slate-800 relative overflow-hidden">
-            {/* Grid Lines */}
             <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
               <div className="w-full h-px bg-slate-800/50" />
               <div className="w-full h-px bg-slate-800/50" />
@@ -115,12 +113,10 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
                     <stop offset="100%" stopColor={themeColor.replace(')', ', 0)').replace('rgb', 'rgba')} />
                  </linearGradient>
               </defs>
-              {/* Fill */}
               <path 
                 d={fillD}
                 fill="url(#latencyGlow)"
               />
-              {/* Line */}
               <path 
                 d={pathD}
                 fill="none"

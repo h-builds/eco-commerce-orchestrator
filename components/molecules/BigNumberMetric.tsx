@@ -2,12 +2,16 @@
 
 import { useEffect, useState } from 'react';
 
+/**
+ * Handles high-frequency numerical tweening via requestAnimationFrame. 
+ * Decouples the visual counting animation from the standard React 
+ * reconciliation cycle to ensure UI fluidity during high-concurrency 
+ * data stream bursts.
+ */
 export function BigNumberMetric({ value }: { value: number }) {
-  // We'll animate the number counting up/down to the value
   const [displayValue, setDisplayValue] = useState(value);
   
   useEffect(() => {
-    // Simple spring-like ease towards value
     let cancel = false;
     let current = displayValue;
     

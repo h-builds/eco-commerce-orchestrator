@@ -9,6 +9,12 @@ import type { ExecutiveReportSnapshot } from '../../lib/executiveReportPdf';
 
 const NETWORK_ROI_DISPLAY = 412;
 
+/**
+ * Orchestrates client-side PDF generation of executive performance audits. 
+ * Utilizes dynamic library injection to bypass Edge Worker memory 
+ * constraints while preserving main-thread responsiveness during 
+ * complex DOM-to-Canvas rasterization.
+ */
 export function DownloadExecutiveReportButton() {
   const { simulatedHour } = useSimulation();
   const { reportData, chartContainerRef } = useReportData();
@@ -31,8 +37,12 @@ export function DownloadExecutiveReportButton() {
             logging: false,
           });
           chartDataUrl = canvas.toDataURL('image/png');
-        } catch {
-          // Continue without chart image
+        } catch (error) {
+          /** 
+           * Silent degradation: proceeds with text-only payload if 
+           * rasterization triggers DOM/CORS complexity issues. 
+           */
+          console.warn('[Report] Chart snapshot failed, omitting from PDF.', error);
         }
       }
 

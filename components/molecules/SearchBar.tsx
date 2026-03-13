@@ -6,6 +6,12 @@ interface SearchBarProps {
   isPending: boolean;
 }
 
+/**
+ * Orchestrates catalog filtering with support for React Concurrent rendering 
+ * and WCAG 2.1 AA accessibility triggers. Synchronizes visual pending 
+ * states with deferred transition cycles to maintain interface fluidity 
+ * during high-cardinality search operations.
+ */
 export function SearchBar({ value, onChange, isPending }: SearchBarProps) {
   const id = useId();
   return (
@@ -41,7 +47,7 @@ export function SearchBar({ value, onChange, isPending }: SearchBarProps) {
             progress_activity
           </span>
         ) : (
-          <span className="w-6 h-6" /> // spacer to keep dimensions fixed when not pending
+          <span className="w-6 h-6" />
         )}
       </div>
     </div>

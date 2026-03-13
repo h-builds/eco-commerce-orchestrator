@@ -12,13 +12,13 @@ const BATCH_COUNT = TOTAL_ITERATIONS / BATCH_SIZE;
 
 interface MetricData {
   timeMs: number;
-  internalTimeUs?: number; // Wasm internal time in microseconds
+  internalTimeUs?: number;
 }
 
 /**
- * Parallel execution environment contrasting local V8 JIT optimization against 
- * deterministic Go-Wasm execution. Focuses on measuring latency offsets and 
- * computational parity under sustained load.
+ * Contrasts V8 JIT optimization against deterministic Go-Wasm execution to 
+ * quantify latency offsets and computational parity under high-concurrency 
+ * load (10k iterations).
  */
 export default function BenchmarksPage() {
   const [isRunning, setIsRunning] = useState(false);
@@ -107,10 +107,6 @@ export default function BenchmarksPage() {
       ? (jsProgress / jsMetrics.timeMs) * 1000
       : 0;
 
-  /**
-   * Computed here to avoid hydration/render race conditions while
-   * benchmarks are asynchronously updating.
-   */
   const finalJsTimeUs = jsMetrics.timeMs * 1000;
   const finalWasmInternalUs = wasmMetrics.internalTimeUs || 0;
   const computeRatio =
@@ -375,7 +371,6 @@ export default function BenchmarksPage() {
                 </h3>
               </div>
 
-              {/* Metrics grid — ONLY rendered when both benchmarks are complete */}
               {isFinished && (
               <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
                 <div className="flex flex-col gap-2">
@@ -525,7 +520,6 @@ export default function BenchmarksPage() {
                 Export Audit Report
               </span>
               <div className="flex gap-4">
-                {/* PNG Export */}
                 <button
                   onClick={exportSnapshot}
                   disabled={isExporting}
@@ -544,7 +538,6 @@ export default function BenchmarksPage() {
                   )}
                 </button>
 
-                {/* JSON Export */}
                 <button
                   onClick={exportJSON}
                   className="group relative overflow-hidden bg-transparent border border-yellow-500/40 text-yellow-400 hover:text-white hover:border-yellow-400 hover:bg-yellow-500/10 font-bold px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 shadow-[0_0_10px_rgba(234,179,8,0.1)] hover:shadow-[0_0_20px_rgba(234,179,8,0.3)]">

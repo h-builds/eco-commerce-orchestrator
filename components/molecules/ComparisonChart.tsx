@@ -31,11 +31,14 @@ interface CustomTooltipProps {
   label?: number;
 }
 
-const COLORS = ["#10b981", "#f59e0b", "#3b82f6"]; // Emerald, Amber, Blue
+const COLORS = ["#10b981", "#f59e0b", "#3b82f6"];
 
+/**
+ * Renders temporal pricing details including Delta P (peak spread) 
+ * to surface volatility anomalies across compared Edge nodes.
+ */
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length && typeof label === 'number') {
-    // Calculate max difference (Delta P)
     let maxDiff = 0;
     if (payload.length > 1) {
       const prices = payload.map((p) => p.value);
@@ -70,10 +73,14 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   return null;
 };
 
+/**
+ * Visualizes deterministic price divergence across multiple product nodes. 
+ * Orchestrates the temporal reference point based on the active 
+ * simulation state to contrast real-time Edge predictions.
+ */
 export function ComparisonChart({ products, chartData }: ComparisonChartProps) {
   const { simulatedHour } = useSimulation();
   
-  // Need current hour to default the reference line if nothing is simulating
   const currentHour = new Date().getHours();
   const activeHour = simulatedHour !== null ? simulatedHour : currentHour;
 
@@ -109,7 +116,7 @@ export function ComparisonChart({ products, chartData }: ComparisonChartProps) {
           
           <ReferenceLine 
             x={activeHour} 
-            stroke="#f59e0b" // Amber
+            stroke="#f59e0b" 
             strokeDasharray="3 3" 
             label={{ position: 'top', value: 'Active Sim', fill: '#f59e0b', fontSize: 10, offset: 10 }}
           />

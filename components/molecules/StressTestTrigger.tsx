@@ -16,6 +16,12 @@ interface StressTestTriggerProps {
   products: StressTestProduct[];
 }
 
+/**
+ * Orchestrates global Wasm revaluation cycles to stress-test Edge pricing 
+ * logic. Leverages React `startTransition` to decouple high-concurrency 
+ * execution cycles from the rendering main-thread, maintaining UI 
+ * responsiveness during synthetic throughput spikes.
+ */
 export function StressTestTrigger({ products }: StressTestTriggerProps) {
   const { simulatedHour } = useSimulation();
   const [active, setActive] = useState(() => WasmTelemetry.getStressTestStatus().active);

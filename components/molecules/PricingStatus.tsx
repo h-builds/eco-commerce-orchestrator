@@ -18,9 +18,8 @@ interface ClockState {
 }
 
 /**
- * Derives UI time-series parameters. Syncs the display countdown with the 
- * deterministic Wasm seed generation window to maintain interface-level 
- * parity with edge compute cycles.
+ * Syncs display countdowns with the deterministic Wasm seed generation 
+ * window to maintain state parity with Edge compute cycles.
  */
 function computeClockState(now: Date, simHour: number | null): ClockState {
   const effectiveHour = simHour !== null ? simHour : now.getHours();
@@ -47,10 +46,10 @@ function formatHour(h: number): string {
 }
 
 /**
- * Orchestrates the global simulation state. Implements a two-phase hydration 
- * strategy (SSR-safe initial state + client-side sync) to prevent Edge-side 
- * hydration mismatches. Utilizes 'useDeferredValue' to prioritize UI responsiveness 
- * over heavy simulation reconciliation during slider scrubbing.
+ * Orchestrates global simulation telemetry. Employs a two-phase hydration 
+ * strategy to prevent Edge-side mismatches and utilizes `useDeferredValue` 
+ * to prioritize interaction latency over heavy reconciliation during 
+ * temporal state scrubbing.
  */
 export function PricingStatus() {
   const { simulatedHour, setSimulatedHour } = useSimulation();

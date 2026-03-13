@@ -7,8 +7,9 @@ interface VolatilityChartProps {
 }
 
 /**
- * Implements Catmull-Rom to Cubic Bezier conversion for monotonic-like 
- * SVG curve interpolation.
+ * Converts Catmull-Rom points to Cubic Bezier segments for monotonic-like 
+ * SVG interpolation. Maintains C1 continuity for high-fidelity 
+ * visualization of volatility vectors.
  */
 function catmullRom2bezier(pts: [number, number][]) {
   if (pts.length === 0) return '';
@@ -32,9 +33,9 @@ function catmullRom2bezier(pts: [number, number][]) {
 }
 
 /**
- * Unrolls deterministic 24-hour price projections via React 'use'. 
- * Renders a native SVG path to eliminate charting library weight 
- * and preserve main-thread execution budgets for high-frequency simulations.
+ * Renders deterministic price trajectories via native SVG paths. 
+ * Eliminates charting library overhead to preserve main-thread capacity 
+ * for high-concurrency simulation reconciliation.
  */
 export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
   const data = use(dataPromise);
@@ -152,7 +153,6 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
           </div>
         </div>
 
-        {/* X-Axis labels */}
         <div className="flex justify-between text-[9px] font-semibold text-slate-500 z-10 mt-3 pt-2 border-t border-slate-800">
           <span>00:00</span>
           <span>06:00</span>

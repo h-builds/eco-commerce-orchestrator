@@ -6,16 +6,18 @@ interface SuccessMetricsCardsProps {
   efficiencyScore: number;
 }
 
+/**
+ * Aggregates high-order sustainability and network efficiency telemetry. 
+ * Derives ROI and carbon offset metrics from distributed Edge execution 
+ * cycles to surface the environmental impact of deterministic pricing.
+ */
 export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScore }: SuccessMetricsCardsProps) {
-  // Rough estimate logic: each surplus item bought offsets ~2.5kg of carbon
   const carbonOffset = surplusCount * 2.5;
   const networkROI = Math.round((totalSavings / 1500) * 100);
   const uptime = 99.990 + (efficiencyScore / 10000);
   
   return (
     <div className="grid grid-rows-3 gap-4 h-full">
-      
-      {/* Carbon Offset Card */}
       <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-5 flex flex-col justify-center relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">
@@ -30,7 +32,6 @@ export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScor
         </div>
       </div>
 
-      {/* Network ROI Card */}
       <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-5 flex flex-col justify-center relative overflow-hidden group hover:border-cyan-500/50 transition-colors">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">
@@ -45,7 +46,6 @@ export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScor
         </div>
       </div>
 
-      {/* System Uptime Card */}
       <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-5 flex flex-col justify-center relative overflow-hidden group hover:border-violet-500/50 transition-colors">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">

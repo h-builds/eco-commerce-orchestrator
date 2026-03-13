@@ -5,6 +5,10 @@ import Link from "next/link";
 import { memo } from "react";
 import { useCompare } from "@/lib/CompareContext";
 
+/**
+ * Core domain model for catalog entities. Synchronizes Edge-verified 
+ * live pricing telemetry with D1-persisted static attributes.
+ */
 export interface Product {
   id: string;
   name: string;
@@ -22,14 +26,14 @@ export interface Product {
 interface ProductCardProps {
   product: Product;
   isSimulating?: boolean;
-  /** Force-priority rendering to stabilize LCP metrics in the shop grid. */
+  /** LCP optimization for above-the-fold catalog assets. */
   priority?: boolean;
 }
 
 /**
- * Architectural entry for the shop grid. Utilizes a strict memoization boundary 
- * to shield the document tree from massive re-render cycles during global 
- * simulation state propagation (tick events).
+ * Employs a strict memoization boundary to isolate the document tree from 
+ * high-concurrency simulation cycles, preserving 60 FPS scrolling stability 
+ * during Go-Wasm seed propagation.
  */
 function ProductCardBase({ product, isSimulating = false, priority = false }: ProductCardProps) {
   const isLowStock = product.stock > 0 && product.stock <= 5;
@@ -205,8 +209,8 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
 }
 
 /** 
- * Enforces a strict render boundary to lock the shop grid against high-frequency 
- * simulation ticks, preserving 60 FPS scrolling and interaction logic.
+ * Locks the catalog grid against high-frequency temporal state 
+ * fluctuations to ensure deterministic UI response times.
  */
 export const ProductCard = memo(
   ProductCardBase,

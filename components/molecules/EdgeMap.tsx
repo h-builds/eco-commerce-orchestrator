@@ -27,6 +27,11 @@ function getStatusColorClass(volatility: number): string {
   return 'text-slate-400';
 }
 
+/**
+ * Visualizes high-cardinality telemetry from 1,000 Edge nodes. Implements 
+ * event delegation for tooltip orchestration to minimize main-thread 
+ * overhead during rapid grid exploration.
+ */
 export function EdgeMap({ nodes }: EdgeMapProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number; flipY: boolean }>({ x: 0, y: 0, flipY: false });
@@ -53,16 +58,14 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
       let flipY = false;
       
       const tooltipWidth = 220;
-      const tooltipHeight = 100; // approximate
+      const tooltipHeight = 100;
       const halfWidth = tooltipWidth / 2;
 
-      // Vertical boundary check
       if (y < tooltipHeight) {
         flipY = true;
-        y = e.clientY - rect.top + 24; // Push below the cursor
+        y = e.clientY - rect.top + 24;
       }
 
-      // Local boundary checks
       if (x + halfWidth > rect.width) {
         x = rect.width - halfWidth - 16;
       } else if (x - halfWidth < 0) {

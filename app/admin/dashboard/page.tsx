@@ -12,8 +12,9 @@ import { StressTestTrigger } from '../../../components/molecules/StressTestTrigg
 export const dynamic = 'force-dynamic';
 
 /**
- * Orchestrates Edge-to-Client handoff by fetching base snapshots from D1 
- * (SQLite) and feeding the high-concurrency Wasm simulation bridge.
+ * Resolves D1 base snapshots for the Wasm simulation bridge. Implements 
+ * defensive cloning of D1 proxy results to ensure hydration parity and 
+ * avoid Proxy-trap performance penalties in stateful client-side loops.
  */
 export default async function DashboardPage() {
   const env = (await getCloudflareContext({ async: true })).env as unknown as {
@@ -35,10 +36,6 @@ export default async function DashboardPage() {
     console.warn('Failed to fetch dashboard products (expected during build/prerender):', error);
   }
 
-  /** 
-   * Normalizes D1 internal proxy arrays into plain JS objects to ensure
-   * hydration compatibility and prevent Proxy-related memory leaks in the client loop.
-   */
   const products = results.map((p) => ({
     id: p.id as string,
     price: p.price as number,

@@ -2,6 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
+/**
+ * Stateless navigation trigger to preserve stateful orchestration context 
+ * during client-side transitions across the edge-rendered catalog.
+ */
 export function BackButton() {
   const router = useRouter();
 

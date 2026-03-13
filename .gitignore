@@ -63,6 +63,8 @@ services/pricing/main
 services/pricing/main.wasm
 # Copied from Go stdlib during wrangler build — not source, always regenerated
 services/pricing/wasm_exec.js
+# Generated JS bridge via workers-assets-gen (syumai/workers v0.32+)
+services/pricing/build/
 
 # IDEs and Editors
 .idea/

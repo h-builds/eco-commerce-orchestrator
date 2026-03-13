@@ -34,7 +34,6 @@ const resolvers = {
         search,
       }: { limit?: number; offset?: number; category?: string; search?: string },
     ) => {
-      // Access Cloudflare D1 Binding via getRequestContext (next-on-pages standard)
       const env = (await getCloudflareContext({ async: true })).env as unknown as {
         eco_db: D1Database;
         PRICING_AGENT?: Fetcher;   // Optional — only present when eco-pricing-agent Worker is deployed
@@ -80,8 +79,11 @@ const resolvers = {
           throw new Error("Failed to fetch products");
         }
 
-        // --- Call the Go Dynamic Pricing Agent ---
-        // Fetch real-time prices for each product via the Wasm-powered JSON-RPC interface
+        /**
+         * Dispatches batched JSON-RPC commands to a distinct Go-based Wasm agent 
+         * via Service Bindings. Maintains 0-copy overhead where possible while 
+         * enforcing deterministic price parity across worker nodes.
+         */
         interface DBProduct {
           id: string;
           price: number;
@@ -159,7 +161,6 @@ const resolvers = {
             }
           }
         } catch (err) {
-          // Fall back to base price and emit a structured log for Cloudflare Logpush / Workers Tail.
           console.error(
             JSON.stringify({
               event: "pricing_agent_failure",
@@ -207,6 +208,10 @@ interface NextContext {
   params: Promise<Record<string, string>>;
 }
 
+/**
+ * Bridges GraphQL Yoga with the Next.js request lifecycle, ensuring 
+ * compatibility with Cloudflare Worker memory and execution limits. 
+ */
 export async function GET(request: NextRequest, ctx: NextContext) {
   return yoga.handleRequest(request, ctx as unknown as Record<string, unknown>);
 }

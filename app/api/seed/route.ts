@@ -4,6 +4,11 @@ import { seedDatabase } from "@/lib/db/seed";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { D1Database } from "@cloudflare/workers-types";
 
+/**
+ * Secret-validated entrypoint for transactional D1 hydration. 
+ * Orchestrates cold-start state initialization to optimize deployment 
+ * velocity by bypassing manual console-level operations.
+ */
 export async function POST(request: NextRequest) {
   try {
     const context = await getCloudflareContext({ async: true });
@@ -13,8 +18,6 @@ export async function POST(request: NextRequest) {
     };
 
     const SEED_SECRET = env.SEED_SECRET;
-
-    // Validación de seguridad
     if (!SEED_SECRET) {
       console.error("CRITICAL: SEED_SECRET missing in environment.");
       return NextResponse.json({ error: "Config error" }, { status: 500 });

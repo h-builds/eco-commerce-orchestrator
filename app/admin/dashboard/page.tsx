@@ -11,6 +11,10 @@ import { StressTestTrigger } from '../../../components/molecules/StressTestTrigg
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * Orchestrates Edge-to-Client handoff by fetching base snapshots from D1 
+ * (SQLite) and feeding the high-concurrency Wasm simulation bridge.
+ */
 export default async function DashboardPage() {
   const env = (await getCloudflareContext({ async: true })).env as unknown as {
     eco_db: D1Database;
@@ -31,7 +35,10 @@ export default async function DashboardPage() {
     console.warn('Failed to fetch dashboard products (expected during build/prerender):', error);
   }
 
-  // Ensure plain objects
+  /** 
+   * Normalizes D1 internal proxy arrays into plain JS objects to ensure
+   * hydration compatibility and prevent Proxy-related memory leaks in the client loop.
+   */
   const products = results.map((p) => ({
     id: p.id as string,
     price: p.price as number,
@@ -43,7 +50,6 @@ export default async function DashboardPage() {
     <SimulationProvider>
       <ReportDataProvider>
         <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-slate-950 text-slate-50 pt-12 pb-24">
-          {/* Background Glow */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div className="absolute -top-[20%] -left-[10%] h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[120px]" />
             <div className="absolute top-[20%] -right-[10%] h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]" />

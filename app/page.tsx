@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   },
 };
 
-// --- Data: architecture pillars rendered as cards ---
 const PILLARS = [
   {
     icon: "memory",
@@ -36,7 +35,6 @@ const PILLARS = [
   },
 ] as const;
 
-// --- Stat bar ---
 const STATS = [
   { value: "OpenNext", label: "CF Workers Adapter" },
   { value: "React 19", label: "RSC + Compiler" },
@@ -44,6 +42,11 @@ const STATS = [
   { value: "D1 + KV", label: "Edge Storage" },
 ] as const;
 
+/**
+ * Static landing view demonstrating Edge-native patterns. 
+ * Leveraging React 19 server components via OpenNext to minimize client-side bundle 
+ * while explaining Wasm-agent interop and WCAG 2.1 AA compliance strategies.
+ */
 export default function Home() {
   return (
     <>
@@ -58,11 +61,9 @@ export default function Home() {
           })
         }}
       />
-      {/* ── Hero ───────────────────────────────────────────────────────── */}
       <section
           aria-labelledby="hero-heading"
           className="relative overflow-hidden border-b border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white via-slate-50 to-emerald-50 dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950/20 py-24 md:py-36">
-          {/* Decorative blobs */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full bg-primary/5 blur-3xl"
@@ -73,7 +74,6 @@ export default function Home() {
           />
 
           <div className="relative mx-auto w-full px-4 md:px-10 lg:px-20 text-center">
-            {/* Eyebrow pill */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
               <span
                 className="material-symbols-outlined text-sm"
@@ -137,7 +137,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Stats bar ──────────────────────────────────────────────────── */}
         <section
           aria-label="Architecture at a glance"
           className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
@@ -159,7 +158,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Pillars ────────────────────────────────────────────────────── */}
         <section
           aria-labelledby="pillars-heading"
           className="py-24 bg-slate-50 dark:bg-slate-950">
@@ -202,7 +200,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── CTA ────────────────────────────────────────────────────────── */}
         <section
           aria-labelledby="cta-heading"
           className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-24">

@@ -3,8 +3,12 @@ import { getTopProducts } from "@/lib/db";
 
 const BASE_URL = "https://eco-commerce-orchestrator.pages.dev";
 
+/**
+ * Leverages Edge DB (D1) for real-time SEO footprint hydration. 
+ * Bypasses intermediate static caches to ensure crawler parity 
+ * with dynamic product permutations.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
@@ -26,7 +30,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic product routes
   try {
     const products = await getTopProducts(50);
     const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({

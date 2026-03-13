@@ -20,7 +20,7 @@ export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScor
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">
           <h3 className="text-xs font-bold uppercase tracking-widest text-emerald-400/80">Total Carbon Offset</h3>
-          <span className="material-symbols-outlined text-emerald-500/50 text-xl">eco</span>
+          <span className="material-symbols-outlined text-emerald-500/50 text-xl" aria-hidden="true">eco</span>
         </div>
         <div className="flex items-baseline gap-1">
           <span className="text-3xl font-black text-emerald-400 tabular-nums">
@@ -35,7 +35,7 @@ export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScor
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">
           <h3 className="text-xs font-bold uppercase tracking-widest text-cyan-400/80">Network ROI</h3>
-          <span className="material-symbols-outlined text-cyan-500/50 text-xl">account_balance_wallet</span>
+          <span className="material-symbols-outlined text-cyan-500/50 text-xl" aria-hidden="true">account_balance_wallet</span>
         </div>
         <div className="flex items-baseline gap-1">
           <span className="text-3xl font-black text-cyan-400 tabular-nums">
@@ -50,7 +50,7 @@ export function SuccessMetricsCards({ surplusCount, totalSavings, efficiencyScor
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
         <div className="flex justify-between items-center mb-1">
           <h3 className="text-xs font-bold uppercase tracking-widest text-violet-400/80">Edge System Uptime</h3>
-          <span className="material-symbols-outlined text-violet-500/50 text-xl">memory</span>
+          <span className="material-symbols-outlined text-violet-500/50 text-xl" aria-hidden="true">memory</span>
         </div>
         <div className="flex items-baseline gap-1">
           <span className="text-3xl font-black text-violet-400 tabular-nums">

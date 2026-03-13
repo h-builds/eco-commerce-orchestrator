@@ -142,7 +142,7 @@ export function ComparisonModal() {
           <div className="flex items-center justify-between p-6 border-b border-slate-800 sticky top-0 bg-slate-900/95 backdrop-blur z-10">
             <div>
               <h2 className="text-2xl font-black text-white flex items-center gap-2">
-                <span className="material-symbols-outlined text-emerald-500">analytics</span>
+                <span className="material-symbols-outlined text-emerald-500" aria-hidden="true">analytics</span>
                 Product Comparison
               </h2>
               <p className="text-sm text-slate-400 mt-1">
@@ -154,7 +154,7 @@ export function ComparisonModal() {
               className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               aria-label="Close comparison modal"
             >
-              <span className="material-symbols-outlined">close</span>
+              <span className="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
           </div>
 
@@ -204,7 +204,7 @@ export function ComparisonModal() {
                      <div className="bg-slate-800/30 rounded-xl p-5 border border-slate-700/50 flex flex-col justify-center">
                       <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 flex items-center gap-1">
                          Correlation Index 
-                         <span className="material-symbols-outlined text-xs" title="Pearson correlation coefficient">info</span>
+                         <span className="material-symbols-outlined text-xs" title="Pearson correlation coefficient" aria-hidden="true">info</span>
                       </h3>
                       <div className="flex items-center gap-4">
                         <div className={`text-4xl font-black ${correlationIndex > 0.5 ? 'text-blue-400' : correlationIndex < -0.5 ? 'text-rose-400' : 'text-slate-400'}`}>
@@ -228,7 +228,7 @@ export function ComparisonModal() {
                      </div>
                   ) : selectedProducts.length > 2 ? (
                       <div className="bg-slate-800/30 rounded-xl p-5 border border-slate-700/50 flex flex-col justify-center text-center">
-                        <span className="material-symbols-outlined text-slate-500 text-3xl mb-2">ssid_chart</span>
+                        <span className="material-symbols-outlined text-slate-500 text-3xl mb-2" aria-hidden="true">ssid_chart</span>
                         <p className="text-slate-400 text-sm">Correlation index requires exactly 2 products.</p>
                       </div>
                   ) : null}

@@ -109,7 +109,7 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ jsonrpc: "2.0", method: "ping", id: 2 }),
     });
-  } catch (e) {
+  } catch {
     // Ignore ping errors
   }
   const pingEnd = performance.now();

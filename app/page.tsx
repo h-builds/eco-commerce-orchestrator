@@ -172,7 +172,7 @@ export default function Home() {
                   <div
                     className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10"
                     aria-hidden="true">
-                    <span className="material-symbols-outlined text-primary">
+                    <span className="material-symbols-outlined text-primary" aria-hidden="true">
                       {icon}
                     </span>
                   </div>

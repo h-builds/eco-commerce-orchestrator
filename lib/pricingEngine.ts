@@ -94,16 +94,19 @@ export function simulatePrice(
 ): SimulatedPricing {
   // ── 1. Determine the target hour's truncated-to-hour Unix timestamp ──────
   const now = new Date();
-  const effectiveHour = simulatedHour !== null ? simulatedHour : now.getHours();
-  // Build a Date at the top of the effective hour (same day)
-  const truncated = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    effectiveHour,
-    0, 0, 0,
+  const effectiveHour = simulatedHour !== null ? simulatedHour : now.getUTCHours();
+  
+  // Build a Date at the top of the effective UTC hour (same day)
+  // This matches Go's time.Now().UTC().Truncate(time.Hour).Unix()
+  const unixHour = Math.floor(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      effectiveHour,
+      0, 0, 0
+    ) / 1000
   );
-  const unixHour = Math.floor(truncated.getTime() / 1000);
 
   // ── 2. FNV-64a hash of "{productId}-{unixHour}" ─────────────────────────
   const hashKey = `${productId}-${unixHour}`;
@@ -154,15 +157,16 @@ export function simulatePrice(
  */
 export function getSeedHex(productId: string, simulatedHour: number | null): string {
   const now = new Date();
-  const effectiveHour = simulatedHour !== null ? simulatedHour : now.getHours();
-  const truncated = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    effectiveHour,
-    0, 0, 0,
+  const effectiveHour = simulatedHour !== null ? simulatedHour : now.getUTCHours();
+  const unixHour = Math.floor(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      effectiveHour,
+      0, 0, 0
+    ) / 1000
   );
-  const unixHour = Math.floor(truncated.getTime() / 1000);
   const hashKey = `${productId}-${unixHour}`;
   const hashSum = fnv64a(hashKey);
   const hex = hashSum.toString(16);

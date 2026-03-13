@@ -188,7 +188,7 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
           className="rounded p-1.5 text-slate-400 hover:bg-slate-800 hover:text-cyan-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
           aria-label="Minimize debug console"
         >
-          <span className="material-symbols-outlined text-lg">remove</span>
+          <span className="material-symbols-outlined text-lg" aria-hidden="true">remove</span>
         </button>
       </div>
 

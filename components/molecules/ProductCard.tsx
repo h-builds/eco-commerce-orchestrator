@@ -190,12 +190,12 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
           {/* Analyze Edge Pricing CTA */}
           <div className="flex items-center justify-between px-4 py-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 border border-emerald-500/20">
             <span className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm animate-pulse">
+              <span className="material-symbols-outlined text-sm animate-pulse" aria-hidden="true">
                 query_stats
               </span>
               Analyze Edge Pricing
             </span>
-            <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">
+            <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1" aria-hidden="true">
               arrow_forward
             </span>
           </div>

@@ -19,6 +19,7 @@ export default function BenchmarksPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [benchmarkError, setBenchmarkError] = useState<string | null>(null);
 
   const [jsProgress, setJsProgress] = useState(0);
   const [wasmProgress, setWasmProgress] = useState(0);
@@ -43,6 +44,7 @@ export default function BenchmarksPage() {
   const startBattle = async () => {
     setIsRunning(true);
     setIsFinished(false);
+    setBenchmarkError(null);
     setJsProgress(0);
     setWasmProgress(0);
     setJsMetrics({ timeMs: 0 });
@@ -69,9 +71,7 @@ export default function BenchmarksPage() {
         const res = await runWasmBenchmarkChunk(BATCH_SIZE);
         if (res.error) {
           console.error("Wasm benchmark returned error:", res.error);
-          alert(
-            `Wasm benchmark failed: ${res.error}\n\nPlease check the console for more details.`,
-          );
+          setBenchmarkError(`Wasm benchmark failed: ${res.error}`);
           setIsRunning(false);
           return;
         }
@@ -86,9 +86,7 @@ export default function BenchmarksPage() {
       } catch (err) {
         console.error("Wasm benchmark unexpected error:", err);
         const errorMessage = err instanceof Error ? err.message : String(err);
-        alert(
-          `Wasm benchmark unexpected error: ${errorMessage}\n\nPlease check the console.`,
-        );
+        setBenchmarkError(`Wasm benchmark unexpected error: ${errorMessage}. Please check the console.`);
         setIsRunning(false);
         return;
       }
@@ -214,7 +212,7 @@ export default function BenchmarksPage() {
       a.click();
     } catch (e) {
       console.error("Export failed", e);
-      alert("Failed to export snapshot.");
+      setBenchmarkError("Failed to export snapshot.");
     } finally {
       setIsExporting(false);
     }
@@ -283,6 +281,23 @@ export default function BenchmarksPage() {
         </p>
       </header>
 
+      {/* Inline Error State */}
+      <AnimatePresence>
+        {benchmarkError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="mb-8 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-400"
+            role="alert">
+            <span className="material-symbols-outlined shrink-0" aria-hidden="true">
+              error
+            </span>
+            <p className="font-bold text-sm">{benchmarkError}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* UI Lock Overlay */}
       <AnimatePresence>
         {isRunning && (
@@ -290,9 +305,9 @@ export default function BenchmarksPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 pointer-events-auto bg-slate-950/40 backdrop-blur-[2px] cursor-not-allowed flex items-center justify-center pointer-events-none">
+            className="fixed inset-0 z-50 pointer-events-none bg-slate-950/40 backdrop-blur-[2px] cursor-not-allowed flex items-center justify-center">
             <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-slate-900 border border-cyan-500/30 text-cyan-400 px-6 py-3 rounded-full font-bold shadow-[0_0_20px_rgba(34,211,238,0.2)] flex items-center gap-3">
-              <span className="material-symbols-outlined animate-spin">
+              <span className="material-symbols-outlined animate-spin" aria-hidden="true">
                 sync
               </span>
               SYSTEM LOCKED: COMPUTING IN PROGRESS
@@ -307,11 +322,11 @@ export default function BenchmarksPage() {
           disabled={isRunning}
           className="relative overflow-hidden group bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all duration-300 disabled:shadow-none hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] flex items-center gap-3">
           {isRunning ? (
-            <span className="material-symbols-outlined animate-spin text-xl">
+            <span className="material-symbols-outlined animate-spin text-xl" aria-hidden="true">
               progress_activity
             </span>
           ) : (
-            <span className="material-symbols-outlined text-xl">
+            <span className="material-symbols-outlined text-xl" aria-hidden="true">
               play_circle
             </span>
           )}
@@ -357,7 +372,7 @@ export default function BenchmarksPage() {
 
               <div className="px-8 py-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                  <span className="material-symbols-outlined text-cyan-400">
+                  <span className="material-symbols-outlined text-cyan-400" aria-hidden="true">
                     analytics
                   </span>
                   Deep Dive Analysis
@@ -435,7 +450,7 @@ export default function BenchmarksPage() {
               {/* Loading placeholder while running */}
               {isRunning && !isFinished && (
                 <div className="p-8 flex items-center justify-center gap-3 text-slate-500">
-                  <span className="material-symbols-outlined animate-spin text-cyan-400">
+                  <span className="material-symbols-outlined animate-spin text-cyan-400" aria-hidden="true">
                     progress_activity
                   </span>
                   <span className="text-sm font-bold uppercase tracking-widest">
@@ -523,7 +538,7 @@ export default function BenchmarksPage() {
                   onClick={exportSnapshot}
                   disabled={isExporting}
                   className="group relative overflow-hidden bg-transparent border border-cyan-500/40 text-cyan-400 hover:text-white hover:border-cyan-400 hover:bg-cyan-500/10 disabled:opacity-50 disabled:cursor-wait font-bold px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 shadow-[0_0_10px_rgba(34,211,238,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]">
-                  <span className="material-symbols-outlined text-lg">
+                  <span className="material-symbols-outlined text-lg" aria-hidden="true">
                     {isExporting ? "progress_activity" : "image"}
                   </span>
                   <span className="flex flex-col items-start">
@@ -531,7 +546,7 @@ export default function BenchmarksPage() {
                     <span className="text-[10px] text-slate-500 font-normal">High-res snapshot</span>
                   </span>
                   {isExporting && (
-                    <span className="material-symbols-outlined animate-spin text-sm absolute top-1 right-1 text-cyan-400/50">
+                    <span className="material-symbols-outlined animate-spin text-sm absolute top-1 right-1 text-cyan-400/50" aria-hidden="true">
                       sync
                     </span>
                   )}
@@ -541,7 +556,7 @@ export default function BenchmarksPage() {
                 <button
                   onClick={exportJSON}
                   className="group relative overflow-hidden bg-transparent border border-yellow-500/40 text-yellow-400 hover:text-white hover:border-yellow-400 hover:bg-yellow-500/10 font-bold px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 shadow-[0_0_10px_rgba(234,179,8,0.1)] hover:shadow-[0_0_20px_rgba(234,179,8,0.3)]">
-                  <span className="material-symbols-outlined text-lg">
+                  <span className="material-symbols-outlined text-lg" aria-hidden="true">
                     data_object
                   </span>
                   <span className="flex flex-col items-start">

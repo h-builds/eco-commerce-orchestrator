@@ -42,9 +42,9 @@ export function BigNumberMetric({ value }: { value: number }) {
            ${Math.abs(displayValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
          </span>
          {isPositive ? (
-           <span className="text-emerald-500 material-symbols-outlined text-4xl">trending_down</span>
+           <span className="text-emerald-500 material-symbols-outlined text-4xl" aria-hidden="true">trending_down</span>
          ) : (
-           <span className="text-red-500 material-symbols-outlined text-4xl">trending_up</span>
+           <span className="text-red-500 material-symbols-outlined text-4xl" aria-hidden="true">trending_up</span>
          )}
       </div>
       

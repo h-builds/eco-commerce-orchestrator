@@ -34,7 +34,7 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
   const [currentHour, setCurrentHour] = useState<number>(0);
 
   useEffect(() => {
-    const updateTime = () => setCurrentHour(new Date().getHours());
+    const updateTime = () => setCurrentHour(new Date().getUTCHours());
     // Use timeout to avoid synchronous state update in effect
     const timeout = setTimeout(updateTime, 0);
     const interval = setInterval(updateTime, 60000);
@@ -74,7 +74,7 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
         <div className="flex justify-between items-start z-10 mb-2 relative">
           <div>
             <h4 className="text-emerald-400 font-bold tracking-widest uppercase text-[10px] mb-1 flex items-center gap-1">
-              <span className="material-symbols-outlined text-xs">monitoring</span>
+              <span className="material-symbols-outlined text-xs" aria-hidden="true">monitoring</span>
               Price Volatility
             </h4>
             <div className="flex items-baseline gap-2 mt-2">
@@ -86,7 +86,7 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
           </div>
           <div className="text-right flex flex-col items-end">
              <span className="text-slate-400 text-xs font-mono font-medium bg-slate-800/50 px-2 py-1 rounded-md border border-slate-700/50">
-                {activeData?.hour.toString().padStart(2, '0')}:00 {hoveredIdx !== null ? '(Simulated)' : '(Live)'}
+                {activeData?.hour.toString().padStart(2, '0')}:00 UTC {hoveredIdx !== null ? '(Simulated)' : '(Live)'}
              </span>
           </div>
         </div>
@@ -166,7 +166,7 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
 
       {/* Technical Context Panel */}
       <div className="px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 flex gap-3 items-start">
-        <span className="material-symbols-outlined text-slate-400 dark:text-slate-500 text-lg mt-0.5">info</span>
+        <span className="material-symbols-outlined text-slate-400 dark:text-slate-500 text-lg mt-0.5" aria-hidden="true">info</span>
         <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
           This volatility is computed in real-time by our <strong className="text-slate-900 dark:text-slate-200">Go-Wasm agent</strong>. It simulates market fluctuations based on deterministic edge seeds.
         </p>

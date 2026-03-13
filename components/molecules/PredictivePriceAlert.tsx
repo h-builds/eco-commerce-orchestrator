@@ -39,7 +39,7 @@ export function PredictivePriceAlert({ currentPrice, dataPromise }: PredictivePr
            setScanResult({
              found: true,
              hour: match.hour,
-             message: `Success! Target reached at ${match.hour.toString().padStart(2, '0')}:00. We'll trigger a notification then.`
+             message: `Success! Target reached at ${match.hour.toString().padStart(2, '0')}:00 UTC. We'll trigger a notification then.`
            });
          } else {
            setScanResult({
@@ -63,7 +63,7 @@ export function PredictivePriceAlert({ currentPrice, dataPromise }: PredictivePr
       
       {isPending && (
          <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col items-center justify-center border-2 border-amber-500 rounded-2xl animate-pulse">
-            <span className="material-symbols-outlined text-4xl text-amber-500 animate-spin mb-2" style={{ animationDuration: '2s' }}>radar</span>
+            <span className="material-symbols-outlined text-4xl text-amber-500 animate-spin mb-2" style={{ animationDuration: '2s' }} aria-hidden="true">radar</span>
             <span className="text-amber-500 font-mono text-xs font-bold tracking-widest uppercase animate-pulse">Analyzing Edge-Seed projections...</span>
          </div>
       )}
@@ -71,7 +71,7 @@ export function PredictivePriceAlert({ currentPrice, dataPromise }: PredictivePr
       <div className="flex justify-between items-start mb-6 relative z-0">
         <div>
           <h3 className="text-amber-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2 mb-1">
-            <span className="material-symbols-outlined text-sm">notifications_active</span>
+            <span className="material-symbols-outlined text-sm" aria-hidden="true">notifications_active</span>
             Predictive Price Alert
           </h3>
           <p className="text-slate-400 text-sm">Set your target price. The Orchestrator will scan tomorrow&apos;s deterministic vectors.</p>
@@ -82,7 +82,7 @@ export function PredictivePriceAlert({ currentPrice, dataPromise }: PredictivePr
             <div className="inline-flex flex-col items-end bg-slate-800/50 border border-slate-700/50 px-3 py-1.5 rounded-lg">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Best Time To Buy</span>
               <span className="text-emerald-400 font-mono font-bold text-sm">
-                ${bestTime.price.toFixed(2)} @ {bestTime.hour.toString().padStart(2, '0')}:00
+                ${bestTime.price.toFixed(2)} @ {bestTime.hour.toString().padStart(2, '0')}:00 UTC
               </span>
             </div>
           </div>
@@ -129,14 +129,14 @@ export function PredictivePriceAlert({ currentPrice, dataPromise }: PredictivePr
            disabled={isPending || targetPrice >= currentPrice || targetPrice <= 0 || isNaN(targetPrice)}
            className="w-full sm:w-auto px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-black tracking-widest uppercase text-sm rounded-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
          >
-            <span className="material-symbols-outlined text-sm text-slate-900 font-bold">radar</span>
+            <span className="material-symbols-outlined text-sm text-slate-900 font-bold" aria-hidden="true">radar</span>
             Scan Forecast
          </button>
          
          <div className="flex-1 w-full sm:w-auto h-12 flex items-center justify-end">
            {scanResult && (
              <div className={`text-sm font-semibold flex items-center gap-2 ${scanResult.found ? 'text-emerald-400' : 'text-rose-400'}`}>
-               <span className="material-symbols-outlined text-lg">
+               <span className="material-symbols-outlined text-lg" aria-hidden="true">
                  {scanResult.found ? 'check_circle' : 'error'}
                </span>
                {scanResult.message}
@@ -153,7 +153,7 @@ export function PredictivePriceAlert({ currentPrice, dataPromise }: PredictivePr
         <div className="mt-4 sm:hidden bg-slate-800/50 border border-slate-700/50 rounded-lg p-3 text-center">
           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Best Time To Buy</span>
           <span className="text-emerald-400 font-mono font-bold text-sm">
-            ${bestTime.price.toFixed(2)} @ {bestTime.hour.toString().padStart(2, '0')}:00
+            ${bestTime.price.toFixed(2)} @ {bestTime.hour.toString().padStart(2, '0')}:00 UTC
           </span>
         </div>
       )}

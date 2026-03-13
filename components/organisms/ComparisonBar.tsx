@@ -4,10 +4,14 @@ import { useCompare } from "@/lib/CompareContext";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
+/**
+ * Persistent utility layer for cross-view product selection. Synchronizes 
+ * with `CompareContext` to manage high-priority UI orchestration for 
+ * multi-product volatility analysis.
+ */
 export function ComparisonBar() {
   const { selectedProducts, clearComparison, setIsCompareModalOpen } = useCompare();
 
-  // Only show the bar if at least 2 items are selected.
   const isVisible = selectedProducts.length >= 2;
 
   return (
@@ -43,7 +47,6 @@ export function ComparisonBar() {
                     />
                   </div>
                 ))}
-                {/* Empty slots */}
                 {Array.from({ length: 3 - selectedProducts.length }).map((_, i) => (
                   <div
                     key={`empty-${i}`}

@@ -23,11 +23,12 @@ interface ProductCardProps {
   product: Product;
   /** When true, changes the Go-Wasm badge to an amber "simulation" state */
   isSimulating?: boolean;
+  /** When true, uses priority rendering for the image (LCP optimization) */
+  priority?: boolean;
 }
 
-function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
+function ProductCardBase({ product, isSimulating = false, priority = false }: ProductCardProps) {
   // Pure functional component (React Compiler target)
-  const isOutOfStock = product.stock === 0;
   const isLowStock = product.stock > 0 && product.stock <= 5;
   const formattedPrice = `$${product.live_price.toFixed(2)}`;
   const formattedOriginalPrice = `$${product.price.toFixed(2)}`;
@@ -76,6 +77,7 @@ function ProductCardBase({ product, isSimulating = false }: ProductCardProps) {
           src={product.image_url}
           alt={`Image of ${product.name}`}
           fill
+          priority={priority}
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />

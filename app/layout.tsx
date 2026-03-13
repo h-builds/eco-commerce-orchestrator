@@ -75,7 +75,21 @@ export default function RootLayout({
           as="style"
           href={MATERIAL_SYMBOLS_HREF}
         />
-        <link rel="stylesheet" href={MATERIAL_SYMBOLS_HREF} />
+        <noscript>
+          <link rel="stylesheet" href={MATERIAL_SYMBOLS_HREF} />
+        </noscript>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var l = document.createElement('link');
+                l.rel = 'stylesheet';
+                l.href = '${MATERIAL_SYMBOLS_HREF}';
+                document.head.appendChild(l);
+              })();
+            `,
+          }}
+        />
       </head>
       <body className="font-sans antialiased text-slate-900 dark:text-slate-50 bg-slate-50 dark:bg-slate-950 flex min-h-screen flex-col">
         <TourProvider>

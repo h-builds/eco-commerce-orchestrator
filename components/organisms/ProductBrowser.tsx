@@ -153,17 +153,26 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   // per product list change (initial load, search, infinite scroll page).
   useEffect(() => {
     if (products.length === 0) return;
-    const t0 = performance.now();
-    for (const p of products) {
-      simulatePrice(p.id, p.price, p.stock, null);
+    
+    const runTelemetry = () => {
+      const t0 = performance.now();
+      for (const p of products) {
+        simulatePrice(p.id, p.price, p.stock, null);
+      }
+      const executionTimeMs = performance.now() - t0;
+      WasmTelemetry.pushEntry({
+        batchSize: products.length,
+        executionTimeMs,
+        seedHex: getSeedHex(products[0].id, null),
+        memoryMb: captureMemoryMb(),
+      });
+    };
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(runTelemetry);
+    } else {
+      setTimeout(runTelemetry, 1);
     }
-    const executionTimeMs = performance.now() - t0;
-    WasmTelemetry.pushEntry({
-      batchSize: products.length,
-      executionTimeMs,
-      seedHex: getSeedHex(products[0].id, null),
-      memoryMb: captureMemoryMb(),
-    });
   }, [products]);
 
   return (
@@ -186,8 +195,8 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
               role="region"
               aria-label="Product Catalog"
             >
-              {products.map((product) => (
-                <SimulatingProductCard key={product.id} product={product} />
+              {products.map((product, i) => (
+                <SimulatingProductCard key={product.id} product={product} priority={i < 6} />
               ))}
               
               {/* Infinite Scroll Skeletons */}

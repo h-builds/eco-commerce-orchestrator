@@ -21,9 +21,10 @@ import { ProductCard, type Product } from './ProductCard';
 
 interface SimulatingProductCardProps {
   product: Product;
+  priority?: boolean;
 }
 
-export function SimulatingProductCard({ product }: SimulatingProductCardProps) {
+export function SimulatingProductCard({ product, priority = false }: SimulatingProductCardProps) {
   const { simulatedHour } = useSimulation();
 
   const displayProduct = useMemo((): Product => {
@@ -52,6 +53,7 @@ export function SimulatingProductCard({ product }: SimulatingProductCardProps) {
     <ProductCard
       product={displayProduct}
       isSimulating={simulatedHour !== null}
+      priority={priority}
     />
   );
 }

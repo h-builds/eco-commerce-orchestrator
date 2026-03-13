@@ -77,6 +77,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   src={product.image_url} 
                   alt={product.name}
                   fill
+                  priority={true}
                   className="object-cover"
                 />
               ) : (

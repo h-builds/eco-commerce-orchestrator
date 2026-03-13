@@ -1,7 +1,8 @@
 /**
- * Sinusoidal efficiency score by hour (0–23).
- * Efficiency(h) = 92 + 4·cos(2π(h−4)/24)
- * Peak 96% at 4:00 AM, valley 88% at 4:00 PM (e-commerce traffic cycle).
+ * Sinusoidal efficiency modeling inverse to the e-commerce traffic cycle. 
+ * Peaks at 04:00 (off-peak) and valleys at 16:00 (peak load) to simulate 
+ * deterministic Edge compute overhead and resource contention across 
+ * stateless Worker nodes.
  */
 export function getEfficiencyForHour(hour: number): number {
   const h = Math.max(0, Math.min(23, Math.floor(hour)));

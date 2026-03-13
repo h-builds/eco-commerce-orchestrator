@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * A lightweight custom hook utilizing IntersectionObserver to trigger a callback
- * when the attached element enters the viewport.
+ * Preserves main-thread capacity for the Wasm pricing agent by offloading 
+ * viewport-based triggers (lazy-loading, animations) to the native 
+ * IntersectionObserver API.
  */
 export function useIntersectionObserver(
   callback: () => void,
@@ -14,10 +15,8 @@ export function useIntersectionObserver(
   const [isIntersecting, setIsIntersecting] = useState(false);
   const callbackRef = useRef(callback);
   
-  // Destructure options to safely use in dependency array
   const { threshold, rootMargin, root } = options;
 
-  // Keep callback reference up to date to avoid running stale closures
   useEffect(() => {
     callbackRef.current = callback;
   }, [callback]);

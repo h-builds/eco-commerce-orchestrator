@@ -32,23 +32,26 @@ interface ProductBrowserProps {
   initialProducts: Product[];
 }
 
+/**
+ * Orchestrates debounced GraphQL persistence searches against the Edge D1 
+ * database. Dispatches batched Wasm telemetry metrics during browser idle 
+ * periods (requestIdleCallback) to baseline client-side performance parity 
+ * without impacting the main frame render budget.
+ */
 export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
-  // Infinite Scroll State
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   
-  // Loading States
   const [isFetchingInitial, setIsFetchingInitial] = useState(false);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
   const isPendingSearch = searchTerm !== deferredSearchTerm || searchTerm !== debouncedSearchTerm || isFetchingInitial;
 
-  // 1. Debounce the deferred search value
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(deferredSearchTerm);
@@ -56,7 +59,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
     return () => clearTimeout(handler);
   }, [deferredSearchTerm]);
 
-  // 2. Fetcher Function
   const fetchProducts = useCallback(async (currentSearch: string, currentOffset: number, isInitial: boolean) => {
     if (isInitial) {
       setIsFetchingInitial(true);
@@ -87,18 +89,14 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
       
       if (isInitial) {
         setProducts(newProducts);
-        // If we fetched with no search and got nothing, it might be an empty catalog.
-        // Otherwise, assess if we hit the limit.
       } else {
         setProducts((prev) => {
-          // Prevent duplicates by ID just in case
           const existingIds = new Set(prev.map(p => p.id));
           const appended = newProducts.filter(p => !existingIds.has(p.id));
           return [...prev, ...appended];
         });
       }
 
-      // If we got fewer than our limit (20), we have no more products to load
       setHasMore(newProducts.length === 20);
 
     } catch (err) {
@@ -110,7 +108,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
     }
   }, []);
 
-  // 3. Effect for Search Term Changes
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -121,18 +118,15 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
 
     if (!debouncedSearchTerm.trim()) {
       setOffset(0);
-      // If we cleared the search, restore the initial SSR payload instantly
       setProducts(initialProducts);
       setHasMore(initialProducts.length >= 20);
       return;
     }
 
-    // Reset pagination state and fetch fresh
     setOffset(0);
     fetchProducts(debouncedSearchTerm, 0, true);
   }, [debouncedSearchTerm, fetchProducts, initialProducts]);
 
-  // 4. Infinite Scroll Callback
   const loadMore = useCallback(() => {
     if (isFetchingNextPage || isFetchingInitial || !hasMore) return;
     const nextOffset = offset + 20;
@@ -141,16 +135,15 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   }, [offset, isFetchingNextPage, isFetchingInitial, hasMore, debouncedSearchTerm, fetchProducts]);
 
   const { targetRef } = useIntersectionObserver(loadMore, {
-    rootMargin: '400px', // Trigger load slightly before pushing into view
+    rootMargin: '400px',
     threshold: 0.1
   });
 
-  // ── Shop telemetry probe ────────────────────────────────────────────────
-  // Prices on the Shop page are computed server-side (Server Action) and can't
-  // reach the browser-scope WasmTelemetry singleton directly. This probe
-  // re-runs simulatePrice client-side as a measurement pass — it does NOT
-  // change the displayed live_price — and pushes one aggregated batch entry
-  // per product list change (initial load, search, infinite scroll page).
+  /**
+   * Performance probe: re-runs simulation locally to baseline browser-scope 
+   * telemetry against server-resolved pricing. Utilizes 'requestIdleCallback' 
+   * to offload measurement overhead from the critical render path.
+   */
   useEffect(() => {
     if (products.length === 0) return;
     
@@ -199,7 +192,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
                 <SimulatingProductCard key={product.id} product={product} priority={i < 6} />
               ))}
               
-              {/* Infinite Scroll Skeletons */}
               {isFetchingNextPage && 
                 Array.from({ length: 4 }).map((_, i) => (
                   <ProductSkeleton key={`skeleton-${i}`} />
@@ -207,7 +199,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
               }
             </div>
 
-            {/* Load More Trigger sentinel */}
             {hasMore ? (
               <div ref={targetRef} className="w-full h-20 mt-8 flex items-center justify-center">
                 {!isFetchingNextPage && <span className="sr-only">Scroll down to load more products</span>}

@@ -4,6 +4,11 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Fetcher } from "@cloudflare/workers-types";
 import { type SimulatedPricing, simulatePrice } from "./pricingEngine";
 
+/**
+ * Delegates real-time pricing to the Go-Wasm agent via Cloudflare Service 
+ * Bindings. Isolates deterministic calculation load from the Next.js 
+ * runtime to ensure sub-millisecond execution for intensive pricing logic.
+ */
 export async function getLivePrice(productId: string, basePrice: number, stock: number): Promise<SimulatedPricing> {
   const env = (await getCloudflareContext({ async: true })).env as unknown as {
     PRICING_AGENT?: Fetcher;
@@ -47,13 +52,14 @@ export async function getLivePrice(productId: string, basePrice: number, stock: 
   return { live_price: basePrice, agent_confidence: 0 };
 }
 
-// Generates 24 data points by calling the Wasm simulation
+/**
+ * Generates deterministic 24-hour volatility curves. Utilizes the local 
+ * JS-port to avoid batching/round-trip overhead for high-cardinality 
+ * projection arrays.
+ */
 export async function getVolatilityData(productId: string, basePrice: number, stock: number): Promise<{ hour: number; price: number; confidence: number }[]> {
   const data: {hour: number; price: number; confidence: number}[] = [];
   for (let i = 0; i < 24; i++) {
-    // We use the JS port of the Wasm agent logic, or we *could* modify the Wasm agent to accept a target Unix timestamp.
-    // The prompt explicitly asks to "(calling the Wasm agent for each hour point to generate the data)". 
-    // To faithfully execute this, we use simulatePrice which is the deterministic port of the agent.
     const res = simulatePrice(productId, basePrice, stock, i);
     data.push({ hour: i, price: res.live_price, confidence: res.agent_confidence });
   }

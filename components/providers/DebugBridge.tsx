@@ -5,12 +5,11 @@ import { DebugConsole } from '@/components/organisms/DebugConsole';
 
 const STORAGE_KEY = 'isConsoleOpen';
 
-// ---------------------------------------------------------------------------
-// useSyncExternalStore wiring for localStorage
-// The `storage` event fires for other-tab changes automatically.
-// For same-tab mutations we manually dispatch a StorageEvent so the snapshot
-// is re-read and the UI stays in sync without calling setState inside an effect.
-// ---------------------------------------------------------------------------
+/**
+ * Synchronizes external DOM storage events. Dispatched manual 'storage' 
+ * events for same-tab mutations to bypass the native browser limitation 
+ * where storage listeners only trigger across instances.
+ */
 function subscribeToStorage(callback: () => void): () => void {
   window.addEventListener('storage', callback);
   return () => window.removeEventListener('storage', callback);
@@ -21,15 +20,19 @@ function getSnapshot(): boolean {
 }
 
 function getServerSnapshot(): boolean {
-  return false; // always start closed on the server / during SSR
+  return false;
 }
 
 function writeStorage(value: boolean): void {
   localStorage.setItem(STORAGE_KEY, String(value));
-  // Notify the same-tab subscription (storage events don't fire for same-tab writes)
   window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEY }));
 }
 
+/**
+ * Hydration-safe bridge for the telemetry console. Utilizes 'useSyncExternalStore' 
+ * to derive state from localStorage without triggering SSR mismatches or 
+ * layout shifts during Worker-side execution.
+ */
 export function DebugBridge() {
   const isConsoleOpen = useSyncExternalStore(
     subscribeToStorage,
@@ -37,7 +40,6 @@ export function DebugBridge() {
     getServerSnapshot,
   );
 
-  // Global keyboard shortcut: Ctrl+Shift+D (Linux/Windows) or Cmd+Shift+D (Mac)
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {

@@ -6,11 +6,10 @@ import { simulatePrice } from "./pricingEngine";
 
 export interface BenchmarkResult {
   executionTimeMs: number;
-  internalExecTimeUs?: number; // Wasm internal time in microseconds
+  internalExecTimeUs?: number;
   error?: string;
 }
 
-// Generates an array of generic items for benchmarking
 function generateMockData(size: number) {
   const data = [];
   for (let i = 0; i < size; i++) {
@@ -23,12 +22,16 @@ function generateMockData(size: number) {
   return data;
 }
 
+/**
+ * Measures local V8 execution performance to establish a baseline for 
+ * JIT-optimized JavaScript logic. Complements Edge Wasm benchmarks to 
+ * quantify deterministic compute offsets.
+ */
 export async function runJSBenchmarkChunk(chunkSize: number): Promise<BenchmarkResult> {
   const mockData = generateMockData(chunkSize);
   
   const start = performance.now();
   for (const item of mockData) {
-    // Calling the identical JS port synchronously
     simulatePrice(item.product_id, item.base_price, item.stock, null);
   }
   const end = performance.now();
@@ -36,6 +39,11 @@ export async function runJSBenchmarkChunk(chunkSize: number): Promise<BenchmarkR
   return { executionTimeMs: end - start };
 }
 
+/**
+ * Evaluates Go-Wasm pricing agent throughput via Cloudflare Service Bindings. 
+ * Account for Spectre mitigation-induced timer freezing by deducing pure 
+ * compute time from baseline network round-trip subtractions.
+ */
 export async function runWasmBenchmarkChunk(chunkSize: number): Promise<BenchmarkResult> {
   const mockData = generateMockData(chunkSize);
   
@@ -101,7 +109,6 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
     };
   }
   
-  // 2. Measure network baseline via ping to subtract Service Binding overhead
   const pingStart = performance.now();
   try {
     await env.PRICING_AGENT.fetch("http://pricing-agent/rpc", {
@@ -110,29 +117,16 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
       body: JSON.stringify({ jsonrpc: "2.0", method: "ping", id: 2 }),
     });
   } catch {
-    // Ignore ping errors
   }
   const pingEnd = performance.now();
   
   const totalMs = end - start;
   const pingMs = pingEnd - pingStart;
 
-  // Cloudflare Spectre mitigations freeze timers during synchronous execution, causing
-  // internal_exec_time_us to be 0. We deduce the pure Wasm compute time by subtracting
-  // the baseline network round-trip time of a tiny payload.
-  // We floor this at 1 microsecond (0.001ms) to handle edge cases of network jitter.
   const deducedComputeUs = Math.max(1, (totalMs - pingMs) * 1000);
   const finalInternalUs = (data?.internal_exec_time_us && data.internal_exec_time_us > 0) 
     ? data.internal_exec_time_us 
     : deducedComputeUs;
-
-  // Debug: log the raw response and calculations
-  console.log("Wasm execution metrics:", {
-    total_rtt_ms: totalMs,
-    ping_rtt_ms: pingMs,
-    reported_internal_us: data?.internal_exec_time_us,
-    deduced_internal_us: deducedComputeUs,
-  });
 
   return {
     executionTimeMs: totalMs,

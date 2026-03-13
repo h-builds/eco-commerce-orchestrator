@@ -22,15 +22,9 @@ const GET_PRODUCTS_QUERY = `
 `;
 
 /**
- * ProductGrid — async RSC.
- * The Suspense boundary lives one level up in app/shop/page.tsx,
- * so this component simply awaits its data and renders. No inner
- * Suspense wrapper needed; throwing a Promise here bubbles correctly
- * to the route-level boundary and its <Loading /> fallback.
- *
- * Renders SimulatingProductCard (a 'use client' component) so that
- * the memoised ProductCard can receive the simulation flag from
- * SimulationContext without polluting the RSC boundary.
+ * Direct GraphQL resolution against the Edge D1 database. Suspense boundaries 
+ * are managed at the layout level to optimize streaming hydration and 
+ * unblock TTFB.
  */
 export async function ProductGrid() {
   try {

@@ -13,7 +13,6 @@ import (
 	"github.com/syumai/workers"
 )
 
-// JSONRPCRequest represents a standard JSON-RPC 2.0 request
 type JSONRPCRequest struct {
 	JSONRPC string        `json:"jsonrpc"`
 	Method  string        `json:"method"`
@@ -21,59 +20,54 @@ type JSONRPCRequest struct {
 	ID      interface{}   `json:"id"`
 }
 
-// PricingArgs are the arguments needed to calculate the dynamic price
 type PricingArgs struct {
 	ProductID string  `json:"product_id"`
 	BasePrice float64 `json:"base_price"`
 	Stock     int     `json:"stock"`
 }
 
-// JSONRPCResponse represents a standard JSON-RPC 2.0 response
 type JSONRPCResponse struct {
 	JSONRPC            string        `json:"jsonrpc"`
 	Result             interface{}   `json:"result,omitempty"`
-	InternalExecTimeUs int64         `json:"internal_exec_time_us"` // no omitempty — zero is a valid measured value
+	InternalExecTimeUs int64         `json:"internal_exec_time_us"`
 	Error              *JSONRPCError `json:"error,omitempty"`
 	ID                 interface{}   `json:"id"`
 }
 
-// JSONRPCError represents a JSON-RPC 2.0 error object
 type JSONRPCError struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
-// PricingResult holds the response from the Agent
 type PricingResult struct {
 	ProductID       string  `json:"product_id"`
 	LivePrice       float64 `json:"live_price"`
-	AgentConfidence float64 `json:"agent_confidence"` // 0.0 to 1.0
+	AgentConfidence float64 `json:"agent_confidence"`
 }
 
+/**
+ * Deterministic pricing logic constrained for Wasm execution. Relies on 
+ * localized operations to satisfy stateless node parity across the 
+ * distributed Worker network.
+ */
 func calculateDynamicPrice(args PricingArgs, currentHour int64, h hash.Hash64) PricingResult {
-	// Base cost assumptions.
-	// The price cannot drop below 40% of base (retail margin floor) or exceed 200%.
 	baseCost := args.BasePrice * 0.4
 	maxPrice := args.BasePrice * 2.0
 
 	currentPrice := args.BasePrice
 
-	// 1. Scarcity Surcharge: If stock < 20, apply a 20% increase.
 	if args.Stock < 20 {
 		currentPrice = currentPrice * 1.20
 	}
 
-	// 2. Eco-Incentive Discount: If stock > 100, apply a 10% discount.
 	if args.Stock > 100 {
 		currentPrice = currentPrice * 0.90
 	}
 
-	// 3. Volatility: deterministic fluctuation seeded by productID + current hour.
-	// The same product in the same hour produces the same multiplier across all
-	// Worker instances — required for a stateless, distributed pricing service.
-	//
-	// PERF: We reuse the hasher (Reset) and build the key via zero-alloc byte ops
-	// instead of fmt.Sprintf to avoid heap allocations and JS interop in the hot loop.
+	/**
+	 * PERF: Hash key constructed via zero-alloc byte ops to avoid heap 
+	 * allocations and JS interop overhead within the hot loop.
+	 */
 	h.Reset()
 	h.Write([]byte(args.ProductID))
 	h.Write([]byte{'-'})
@@ -82,11 +76,9 @@ func calculateDynamicPrice(args PricingArgs, currentHour int64, h hash.Hash64) P
 	seed := int64(hashSum)
 	r := rand.New(rand.NewSource(seed))
 
-	// Volatility multiplier in [0.95, 1.05] — one and only one rand draw.
 	volatilityMultiplier := 0.95 + r.Float64()*(1.05-0.95)
 	currentPrice = currentPrice * volatilityMultiplier
 
-	// 4. Guardrails — clamp price to [baseCost, maxPrice].
 	if currentPrice < baseCost {
 		currentPrice = baseCost
 	}
@@ -94,30 +86,27 @@ func calculateDynamicPrice(args PricingArgs, currentHour int64, h hash.Hash64) P
 		currentPrice = maxPrice
 	}
 
-	// 5. Confidence — a pure, deterministic function of stock thresholds and the
-	// hash. No second r.Float64() call; confidence is not entangled with the
-	// volatility draw order and will never shift if code is reorganised.
+	/**
+	 * Confidence is derived as a pure, deterministic function of the hash 
+	 * to ensure stability regardless of internal execution order or 
+	 * code reorganization.
+	 */
 	confidence := 0.90
 	if args.Stock < 20 {
-		confidence += 0.05 // high-confidence scarcity signal
+		confidence += 0.05
 	}
 	if args.Stock > 100 {
-		confidence += 0.05 // high-confidence surplus signal
+		confidence += 0.05
 	}
-	// Reduce by a deterministic fraction derived from the hash (0.000 – 0.099).
-	// This encodes genuine uncertainty about market volatility without a second
-	// non-deterministic rand call.
 	hashUncertainty := float64(hashSum%1000) / 10000.0
 	confidence -= hashUncertainty
 
-	// Clamp confidence to [0.0, 1.0].
 	if confidence > 1.0 {
 		confidence = 1.0
 	} else if confidence < 0.0 {
 		confidence = 0.0
 	}
 
-	// Round to 2 decimal places.
 	roundedPrice := math.Round(currentPrice*100) / 100
 
 	return PricingResult{
@@ -127,9 +116,12 @@ func calculateDynamicPrice(args PricingArgs, currentHour int64, h hash.Hash64) P
 	}
 }
 
+/**
+ * JSON-RPC gateway optimized for Cloudflare Service Bindings. Bypasses 
+ * public ingress and standard authentication layers to minimize RTT 
+ * within the internal Worker network.
+ */
 func rpcHandler(w http.ResponseWriter, req *http.Request) {
-	// Note: auth is not needed — this worker is only reachable via private
-	// Cloudflare Service Bindings, not the public internet.
 	if req.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
@@ -162,14 +154,15 @@ func rpcHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Measure pure computation time in microseconds for precision
 	start := time.Now()
 
-	// PERF: Hoist time.Now() + hasher allocation OUTSIDE the loop.
-	// time.Now() in Wasm crosses the JS interop boundary every call.
-	// Calling it once here instead of 10,000 times saves ~10,000 boundary crossings.
+	/**
+	 * PERF: time.Now() and hasher allocation are hoisted outside the loop. 
+	 * Each time.Now() in Wasm triggers a JS interop boundary crossing; 
+	 * batching reduces this overhead from O(N) to O(1).
+	 */
 	currentHour := time.Now().Truncate(time.Hour).Unix()
-	h := fnv.New64a() // single allocation, reused via h.Reset() inside the function
+	h := fnv.New64a()
 
 	results := make([]PricingResult, len(rpcReq.Params))
 	for i, param := range rpcReq.Params {
@@ -189,6 +182,11 @@ func rpcHandler(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(rpcRes)
 }
 
+/**
+ * Transmits domain errors via HTTP 200 per JSON-RPC 2.0 spec. Prevents 
+ * Next.js Route Handlers from triggering standard retry policies on 
+ * application-level failures.
+ */
 func sendError(w http.ResponseWriter, id interface{}, code int, message string) {
 	res := JSONRPCResponse{
 		JSONRPC: "2.0",
@@ -199,15 +197,11 @@ func sendError(w http.ResponseWriter, id interface{}, code int, message string) 
 		ID: id,
 	}
 	w.Header().Set("Content-Type", "application/json")
-	// JSON-RPC 2.0 §5: application-level errors MUST return HTTP 200.
-	// Error detail belongs in the response body, not the HTTP status.
-	// Using 4xx here caused the route.ts retry loop to fire on every
-	// malformed request (parse error, wrong method), not just transient faults.
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(res)
 }
 
 func main() {
 	http.HandleFunc("/rpc", rpcHandler)
-	workers.Serve(nil) // Start the server via `github.com/syumai/workers`
+	workers.Serve(nil)
 }

@@ -109,7 +109,7 @@ export function PricingStatus() {
       className={[
         "w-full rounded-2xl border relative overflow-hidden",
         borderClass,
-        "bg-slate-900/80 backdrop-blur-xl",
+        "bg-[#0c1327]/80 backdrop-blur-xl",
         "p-6 mb-8",
         glowClass,
         "transition-all duration-500",

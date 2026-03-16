@@ -2,7 +2,7 @@
 
 ### **High-Performance Edge-Native Pricing Engine**
 
-[**🔗 LIVE DEMO & PERFORMANCE BENCHMARK**](https://eco-commerce-orchestrator.pages.dev)
+[**🔗 LIVE DEMO & PERFORMANCE BENCHMARK**](https://eco-commerce-orchestrator.achegideas.workers.dev/)
 
 The **Eco-Commerce Orchestrator** is an industrial-grade distributed system designed to guarantee **mathematical determinism** and **price consistency** in real-time. It operates entirely on the global **Cloudflare Edge** infrastructure to minimize latency and maximize reliability.
 

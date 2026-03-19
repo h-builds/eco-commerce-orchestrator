@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 /**
@@ -89,9 +90,10 @@ export default function RootLayout({
           rel="preload"
           as="style"
           href={MATERIAL_SYMBOLS_HREF}
+          crossOrigin="anonymous"
         />
         <noscript>
-          <link rel="stylesheet" href={MATERIAL_SYMBOLS_HREF} />
+          <link rel="stylesheet" href={MATERIAL_SYMBOLS_HREF} crossOrigin="anonymous" />
         </noscript>
         <script
           dangerouslySetInnerHTML={{

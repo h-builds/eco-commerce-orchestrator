@@ -79,7 +79,7 @@ export function TelemetryHUD() {
       role="status"
       aria-label="Live telemetry dashboard"
       className="
-        fixed bottom-6 right-6 z-50
+        fixed bottom-6 left-6 z-50
         font-[family-name:var(--font-geist-mono)]
         text-[11px] leading-relaxed tracking-wide
         bg-slate-950/85 backdrop-blur-md
@@ -121,7 +121,7 @@ export function TelemetryHUD() {
             <div
               role="tooltip"
               className="
-                absolute bottom-7 right-0
+                absolute bottom-7 left-0
                 w-64 px-3 py-2
                 bg-slate-900 border border-cyan-500/20
                 rounded-md text-[10px] text-slate-300 leading-snug

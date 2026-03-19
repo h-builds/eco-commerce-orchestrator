@@ -99,6 +99,7 @@ export default function RootLayout({
               (function() {
                 var l = document.createElement('link');
                 l.rel = 'stylesheet';
+                l.crossOrigin = 'anonymous';
                 l.href = '${MATERIAL_SYMBOLS_HREF}';
                 document.head.appendChild(l);
               })();

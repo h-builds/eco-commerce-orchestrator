@@ -196,18 +196,25 @@ export default function BenchmarksPage() {
   const exportSnapshot = async () => {
     if (!snapshotRef.current || isExporting) return;
     setIsExporting(true);
+    setBenchmarkError(null);
     try {
       const dataUrl = await toPng(snapshotRef.current, {
         backgroundColor: "#0f172a",
         pixelRatio: 2,
       });
+      
+      let customConfigName: string | undefined;
+      const safeName = customConfigName && typeof customConfigName === 'string' && customConfigName.trim() 
+        ? customConfigName.trim() 
+        : 'audit_report';
+
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = `performance-duel-${new Date().toISOString().slice(0, 19)}.png`;
+      a.download = `${safeName}-${new Date().toISOString().slice(0, 19)}.png`;
       a.click();
     } catch (e) {
       console.error("Export failed", e);
-      setBenchmarkError("Failed to export snapshot.");
+      setBenchmarkError("Export failed: Browser blocked canvas rendering. Please check CORS or content blocker settings.");
     } finally {
       setIsExporting(false);
     }

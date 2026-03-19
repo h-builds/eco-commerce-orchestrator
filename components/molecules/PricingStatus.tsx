@@ -19,7 +19,7 @@ interface ClockState {
 }
 
 /**
- * Syncs display countdowns with the deterministic Wasm seed generation 
+ * Syncs display countdowns with the deterministic Wasm seed generation
  * window to maintain state parity with Edge compute cycles.
  */
 function computeClockState(now: Date, simHour: number | null): ClockState {
@@ -47,9 +47,9 @@ function formatHour(h: number): string {
 }
 
 /**
- * Orchestrates global simulation telemetry. Employs a two-phase hydration 
- * strategy to prevent Edge-side mismatches and utilizes `useDeferredValue` 
- * to prioritize interaction latency over heavy reconciliation during 
+ * Orchestrates global simulation telemetry. Employs a two-phase hydration
+ * strategy to prevent Edge-side mismatches and utilizes `useDeferredValue`
+ * to prioritize interaction latency over heavy reconciliation during
  * temporal state scrubbing.
  */
 export function PricingStatus() {
@@ -83,7 +83,7 @@ export function PricingStatus() {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const h = Number(e.target.value);
       setSliderHour(h);
-      
+
       if (debounceTimerInfo.current) {
         clearTimeout(debounceTimerInfo.current);
       }
@@ -120,12 +120,14 @@ export function PricingStatus() {
       className={[
         "w-full rounded-2xl border relative overflow-hidden",
         borderClass,
-        "bg-[#0c1327]/80 backdrop-blur-xl",
+        "bg-[#0c1327]",
         "p-6 mb-8",
         glowClass,
         "transition-all duration-500",
       ].join(" ")}>
-      <div className={`absolute -top-16 -right-16 w-32 h-32 rounded-full blur-3xl pointer-events-none transition-colors duration-700 ${isSimulating ? "bg-amber-500/10" : "bg-cyan-500/10"}`} />
+      <div
+        className={`absolute -top-16 -right-16 w-32 h-32 rounded-full blur-3xl pointer-events-none transition-colors duration-700 ${isSimulating ? "bg-amber-500/10" : "bg-cyan-500/10"}`}
+      />
 
       <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-3 relative z-10">
         <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
@@ -230,7 +232,7 @@ export function PricingStatus() {
 
           <div className="relative flex-1 group/slider py-2">
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 rounded-full bg-slate-800 border border-slate-700/50 pointer-events-none" />
-            
+
             <div
               className={`absolute left-0 top-1/2 -translate-y-1/2 h-2 rounded-full pointer-events-none transition-colors duration-300 ${isSimulating ? "bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" : "bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]"}`}
               style={{ width: `${sliderPercent}%` }}
@@ -287,8 +289,8 @@ export function PricingStatus() {
           </span>
           <span
             className={`font-mono text-lg font-black tracking-widest transition-colors duration-300 rounded border px-4 py-1.5 ${
-              isSimulating 
-                ? "text-amber-400 border-amber-500/30 bg-amber-500/10" 
+              isSimulating
+                ? "text-amber-400 border-amber-500/30 bg-amber-500/10"
                 : "text-slate-400 border-slate-700 bg-slate-800"
             }`}
             aria-live="polite"

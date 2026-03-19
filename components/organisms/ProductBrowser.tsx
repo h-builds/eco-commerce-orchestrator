@@ -7,8 +7,11 @@ import { SearchBar } from '@/components/molecules/SearchBar';
 import { ProductSkeleton } from '@/components/molecules/ProductSkeleton';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ComparisonBar } from '@/components/organisms/ComparisonBar';
-import { simulatePrice, getSeedHex } from '@/lib/pricingEngine';
+import { getSeedHex } from '@/lib/pricingEngine';
 import { WasmTelemetry, captureMemoryMb } from '@/lib/wasmTelemetry';
+import { useSimulation } from '@/lib/SimulationContext';
+import { orchestrateBatches, chunkArray } from '@/lib/batchOrchestrator';
+import { batchLivePrices } from '@/lib/pricing';
 
 const SEARCH_QUERY = `
   query SearchProducts($search: String, $offset: Int) {
@@ -42,6 +45,8 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const { simulatedHour } = useSimulation();
+  const prevSimulatedHour = useRef<number | null>(simulatedHour);
 
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [offset, setOffset] = useState(0);
@@ -140,33 +145,71 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   });
 
   /**
-   * Performance probe: re-runs simulation locally to baseline browser-scope 
-   * telemetry against server-resolved pricing. Utilizes 'requestIdleCallback' 
-   * to offload measurement overhead from the critical render path.
+   * Reactive Edge Batch Dispatcher
+   * Links the debounced Simulation Time Machine slider directly to the Wasm
+   * Edge. Executes the identical Parallel Batching logic used in stress tests,
+   * injecting high-density Processing states into the TelemetryHUD.
    */
   useEffect(() => {
     if (products.length === 0) return;
     
-    const runTelemetry = () => {
-      const t0 = performance.now();
-      for (const p of products) {
-        simulatePrice(p.id, p.price, p.stock, null);
+    // Only invoke heavy processing if the hour changed or this is the initial load
+    if (simulatedHour === prevSimulatedHour.current && prevSimulatedHour.current !== undefined) {
+      return;
+    }
+    prevSimulatedHour.current = simulatedHour;
+
+    let isCancelled = false;
+
+    const runReactiveBatch = async () => {
+      // 1. Visual Feedback: Processing State
+      const hud = document.getElementById('telemetry-hud');
+      hud?.classList.remove('shadow-[0_0_20px_rgba(0,255,255,0.15)]');
+      hud?.classList.add('shadow-[0_0_20px_rgba(245,158,11,0.5)]', 'ring-2', 'ring-amber-500');
+
+      try {
+        const chunks = chunkArray(products, 500);
+        await orchestrateBatches(
+          chunks,
+          async (chunk) => {
+            if (isCancelled) return 0;
+            
+            // Yield to main thread for a fluid 60 FPS slider experience
+            await new Promise<void>((r) => requestAnimationFrame(() => r()));
+            
+            const t0 = performance.now();
+            await batchLivePrices(chunk.map(p => ({ id: p.id, price: p.price, stock: p.stock })));
+            const executionTimeMs = performance.now() - t0;
+            
+            // 2. Telemetry Sync: populate WASM_PROC config
+            WasmTelemetry.pushEntry({
+              batchSize: chunk.length,
+              executionTimeMs,
+              seedHex: getSeedHex(chunk[0].id, simulatedHour),
+              memoryMb: captureMemoryMb(),
+            });
+            return chunk.length;
+          },
+          () => {} // Omit stress test progress to keep UI clean
+        );
+      } finally {
+        if (!isCancelled) {
+          // Snap back to green/cyan when finalized
+          hud?.classList.remove('shadow-[0_0_20px_rgba(245,158,11,0.5)]', 'ring-2', 'ring-amber-500');
+          hud?.classList.add('shadow-[0_0_20px_rgba(0,255,255,0.15)]');
+        }
       }
-      const executionTimeMs = performance.now() - t0;
-      WasmTelemetry.pushEntry({
-        batchSize: products.length,
-        executionTimeMs,
-        seedHex: getSeedHex(products[0].id, null),
-        memoryMb: captureMemoryMb(),
-      });
     };
 
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(runTelemetry);
-    } else {
-      setTimeout(runTelemetry, 1);
-    }
-  }, [products]);
+    runReactiveBatch();
+
+    return () => {
+      isCancelled = true;
+      const hud = document.getElementById('telemetry-hud');
+      hud?.classList.remove('shadow-[0_0_20px_rgba(245,158,11,0.5)]', 'ring-2', 'ring-amber-500');
+      hud?.classList.add('shadow-[0_0_20px_rgba(0,255,255,0.15)]');
+    };
+  }, [products, simulatedHour]);
 
   return (
     <div className="flex flex-col w-full">

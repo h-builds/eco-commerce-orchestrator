@@ -6,6 +6,7 @@ import {
   useDeferredValue,
   useCallback,
   useMemo,
+  useRef,
 } from "react";
 import { useSimulation } from "@/lib/SimulationContext";
 import { getHexSeedForHour } from "@/lib/hexSeed";
@@ -55,30 +56,40 @@ export function PricingStatus() {
   const { simulatedHour, setSimulatedHour } = useSimulation();
 
   const [sliderHour, setSliderHour] = useState<number>(0);
+  const debounceTimerInfo = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    setSliderHour(new Date().getHours());
+    const timer = setTimeout(() => {
+      setSliderHour(new Date().getHours());
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const deferredSimHour = useDeferredValue(simulatedHour);
 
-  const [tick, setTick] = useState(0);
+  const [now, setNow] = useState<Date>(() => new Date());
 
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 1000);
+    const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
 
   const clock = useMemo(
-    () => computeClockState(new Date(), deferredSimHour),
-    [tick, deferredSimHour],
+    () => computeClockState(now, deferredSimHour),
+    [now, deferredSimHour],
   );
 
   const handleSliderChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const h = Number(e.target.value);
       setSliderHour(h);
-      setSimulatedHour(h);
+      
+      if (debounceTimerInfo.current) {
+        clearTimeout(debounceTimerInfo.current);
+      }
+      debounceTimerInfo.current = setTimeout(() => {
+        setSimulatedHour(h);
+      }, 150);
     },
     [setSimulatedHour],
   );

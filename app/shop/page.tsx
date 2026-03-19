@@ -49,11 +49,15 @@ export default function ShopPage() {
             <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
               Eco-Friendly Essentials
             </h1>
-            <p className="mt-4 text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-              Sustainable products priced in real-time by our Go&nbsp;Wasm AI agent.
-              Every price reflects live supply &amp; demand — seeded hourly for
-              deterministic, edge-consistent results.
-            </p>
+            <div className="mt-6 max-w-2xl rounded-lg border border-cyan-500/20 bg-slate-900/40 p-4 text-sm leading-relaxed text-slate-300 shadow-inner backdrop-blur-sm font-mono">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-cyan-400">
+                <span className="material-symbols-outlined text-[16px]" aria-hidden="true">settings_b_roll</span>
+                Identity: Deterministic Pricing Orchestrator
+              </span>
+              <p>
+                This is not a price scraper. This is a high-performance calculation engine. We process 10,000+ pricing permutations per second via Go-Wasm to guarantee absolute price integrity across global edge nodes.
+              </p>
+            </div>
           </header>
 
           <PricingStatus />

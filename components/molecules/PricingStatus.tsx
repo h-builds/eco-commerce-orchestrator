@@ -142,14 +142,14 @@ export function PricingStatus() {
           className={`text-xs font-black uppercase tracking-[0.2em] transition-colors duration-300 ${labelColor}`}>
           {isSimulating ? "Simulation Mode" : "Edge Pricing Engine"}
         </span>
-        <span className="ml-auto text-[10px] uppercase font-bold tracking-widest text-slate-500 border border-slate-800 bg-slate-950 px-2 py-1 rounded-full">
+        <span className="ml-auto text-[10px] uppercase font-bold tracking-widest text-slate-400 border border-slate-700 bg-slate-900 px-2 py-1 rounded-full">
           Go-Wasm Core
         </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 relative z-10">
         <div className="flex flex-col bg-slate-950/50 rounded-xl p-4 border border-slate-800/80">
-          <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">
+          <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
             {isSimulating ? "Simulated Hour" : "Last Network Sync"}
           </span>
           <span
@@ -161,7 +161,7 @@ export function PricingStatus() {
         </div>
 
         <div className="flex flex-col bg-slate-950/50 rounded-xl p-4 border border-slate-800/80">
-          <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">
+          <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
             Next Price Shift
           </span>
           <span
@@ -174,7 +174,7 @@ export function PricingStatus() {
         </div>
 
         <div className="flex flex-col bg-slate-950/50 rounded-xl p-4 border border-slate-800/80">
-          <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">
+          <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
             Global Price Seed
           </span>
           <span
@@ -213,7 +213,7 @@ export function PricingStatus() {
           {isSimulating && (
             <button
               onClick={handleReset}
-              className="flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase text-slate-400 hover:text-white bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
+              className="flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase text-slate-100 bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg border border-slate-600 hover:border-slate-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
               aria-label="Reset to live system time">
               <span
                 className="material-symbols-outlined text-sm"
@@ -226,7 +226,7 @@ export function PricingStatus() {
         </div>
 
         <div className="flex items-center gap-4">
-          <span className="text-xs font-mono font-bold text-slate-500 w-12 shrink-0 text-right">
+          <span className="text-xs font-mono font-bold text-slate-400 w-12 shrink-0 text-right">
             00:00
           </span>
 
@@ -278,13 +278,13 @@ export function PricingStatus() {
             />
           </div>
 
-          <span className="text-xs font-mono font-bold text-slate-500 w-12 shrink-0">
+          <span className="text-xs font-mono font-bold text-slate-400 w-12 shrink-0">
             23:00
           </span>
         </div>
 
         <div className="mt-4 flex flex-col items-center justify-center">
-          <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">
+          <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
             {isSimulating ? "Target Validation Matrix" : "Drag to forecast"}
           </span>
           <span

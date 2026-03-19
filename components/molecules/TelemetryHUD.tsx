@@ -119,7 +119,7 @@ export function TelemetryHUD() {
             onBlur={hideTooltip}
             aria-label="Technical information about main thread liberation"
             className="
-              text-cyan-500/60 hover:text-cyan-400 transition-colors
+              text-cyan-400 hover:text-cyan-300 transition-colors
               flex items-center justify-center w-5 h-5 rounded
               focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50
             "
@@ -151,7 +151,7 @@ export function TelemetryHUD() {
 
       {/* WASM Engine Status */}
       <div className="flex items-center gap-2 text-slate-300">
-        <span className="text-slate-500">WASM_ENGINE:</span>
+        <span className="text-slate-400">WASM_ENGINE:</span>
         <span
           ref={wasmDotRef}
           className="animate-pulse text-green-500"
@@ -166,7 +166,7 @@ export function TelemetryHUD() {
 
       {/* Price Validations */}
       <div className="flex items-center gap-2 text-slate-300 mt-0.5">
-        <span className="text-slate-500">WASM_PROC:</span>
+        <span className="text-slate-400">WASM_PROC:</span>
         <span ref={wasmProcRef} className="text-cyan-400">
           0 / 0
         </span>
@@ -178,13 +178,13 @@ export function TelemetryHUD() {
         className="flex items-center gap-2 mt-0.5"
         style={{ color: '#22c55e' }}
       >
-        <span className="text-slate-500">UI_JITTER:</span>
+        <span className="text-slate-400">UI_JITTER:</span>
         <span ref={jitterRef}>0.0ms</span>
       </div>
 
       {/* Edge Latency */}
       <div className="flex items-center gap-2 text-slate-300 mt-0.5">
-        <span className="text-slate-500">EDGE_RTT:</span>
+        <span className="text-slate-400">EDGE_RTT:</span>
         <span ref={rttRef} className="text-cyan-400">
           —ms
         </span>
@@ -196,7 +196,7 @@ export function TelemetryHUD() {
         className="flex items-center gap-2 text-slate-300 mt-0.5"
         style={{ display: 'none' }}
       >
-        <span className="text-slate-500">EDGE_BATCH:</span>
+        <span className="text-slate-400">EDGE_BATCH:</span>
         <span ref={batchRef} className="text-emerald-400 font-bold">
           —
         </span>

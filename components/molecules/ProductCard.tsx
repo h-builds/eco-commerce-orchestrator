@@ -51,18 +51,18 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
 
   const confidenceColor =
     confidencePercent >= 90
-      ? "bg-emerald-500 text-white"
+      ? "bg-emerald-400 text-slate-950"
       : confidencePercent >= 75
-        ? "bg-amber-500 text-white"
-        : "bg-rose-500 text-white";
+        ? "bg-amber-400 text-slate-950"
+        : "bg-rose-400 text-slate-950";
 
   const verifiedBadgeClass = isSimulating
-    ? "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 animate-pulse"
-    : "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30 animate-pulse";
+    ? "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 animate-pulse border border-transparent"
+    : "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950 animate-pulse border border-transparent";
 
   const verifiedDotClass = isSimulating
-    ? "size-1.5 rounded-full bg-amber-400 shrink-0"
-    : "size-1.5 rounded-full bg-emerald-400 shrink-0";
+    ? "size-1.5 rounded-full bg-slate-900 shrink-0"
+    : "size-1.5 rounded-full bg-slate-900 shrink-0";
 
   const verifiedLabel = isSimulating
     ? "Price seeded by simulated hour"
@@ -161,10 +161,10 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
                   <span className="material-symbols-outlined text-[10px]" aria-hidden="true">memory</span>
                   [WASM_VALIDATED]
                 </span>
-                <div className="absolute right-0 bottom-full mb-1.5 w-64 opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible rounded border border-cyan-500/30 bg-slate-950 p-2.5 text-[10px] font-[family-name:var(--font-geist-mono)] leading-relaxed text-slate-300 shadow-xl shadow-cyan-900/20 transition-all z-50 pointer-events-none">
-                  <span className="text-cyan-400 font-bold block mb-1 tracking-widest uppercase">Edge Orchestration</span>
+                <div className="absolute right-0 bottom-full mb-1.5 w-64 opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible rounded border border-cyan-500/50 bg-slate-950 p-2.5 text-[10px] font-[family-name:var(--font-geist-mono)] leading-relaxed text-slate-200 shadow-xl shadow-cyan-900/20 transition-all z-50 pointer-events-none">
+                  <span className="text-cyan-300 font-bold block mb-1 tracking-widest uppercase">Edge Orchestration</span>
                   Real-time deterministic calculation of sustainable premiums, carbon offsets, and ethical sourcing margins. Processed via Go-Wasm at the Edge to eliminate client-side jitter and ensure 100% price integrity.
-                  <span id={`latency-${product.id}`} className="font-bold text-emerald-400 mt-2 block">LATENCY: —ms</span>
+                  <span id={`latency-${product.id}`} className="font-bold text-emerald-300 mt-2 block">LATENCY: —ms</span>
                 </div>
               </div>
             </div>

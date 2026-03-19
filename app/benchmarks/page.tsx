@@ -204,9 +204,7 @@ export default function BenchmarksPage() {
       });
       
       let customConfigName: string | undefined;
-      const safeName = customConfigName && typeof customConfigName === 'string' && customConfigName.trim() 
-        ? customConfigName.trim() 
-        : 'audit_report';
+      const safeName = customConfigName?.trim() || 'audit_report';
 
       const a = document.createElement("a");
       a.href = dataUrl;

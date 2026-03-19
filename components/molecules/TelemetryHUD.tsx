@@ -87,6 +87,7 @@ export function TelemetryHUD() {
 
   return (
     <div
+      id="telemetry-hud"
       ref={containerRef}
       role="status"
       aria-label="Live telemetry dashboard"
@@ -99,7 +100,7 @@ export function TelemetryHUD() {
         rounded-lg px-4 py-3
         shadow-[0_0_20px_rgba(0,255,255,0.15)]
         select-none pointer-events-auto
-        min-w-[260px]
+        min-w-[260px] transition-all duration-300
       "
     >
       {/* Header */}

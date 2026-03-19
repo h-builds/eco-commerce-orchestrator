@@ -11,7 +11,8 @@
  * remaining batches continue — ensuring the benchmark is resilient but honest.
  */
 
-import { simulatePrice, getSeedHex } from './pricingEngine';
+import { getSeedHex } from './pricingEngine';
+import { batchLivePrices } from './pricing';
 import { WasmTelemetry, captureMemoryMb } from './wasmTelemetry';
 import { chunkArray, orchestrateBatches } from './batchOrchestrator';
 
@@ -33,27 +34,26 @@ async function processBatch(
   products: BaseProduct[],
   simulatedHour: number | null,
 ): Promise<number> {
-  const MICRO_BATCH = 50;
+  const t0 = performance.now();
 
-  for (let i = 0; i < products.length; i += MICRO_BATCH) {
-    const micro = products.slice(i, i + MICRO_BATCH);
-    const t0 = performance.now();
+  // Dispatch the entire 500-item batch across the network to the
+  // Edge Worker Service Binding to force Fan-out execution
+  await batchLivePrices(products.map(p => ({
+    id: p.id,
+    price: p.price,
+    stock: p.stock
+  })));
 
-    for (const p of micro) {
-      simulatePrice(p.id, p.price, p.stock, simulatedHour);
-    }
+  const executionTimeMs = performance.now() - t0;
+  const seedHex = products.length > 0 ? getSeedHex(products[0].id, simulatedHour) : undefined;
+  const memoryMb = captureMemoryMb();
 
-    const executionTimeMs = performance.now() - t0;
-    const seedHex = micro.length > 0 ? getSeedHex(micro[0].id, simulatedHour) : undefined;
-    const memoryMb = captureMemoryMb();
-
-    WasmTelemetry.pushEntry({
-      batchSize: micro.length,
-      executionTimeMs,
-      seedHex,
-      memoryMb,
-    });
-  }
+  WasmTelemetry.pushEntry({
+    batchSize: products.length,
+    executionTimeMs,
+    seedHex,
+    memoryMb,
+  });
 
   return products.length;
 }

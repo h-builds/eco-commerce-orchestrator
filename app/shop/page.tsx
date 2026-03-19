@@ -55,7 +55,7 @@ export default function ShopPage() {
                 Identity: Deterministic Pricing Orchestrator
               </span>
               <p>
-                This is not a price scraper. This is a high-performance calculation engine. We process 10,000+ pricing permutations per second via Go-Wasm to guarantee absolute price integrity across global edge nodes.
+                This is a high-performance calculation engine—not a scraper. We process 10,000+ pricing permutations per second via Go-Wasm to guarantee absolute price integrity across global edge nodes.
               </p>
             </div>
           </header>

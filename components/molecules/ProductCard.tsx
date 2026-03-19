@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { memo } from "react";
 import { useCompare } from "@/lib/CompareContext";
+import { WasmTelemetry } from "@/lib/wasmTelemetry";
+import { getHUDMetrics } from "@/lib/hudTelemetry";
 
 /**
  * Core domain model for catalog entities. Synchronizes Edge-verified 
@@ -142,14 +144,27 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
               <span className="font-mono font-bold text-slate-900 dark:text-slate-100 text-lg">
                 {formattedPrice}
               </span>
-              <div className="group/badge relative flex items-center">
-                <span className="font-mono text-[9px] font-bold tracking-widest text-cyan-500 dark:text-cyan-400 border border-cyan-500/30 rounded flex items-center gap-0.5 px-1 py-0.5 cursor-crosshair bg-transparent select-none">
+              <div 
+                className="group/badge relative flex items-center"
+                onMouseEnter={() => {
+                  document.getElementById('telemetry-hud')?.classList.add('ring-4', 'ring-cyan-500/50', 'scale-[1.02]');
+                  const logs = WasmTelemetry.getLogs();
+                  const ms = logs.length > 0 ? logs[0].executionTimeMs.toFixed(1) : getHUDMetrics().edgeRttMs;
+                  const el = document.getElementById(`latency-${product.id}`);
+                  if (el) el.textContent = `LATENCY: ${ms}ms`;
+                }}
+                onMouseLeave={() => {
+                  document.getElementById('telemetry-hud')?.classList.remove('ring-4', 'ring-cyan-500/50', 'scale-[1.02]');
+                }}
+              >
+                <span className="font-mono text-[9px] font-bold tracking-widest text-cyan-400 border border-cyan-400 rounded flex items-center gap-0.5 px-1 py-0.5 cursor-crosshair bg-transparent select-none">
                   <span className="material-symbols-outlined text-[10px]" aria-hidden="true">memory</span>
-                  &lt;WASM VERIFIED&gt;
+                  [WASM_VALIDATED]
                 </span>
-                <div className="absolute right-0 bottom-full mb-1.5 w-56 opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible rounded border border-cyan-500/30 bg-slate-950 p-2.5 text-[10px] font-[family-name:var(--font-geist-mono)] leading-relaxed text-slate-300 shadow-xl shadow-cyan-900/20 transition-all z-50 pointer-events-none">
+                <div className="absolute right-0 bottom-full mb-1.5 w-64 opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible rounded border border-cyan-500/30 bg-slate-950 p-2.5 text-[10px] font-[family-name:var(--font-geist-mono)] leading-relaxed text-slate-300 shadow-xl shadow-cyan-900/20 transition-all z-50 pointer-events-none">
                   <span className="text-cyan-400 font-bold block mb-1 tracking-widest uppercase">Edge Orchestration</span>
-                  Calculated in {(0.6 + (product.id.charCodeAt(0) % 10) * 0.08).toFixed(1)}ms at the Edge. Ensures immunity against client-side hardware limitations and V8 JIT inconsistencies.
+                  Real-time deterministic calculation of sustainable premiums, carbon offsets, and ethical sourcing margins. Processed via Go-Wasm at the Edge to eliminate client-side jitter and ensure 100% price integrity.
+                  <span id={`latency-${product.id}`} className="font-bold text-emerald-400 mt-2 block">LATENCY: —ms</span>
                 </div>
               </div>
             </div>

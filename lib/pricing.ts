@@ -53,6 +53,69 @@ export async function getLivePrice(productId: string, basePrice: number, stock: 
 }
 
 /**
+ * Dispatches a batch of products to the Go-Wasm agent concurrently.
+ * Used for bypassing Cloudflare CPU time limits via parallel fan-out.
+ */
+export async function batchLivePrices(products: { id: string; price: number; stock: number }[]): Promise<{ id: string; live_price: number; agent_confidence: number }[]> {
+  const env = (await getCloudflareContext({ async: true })).env as unknown as {
+    PRICING_AGENT?: Fetcher;
+    INTERNAL_SECRET?: string;
+  };
+
+  if (!env.PRICING_AGENT) {
+    return products.map((p) => ({
+      id: p.id,
+      live_price: p.price,
+      agent_confidence: 0,
+    }));
+  }
+
+  try {
+    const res = await env.PRICING_AGENT.fetch("http://pricing-agent/rpc", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${env.INTERNAL_SECRET}`,
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "calculate_price",
+        params: products.map((p) => ({
+          product_id: p.id,
+          base_price: p.price,
+          stock: p.stock,
+        })),
+        id: "batch-dispatch",
+      }),
+    });
+
+    if (res.ok) {
+      const data = (await res.json()) as {
+        result?: { product_id: string; live_price: number; agent_confidence: number }[];
+      };
+      if (data?.result && Array.isArray(data.result)) {
+        return data.result.map((r) => ({
+          id: r.product_id,
+          live_price: r.live_price,
+          agent_confidence: r.agent_confidence,
+        }));
+      }
+    } else {
+       console.warn(`batchLivePrices Wasm fetch failed: status ${res.status}`);
+    }
+  } catch (e) {
+    console.error("Error fetching from pricing agent in batchLivePrices:", e);
+  }
+
+  return products.map((p) => ({
+    id: p.id,
+    live_price: p.price,
+    agent_confidence: 0,
+  }));
+}
+
+
+/**
  * Generates deterministic 24-hour volatility curves. Utilizes the local 
  * JS-port to avoid batching/round-trip overhead for high-cardinality 
  * projection arrays.

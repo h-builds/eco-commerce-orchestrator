@@ -22,6 +22,8 @@ export function TelemetryHUD() {
   const jitterRef = useRef<HTMLSpanElement>(null);
   const jitterRowRef = useRef<HTMLDivElement>(null);
   const rttRef = useRef<HTMLSpanElement>(null);
+  const batchRef = useRef<HTMLSpanElement>(null);
+  const batchRowRef = useRef<HTMLDivElement>(null);
   const paintRafRef = useRef(0);
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
@@ -60,6 +62,16 @@ export function TelemetryHUD() {
       // Edge RTT
       if (rttRef.current) {
         rttRef.current.textContent = `${m.edgeRttMs}ms`;
+      }
+
+      // Batch progress
+      if (batchRef.current) {
+        batchRef.current.textContent = m.batchTotal > 0
+          ? `${m.batchCompleted} / ${m.batchTotal}`
+          : '—';
+      }
+      if (batchRowRef.current) {
+        batchRowRef.current.style.display = m.batchTotal > 0 ? 'flex' : 'none';
       }
 
       paintRafRef.current = requestAnimationFrame(paint);
@@ -174,6 +186,18 @@ export function TelemetryHUD() {
         <span className="text-slate-500">EDGE_RTT:</span>
         <span ref={rttRef} className="text-cyan-400">
           —ms
+        </span>
+      </div>
+
+      {/* Batch Progress — hidden when no stress test has run */}
+      <div
+        ref={batchRowRef}
+        className="flex items-center gap-2 text-slate-300 mt-0.5"
+        style={{ display: 'none' }}
+      >
+        <span className="text-slate-500">EDGE_BATCH:</span>
+        <span ref={batchRef} className="text-emerald-400 font-bold">
+          —
         </span>
       </div>
     </div>

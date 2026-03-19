@@ -13,6 +13,8 @@ export interface HUDMetrics {
   wasmTotal: number;
   jitterMs: number;
   edgeRttMs: number;
+  batchCompleted: number;
+  batchTotal: number;
 }
 
 const metrics: HUDMetrics = {
@@ -21,6 +23,8 @@ const metrics: HUDMetrics = {
   wasmTotal: 0,
   jitterMs: 0,
   edgeRttMs: 0,
+  batchCompleted: 0,
+  batchTotal: 0,
 };
 
 let running = false;
@@ -44,10 +48,24 @@ function measureJitter(now: number): void {
 function syncWasmMetrics(): void {
   const session = WasmTelemetry.getSessionMetrics();
   metrics.wasmProcessed = session.totalProducts;
-  metrics.wasmTotal = session.totalProducts; // Shows total processed as capacity
+  metrics.wasmTotal = session.totalProducts;
 
   const stress = WasmTelemetry.getStressTestStatus();
   metrics.wasmActive = stress.active || session.totalBatches > 0;
+
+  // Batch progress: derive from stress test total using 500-item chunks
+  if (stress.active && stress.total > 0) {
+    const batchSize = 500;
+    metrics.batchTotal = Math.ceil(stress.total / batchSize);
+    metrics.batchCompleted = Math.min(
+      Math.ceil(stress.progress / batchSize),
+      metrics.batchTotal,
+    );
+  } else if (!stress.active && stress.total > 0) {
+    const batchSize = 500;
+    metrics.batchTotal = Math.ceil(stress.total / batchSize);
+    metrics.batchCompleted = metrics.batchTotal;
+  }
 }
 
 async function measureEdgeRtt(): Promise<void> {

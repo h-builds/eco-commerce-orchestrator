@@ -25,8 +25,8 @@ interface DashboardClientProps {
 }
 
 /**
- * Isolates high-frequency client-side state (Wasm batch runs, telemetry 
- * streaming) from the static Edge-shell to preserve L1/L2 cacheability 
+ * Isolates high-frequency client-side state (Wasm batch runs, telemetry
+ * streaming) from the static Edge-shell to preserve L1/L2 cacheability
  * of the parent route at the Worker level.
  */
 export default function DashboardClient({
@@ -41,8 +41,8 @@ export default function DashboardClient({
   }, [initialProducts, simulatedHour, setStressTestProducts]);
 
   /**
-   * Dispatches the batch pricing loop. Reports to WasmTelemetry to ensure 
-   * simulation consistency between client-side re-computation and Edge 
+   * Dispatches the batch pricing loop. Reports to WasmTelemetry to ensure
+   * simulation consistency between client-side re-computation and Edge
    * Worker logs.
    */
   const computedData = useMemo(() => {
@@ -78,8 +78,7 @@ export default function DashboardClient({
           />
           <Link
             href="/benchmarks"
-            className="group relative flex items-center justify-between overflow-hidden rounded-2xl border border-cyan-500/30 bg-white/5 p-6 backdrop-blur-md transition-all hover:border-cyan-400 hover:bg-cyan-500/10 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)]"
-          >
+            className="group relative flex items-center justify-between overflow-hidden rounded-2xl border border-cyan-500/30 bg-white/5 p-6 backdrop-blur-md transition-all hover:border-cyan-400 hover:bg-cyan-500/10 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)]">
             <div className="flex flex-col">
               <span className="text-xs font-bold uppercase tracking-widest text-cyan-500">
                 System Audit
@@ -89,7 +88,9 @@ export default function DashboardClient({
               </span>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white transition-all">
-              <span className="material-symbols-outlined text-xl" aria-hidden="true">
+              <span
+                className="material-symbols-outlined text-xl"
+                aria-hidden="true">
                 arrow_forward
               </span>
             </div>
@@ -102,7 +103,7 @@ export default function DashboardClient({
           <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase mb-4 shrink-0">
             Network Edge Map
           </h3>
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1">
             <EdgeMap nodes={computedData.nodes} />
           </div>
         </div>

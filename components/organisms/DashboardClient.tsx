@@ -89,8 +89,8 @@ export default function DashboardClient({
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white transition-all">
               <span
-                className="material-symbols-outlined text-xl"
-                aria-hidden="true">
+                className="material-symbols-outlined notranslate text-xl"
+                aria-hidden="true" translate="no">
                 arrow_forward
               </span>
             </div>

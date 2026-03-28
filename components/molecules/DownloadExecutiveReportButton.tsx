@@ -90,9 +90,9 @@ export function DownloadExecutiveReportButton() {
       }
     >
       <span
-        className="material-symbols-outlined text-lg"
+        className="material-symbols-outlined notranslate text-lg"
         aria-hidden="true"
-      >
+       translate="no">
         picture_as_pdf
       </span>
       {isGenerating ? 'Generating…' : 'Download Executive Report'}

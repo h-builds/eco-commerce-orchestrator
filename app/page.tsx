@@ -76,8 +76,8 @@ export default function Home() {
           <div className="relative mx-auto w-full px-4 md:px-10 lg:px-20 text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
               <span
-                className="material-symbols-outlined text-sm"
-                aria-hidden="true">
+                className="material-symbols-outlined notranslate text-sm"
+                aria-hidden="true" translate="no">
                 architecture
               </span>
               Architectural Showcase · 2026
@@ -102,7 +102,7 @@ export default function Home() {
                 href="/admin/dashboard"
                 className="group inline-flex items-center gap-2 rounded-full border border-primary bg-primary/10 px-8 py-4 text-base font-bold text-primary shadow-lg shadow-primary/10 transition-all hover:bg-primary/20 hover:shadow-xl hover:shadow-primary/20 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
                 aria-label="View the global analytics dashboard">
-                <span className="material-symbols-outlined" aria-hidden="true">
+                <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">
                   query_stats
                 </span>
                 Admin Dashboard
@@ -111,13 +111,13 @@ export default function Home() {
                 href="/shop"
                 className="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-bold text-white shadow-lg shadow-primary/25 transition-all hover:brightness-110 hover:shadow-xl hover:shadow-primary/30 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
                 aria-label="Enter the product showcase shop">
-                <span className="material-symbols-outlined" aria-hidden="true">
+                <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">
                   storefront
                 </span>
                 Enter Shop
                 <span
-                  className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1"
-                  aria-hidden="true">
+                  className="material-symbols-outlined notranslate text-sm transition-transform group-hover:translate-x-1"
+                  aria-hidden="true" translate="no">
                   arrow_forward
                 </span>
               </Link>
@@ -127,8 +127,8 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-8 py-4 text-base font-bold text-slate-700 dark:text-slate-200 transition-all hover:border-primary hover:text-primary focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30">
                 <span
-                  className="material-symbols-outlined text-sm"
-                  aria-hidden="true">
+                  className="material-symbols-outlined notranslate text-sm"
+                  aria-hidden="true" translate="no">
                   code
                 </span>
                 View Source
@@ -184,7 +184,7 @@ export default function Home() {
                   <div
                     className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10"
                     aria-hidden="true">
-                    <span className="material-symbols-outlined text-primary" aria-hidden="true">
+                    <span className="material-symbols-outlined notranslate text-primary" aria-hidden="true" translate="no">
                       {icon}
                     </span>
                   </div>
@@ -205,8 +205,8 @@ export default function Home() {
           className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-24">
           <div className="mx-auto max-w-2xl px-4 text-center">
             <span
-              className="material-symbols-outlined text-4xl text-primary mb-4 block"
-              aria-hidden="true">
+              className="material-symbols-outlined notranslate text-4xl text-primary mb-4 block"
+              aria-hidden="true" translate="no">
               eco
             </span>
             <h2
@@ -222,7 +222,7 @@ export default function Home() {
               href="/shop"
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-bold text-white shadow-lg shadow-primary/25 transition-all hover:brightness-110 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
               aria-label="Browse the eco-commerce product shop">
-              <span className="material-symbols-outlined" aria-hidden="true">
+              <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">
                 shopping_bag
               </span>
               Browse Products

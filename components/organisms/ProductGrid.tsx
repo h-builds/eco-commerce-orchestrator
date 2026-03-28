@@ -38,7 +38,7 @@ export async function ProductGrid() {
       return (
         <div className="p-8 bg-red-50 dark:bg-red-900/10 border border-red-500 rounded-xl" role="alert">
           <p className="text-red-600 font-bold flex items-center gap-2">
-            <span className="material-symbols-outlined" aria-hidden="true">error</span>
+            <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">error</span>
             Failed to load products. Please try again later.
           </p>
         </div>
@@ -51,7 +51,7 @@ export async function ProductGrid() {
   if (!products || products.length === 0) {
     return (
       <div className="p-8 text-center text-slate-500 flex flex-col items-center gap-4">
-        <span className="material-symbols-outlined text-4xl" aria-hidden="true">inventory_2</span>
+        <span className="material-symbols-outlined notranslate text-4xl" aria-hidden="true" translate="no">inventory_2</span>
         <p>No products found in the catalog.</p>
       </div>
     );
@@ -65,7 +65,7 @@ export async function ProductGrid() {
     return (
       <div className="p-8 bg-red-50 dark:bg-red-900/10 border border-red-500 rounded-xl" role="alert">
         <p className="text-red-600 font-bold flex items-center gap-2">
-          <span className="material-symbols-outlined" aria-hidden="true">error</span>
+          <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">error</span>
           Failed to load products. Please try again later.
         </p>
       </div>

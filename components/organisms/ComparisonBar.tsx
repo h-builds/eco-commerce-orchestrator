@@ -52,7 +52,7 @@ export function ComparisonBar() {
                     key={`empty-${i}`}
                     className="w-10 h-10 rounded-lg border border-dashed border-slate-600 flex items-center justify-center text-slate-600 bg-slate-800/50"
                   >
-                    <span className="material-symbols-outlined text-sm" aria-hidden="true">
+                    <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">
                       add
                     </span>
                   </div>
@@ -71,7 +71,7 @@ export function ComparisonBar() {
                 onClick={() => setIsCompareModalOpen(true)}
                 className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2 px-5 rounded-lg shadow-lg shadow-emerald-500/20 transition-all active:scale-95 flex items-center gap-2 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/30"
               >
-                <span className="material-symbols-outlined text-sm" aria-hidden="true">
+                <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">
                   analytics
                 </span>
                 Compare Now

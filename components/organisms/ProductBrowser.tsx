@@ -220,7 +220,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
       <div className={`transition-opacity duration-300 ${isPendingSearch ? 'opacity-50' : 'opacity-100'}`}>
         {!products || products.length === 0 ? (
           <div className="p-8 mt-12 text-center text-slate-500 flex flex-col items-center gap-4">
-            <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-700" aria-hidden="true">search_off</span>
+            <span className="material-symbols-outlined notranslate text-6xl text-slate-300 dark:text-slate-700" aria-hidden="true" translate="no">search_off</span>
             <p className="text-xl font-medium">No results found.</p>
             <p className="text-sm">We couldn&apos;t find anything matching &quot;{debouncedSearchTerm}&quot;. Try another search term.</p>
           </div>
@@ -248,7 +248,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
               </div>
             ) : (
               <div className="w-full py-12 mt-8 text-center border-t border-slate-200/50 dark:border-slate-800/50 text-slate-500 dark:text-slate-400">
-                <span className="material-symbols-outlined text-2xl mb-2 inline-block opacity-50" aria-hidden="true">eco</span>
+                <span className="material-symbols-outlined notranslate text-2xl mb-2 inline-block opacity-50" aria-hidden="true" translate="no">eco</span>
                 <p>You&apos;ve reached the end of our sustainable catalog.</p>
               </div>
             )}

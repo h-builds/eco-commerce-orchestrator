@@ -147,7 +147,7 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
         style={{ right: 'max(1.5rem, calc(50vw - 720px + 1.5rem))' }}
         aria-label="Open debug console"
       >
-        <span className="material-symbols-outlined" aria-hidden="true">
+        <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">
           terminal
         </span>
       </button>
@@ -188,7 +188,7 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
           className="rounded p-1.5 text-slate-400 hover:bg-slate-800 hover:text-cyan-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
           aria-label="Minimize debug console"
         >
-          <span className="material-symbols-outlined text-lg" aria-hidden="true">remove</span>
+          <span className="material-symbols-outlined notranslate text-lg" aria-hidden="true" translate="no">remove</span>
         </button>
       </div>
 
@@ -268,11 +268,11 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
           className="flex items-center gap-1.5 rounded border-2 border-red-500/80 bg-red-950/40 px-3 py-1.5 text-xs font-bold text-red-400 hover:bg-red-900/50 disabled:pointer-events-none disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
         >
           <span
-            className={`material-symbols-outlined text-sm ${
+            className={`material-symbols-outlined notranslate text-sm ${
               stressTestStatus.active ? 'animate-pulse' : ''
             }`}
             aria-hidden="true"
-          >
+           translate="no">
             rocket_launch
           </span>
           Launch Stress Test

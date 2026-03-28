@@ -124,7 +124,7 @@ export function TelemetryHUD() {
               focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50
             "
           >
-            <span className="material-symbols-outlined text-[16px]" aria-hidden="true">
+            <span className="material-symbols-outlined notranslate text-[16px]" aria-hidden="true" translate="no">
               info
             </span>
           </button>

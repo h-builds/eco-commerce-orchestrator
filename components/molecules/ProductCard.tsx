@@ -113,8 +113,8 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
                 : "Comparison limit reached"
           }>
           <span
-            className="material-symbols-outlined text-sm font-bold"
-            aria-hidden="true">
+            className="material-symbols-outlined notranslate text-sm font-bold"
+            aria-hidden="true" translate="no">
             {isSelected ? "check" : "compare_arrows"}
           </span>
         </button>
@@ -158,7 +158,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
                 }}
               >
                 <span className="font-mono text-[9px] font-bold tracking-widest text-cyan-400 border border-cyan-400 rounded flex items-center gap-0.5 px-1 py-0.5 cursor-crosshair bg-transparent select-none">
-                  <span className="material-symbols-outlined text-[10px]" aria-hidden="true">memory</span>
+                  <span className="material-symbols-outlined notranslate text-[10px]" aria-hidden="true" translate="no">memory</span>
                   [WASM_VALIDATED]
                 </span>
                 <div className="absolute right-0 bottom-full mb-1.5 w-64 opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible rounded border border-cyan-500/50 bg-slate-950 p-2.5 text-[10px] font-[family-name:var(--font-geist-mono)] leading-relaxed text-slate-200 shadow-xl shadow-cyan-900/20 transition-all z-50 pointer-events-none">
@@ -187,8 +187,8 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
             className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 ${confidenceColor}`}
             aria-label={`AI Pricing Agent Confidence: ${confidencePercent}%`}>
             <span
-              className="material-symbols-outlined text-[10px]"
-              aria-hidden="true">
+              className="material-symbols-outlined notranslate text-[10px]"
+              aria-hidden="true" translate="no">
               auto_awesome
             </span>
             AI Price • {confidencePercent}%
@@ -203,8 +203,8 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
           className="flex items-center gap-1 mt-2 text-amber-400"
           aria-label={`Rating: ${formattedRating} out of 5 stars in ${product.category}`}>
           <span
-            className="material-symbols-outlined text-sm"
-            aria-hidden="true">
+            className="material-symbols-outlined notranslate text-sm"
+            aria-hidden="true" translate="no">
             star
           </span>
           <span
@@ -220,12 +220,12 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
         <div className="mt-4 flex flex-col gap-2 relative">
           <div className="flex items-center justify-between px-4 py-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 border border-emerald-500/20">
             <span className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm animate-pulse" aria-hidden="true">
+              <span className="material-symbols-outlined notranslate text-sm animate-pulse" aria-hidden="true" translate="no">
                 query_stats
               </span>
               Analyze Edge Pricing
             </span>
-            <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1" aria-hidden="true">
+            <span className="material-symbols-outlined notranslate text-sm transition-transform group-hover:translate-x-1" aria-hidden="true" translate="no">
               arrow_forward
             </span>
           </div>

@@ -54,9 +54,9 @@ export function StressTestTrigger({ products }: StressTestTriggerProps) {
       className="inline-flex items-center gap-2 rounded-lg border-2 border-red-500/80 bg-red-950/40 px-4 py-2 text-sm font-bold text-red-400 shadow-lg shadow-red-500/10 hover:bg-red-900/50 disabled:pointer-events-none disabled:opacity-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-red-500/50"
     >
       <span
-        className={`material-symbols-outlined text-lg ${active ? 'animate-pulse' : ''}`}
+        className={`material-symbols-outlined notranslate text-lg ${active ? 'animate-pulse' : ''}`}
         aria-hidden="true"
-      >
+       translate="no">
         rocket_launch
       </span>
       Launch Stress Test

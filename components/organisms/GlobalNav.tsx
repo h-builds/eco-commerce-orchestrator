@@ -16,7 +16,7 @@ export function GlobalNav() {
         href="/admin/dashboard"
         className="relative inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-5 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
       >
-        <span className="material-symbols-outlined text-sm" aria-hidden="true">
+        <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">
           query_stats
         </span>
         Dashboard
@@ -31,7 +31,7 @@ export function GlobalNav() {
         href="/benchmarks"
         className="relative inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-5 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-500/30"
       >
-        <span className="material-symbols-outlined text-sm text-cyan-500" aria-hidden="true">
+        <span className="material-symbols-outlined notranslate text-sm text-cyan-500" aria-hidden="true" translate="no">
           bolt
         </span>
         Runtime Duel
@@ -44,7 +44,7 @@ export function GlobalNav() {
         href="/shop"
         className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-bold text-white transition-all hover:brightness-110 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
       >
-        <span className="material-symbols-outlined text-sm" aria-hidden="true">
+        <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">
           shopping_bag
         </span>
         Enter Shop

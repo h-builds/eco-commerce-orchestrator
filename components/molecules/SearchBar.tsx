@@ -17,7 +17,7 @@ export function SearchBar({ value, onChange, isPending }: SearchBarProps) {
   return (
     <div className="relative w-full max-w-2xl mx-auto mb-10 group">
       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-        <span className="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors duration-300" aria-hidden="true">
+        <span className="material-symbols-outlined notranslate text-slate-400 group-focus-within:text-primary transition-colors duration-300" aria-hidden="true" translate="no">
           search
         </span>
       </div>
@@ -38,12 +38,12 @@ export function SearchBar({ value, onChange, isPending }: SearchBarProps) {
           className="absolute inset-y-0 right-12 flex items-center px-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
           aria-label="Clear search"
         >
-          <span className="material-symbols-outlined text-sm" aria-hidden="true">close</span>
+          <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">close</span>
         </button>
       )}
       <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
         {isPending ? (
-          <span className="material-symbols-outlined text-primary animate-spin" aria-hidden="true">
+          <span className="material-symbols-outlined notranslate text-primary animate-spin" aria-hidden="true" translate="no">
             progress_activity
           </span>
         ) : (

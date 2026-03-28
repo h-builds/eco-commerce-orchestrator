@@ -43,7 +43,7 @@ export default function ShopPage() {
         <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12 px-4 md:px-10 lg:px-20">
           <header className="mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
-              <span className="material-symbols-outlined text-sm" aria-hidden="true">eco</span>
+              <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">eco</span>
               New Arrivals
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
@@ -51,7 +51,7 @@ export default function ShopPage() {
             </h1>
             <div className="mt-6 max-w-2xl rounded-lg border border-slate-800 bg-slate-950 p-4 text-sm leading-relaxed text-slate-100 shadow-xl font-mono">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-cyan-400">
-                <span className="material-symbols-outlined text-[16px]" aria-hidden="true">settings_b_roll</span>
+                <span className="material-symbols-outlined notranslate text-[16px]" aria-hidden="true" translate="no">settings_b_roll</span>
                 Identity: Deterministic Pricing Orchestrator
               </span>
               <p className="opacity-100 text-slate-300">

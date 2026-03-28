@@ -152,7 +152,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 />
               ) : (
                 <div className="w-48 h-48 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center border border-slate-300 dark:border-slate-700 shadow-inner">
-                  <span className="material-symbols-outlined text-6xl text-slate-400 dark:text-slate-600" aria-hidden="true">eco</span>
+                  <span className="material-symbols-outlined notranslate text-6xl text-slate-400 dark:text-slate-600" aria-hidden="true" translate="no">eco</span>
                 </div>
               )}
               
@@ -173,7 +173,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
           <div className="flex flex-col justify-start">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest mb-4 w-max">
-              <span className="material-symbols-outlined text-sm" aria-hidden="true">category</span>
+              <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">category</span>
               {product.category || 'Eco-Friendly'}
             </div>
             

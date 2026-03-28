@@ -75,9 +75,9 @@ export function PredictivePriceAlert({
       {isPending && (
         <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col items-center justify-center border-2 border-amber-500 rounded-2xl animate-pulse">
           <span
-            className="material-symbols-outlined text-4xl text-amber-500 animate-spin mb-2"
+            className="material-symbols-outlined notranslate text-4xl text-amber-500 animate-spin mb-2"
             style={{ animationDuration: "2s" }}
-            aria-hidden="true">
+            aria-hidden="true" translate="no">
             radar
           </span>
           <span className="text-amber-500 font-mono text-xs font-bold tracking-widest uppercase animate-pulse">
@@ -90,8 +90,8 @@ export function PredictivePriceAlert({
         <div>
           <h3 className="text-amber-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2 mb-1">
             <span
-              className="material-symbols-outlined text-sm"
-              aria-hidden="true">
+              className="material-symbols-outlined notranslate text-sm"
+              aria-hidden="true" translate="no">
               notifications_active
             </span>
             Predictive Price Alert
@@ -172,8 +172,8 @@ export function PredictivePriceAlert({
           }
           className="w-full sm:w-auto px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-black tracking-widest uppercase text-sm rounded-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
           <span
-            className="material-symbols-outlined text-sm text-slate-900 font-bold"
-            aria-hidden="true">
+            className="material-symbols-outlined notranslate text-sm text-slate-900 font-bold"
+            aria-hidden="true" translate="no">
             radar
           </span>
           Scan Forecast
@@ -184,8 +184,8 @@ export function PredictivePriceAlert({
             <div
               className={`text-sm font-semibold flex items-center gap-2 ${scanResult.found ? "text-emerald-400" : "text-rose-400"}`}>
               <span
-                className="material-symbols-outlined text-lg"
-                aria-hidden="true">
+                className="material-symbols-outlined notranslate text-lg"
+                aria-hidden="true" translate="no">
                 {scanResult.found ? "check_circle" : "error"}
               </span>
               {scanResult.message}

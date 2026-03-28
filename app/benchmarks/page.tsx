@@ -263,8 +263,8 @@ export default function BenchmarksPage() {
       <header className="mb-8 max-w-4xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-4 border border-cyan-500/20">
           <span
-            className="material-symbols-outlined text-sm"
-            aria-hidden="true">
+            className="material-symbols-outlined notranslate text-sm"
+            aria-hidden="true" translate="no">
             bolt
           </span>
           Performance Duel
@@ -289,7 +289,7 @@ export default function BenchmarksPage() {
             exit={{ opacity: 0, y: -10 }}
             className="mb-8 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-400"
             role="alert">
-            <span className="material-symbols-outlined shrink-0" aria-hidden="true">
+            <span className="material-symbols-outlined notranslate shrink-0" aria-hidden="true" translate="no">
               error
             </span>
             <p className="font-bold text-sm">{benchmarkError}</p>
@@ -305,7 +305,7 @@ export default function BenchmarksPage() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 pointer-events-none bg-slate-950/40 backdrop-blur-[2px] cursor-not-allowed flex items-center justify-center">
             <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-slate-900 border border-cyan-500/30 text-cyan-400 px-6 py-3 rounded-full font-bold shadow-[0_0_20px_rgba(34,211,238,0.2)] flex items-center gap-3">
-              <span className="material-symbols-outlined animate-spin" aria-hidden="true">
+              <span className="material-symbols-outlined notranslate animate-spin" aria-hidden="true" translate="no">
                 sync
               </span>
               SYSTEM LOCKED: COMPUTING IN PROGRESS
@@ -320,11 +320,11 @@ export default function BenchmarksPage() {
           disabled={isRunning}
           className="relative overflow-hidden group bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all duration-300 disabled:shadow-none hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] flex items-center gap-3">
           {isRunning ? (
-            <span className="material-symbols-outlined animate-spin text-xl" aria-hidden="true">
+            <span className="material-symbols-outlined notranslate animate-spin text-xl" aria-hidden="true" translate="no">
               progress_activity
             </span>
           ) : (
-            <span className="material-symbols-outlined text-xl" aria-hidden="true">
+            <span className="material-symbols-outlined notranslate text-xl" aria-hidden="true" translate="no">
               play_circle
             </span>
           )}
@@ -369,7 +369,7 @@ export default function BenchmarksPage() {
 
               <div className="px-8 py-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                  <span className="material-symbols-outlined text-cyan-400" aria-hidden="true">
+                  <span className="material-symbols-outlined notranslate text-cyan-400" aria-hidden="true" translate="no">
                     analytics
                   </span>
                   Deep Dive Analysis
@@ -445,7 +445,7 @@ export default function BenchmarksPage() {
 
               {isRunning && !isFinished && (
                 <div className="p-8 flex items-center justify-center gap-3 text-slate-500">
-                  <span className="material-symbols-outlined animate-spin text-cyan-400" aria-hidden="true">
+                  <span className="material-symbols-outlined notranslate animate-spin text-cyan-400" aria-hidden="true" translate="no">
                     progress_activity
                   </span>
                   <span className="text-sm font-bold uppercase tracking-widest">
@@ -529,7 +529,7 @@ export default function BenchmarksPage() {
                   onClick={exportSnapshot}
                   disabled={isExporting}
                   className="group relative overflow-hidden bg-transparent border border-cyan-500/40 text-cyan-400 hover:text-white hover:border-cyan-400 hover:bg-cyan-500/10 disabled:opacity-50 disabled:cursor-wait font-bold px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 shadow-[0_0_10px_rgba(34,211,238,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]">
-                  <span className="material-symbols-outlined text-lg" aria-hidden="true">
+                  <span className="material-symbols-outlined notranslate text-lg" aria-hidden="true" translate="no">
                     {isExporting ? "progress_activity" : "image"}
                   </span>
                   <span className="flex flex-col items-start">
@@ -537,7 +537,7 @@ export default function BenchmarksPage() {
                     <span className="text-[10px] text-slate-500 font-normal">High-res snapshot</span>
                   </span>
                   {isExporting && (
-                    <span className="material-symbols-outlined animate-spin text-sm absolute top-1 right-1 text-cyan-400/50" aria-hidden="true">
+                    <span className="material-symbols-outlined notranslate animate-spin text-sm absolute top-1 right-1 text-cyan-400/50" aria-hidden="true" translate="no">
                       sync
                     </span>
                   )}
@@ -546,7 +546,7 @@ export default function BenchmarksPage() {
                 <button
                   onClick={exportJSON}
                   className="group relative overflow-hidden bg-transparent border border-yellow-500/40 text-yellow-400 hover:text-white hover:border-yellow-400 hover:bg-yellow-500/10 font-bold px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 shadow-[0_0_10px_rgba(234,179,8,0.1)] hover:shadow-[0_0_20px_rgba(234,179,8,0.3)]">
-                  <span className="material-symbols-outlined text-lg" aria-hidden="true">
+                  <span className="material-symbols-outlined notranslate text-lg" aria-hidden="true" translate="no">
                     data_object
                   </span>
                   <span className="flex flex-col items-start">

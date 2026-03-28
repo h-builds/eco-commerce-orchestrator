@@ -125,8 +125,8 @@ export default function RootLayout({
                       href="/"
                       className="flex items-center gap-2 text-primary font-black text-lg tracking-tight hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 rounded-lg">
                       <span
-                        className="material-symbols-outlined"
-                        aria-hidden="true">
+                        className="material-symbols-outlined notranslate"
+                        aria-hidden="true" translate="no">
                         eco
                       </span>
                       Eco-Commerce

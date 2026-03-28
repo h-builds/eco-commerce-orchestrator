@@ -195,8 +195,8 @@ export function PricingStatus() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span
-              className="material-symbols-outlined text-base text-slate-400"
-              aria-hidden="true">
+              className="material-symbols-outlined notranslate text-base text-slate-400"
+              aria-hidden="true" translate="no">
               schedule
             </span>
             <label
@@ -216,8 +216,8 @@ export function PricingStatus() {
               className="flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase text-slate-100 bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg border border-slate-600 hover:border-slate-400 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
               aria-label="Reset to live system time">
               <span
-                className="material-symbols-outlined text-sm"
-                aria-hidden="true">
+                className="material-symbols-outlined notranslate text-sm"
+                aria-hidden="true" translate="no">
                 power_settings_new
               </span>
               Abort Sim

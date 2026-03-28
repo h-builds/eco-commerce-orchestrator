@@ -148,8 +148,8 @@ export function ComparisonModal() {
             <div>
               <h2 className="text-2xl font-black text-white flex items-center gap-2">
                 <span
-                  className="material-symbols-outlined text-emerald-500"
-                  aria-hidden="true">
+                  className="material-symbols-outlined notranslate text-emerald-500"
+                  aria-hidden="true" translate="no">
                   analytics
                 </span>
                 Product Comparison
@@ -162,7 +162,7 @@ export function ComparisonModal() {
               onClick={() => setIsCompareModalOpen(false)}
               className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               aria-label="Close comparison modal">
-              <span className="material-symbols-outlined" aria-hidden="true">
+              <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">
                 close
               </span>
             </button>
@@ -223,9 +223,9 @@ export function ComparisonModal() {
                       <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 flex items-center gap-1">
                         Correlation Index
                         <span
-                          className="material-symbols-outlined text-xs"
+                          className="material-symbols-outlined notranslate text-xs"
                           title="Pearson correlation coefficient"
-                          aria-hidden="true">
+                          aria-hidden="true" translate="no">
                           info
                         </span>
                       </h3>
@@ -257,8 +257,8 @@ export function ComparisonModal() {
                   ) : selectedProducts.length > 2 ? (
                     <div className="bg-slate-800/30 rounded-xl p-5 border border-slate-700/50 flex flex-col justify-center text-center">
                       <span
-                        className="material-symbols-outlined text-slate-500 text-3xl mb-2"
-                        aria-hidden="true">
+                        className="material-symbols-outlined notranslate text-slate-500 text-3xl mb-2"
+                        aria-hidden="true" translate="no">
                         ssid_chart
                       </span>
                       <p className="text-slate-400 text-sm">

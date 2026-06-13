@@ -46,7 +46,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const { simulatedHour } = useSimulation();
-  const prevSimulatedHour = useRef<number | null | undefined>(undefined);
 
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [offset, setOffset] = useState(0);
@@ -152,12 +151,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
    */
   useEffect(() => {
     if (products.length === 0) return;
-    
-    // Only invoke heavy processing if the hour changed or this is the initial load
-    if (simulatedHour === prevSimulatedHour.current && prevSimulatedHour.current !== undefined) {
-      return;
-    }
-    prevSimulatedHour.current = simulatedHour;
 
     let isCancelled = false;
 

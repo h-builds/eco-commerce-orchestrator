@@ -58,8 +58,24 @@ export async function ProductGrid() {
   }
 
   const serializableProducts = products.map((product) => ({ ...product }));
+  const agentOffline = serializableProducts.some(p => p.agent_confidence === 0.0);
 
-  return <ProductBrowser initialProducts={serializableProducts} />;
+  return (
+    <>
+      {agentOffline && (
+        <div className="mb-6 rounded-lg border-2 border-rose-500/50 bg-rose-950/30 p-4 shadow-lg shadow-rose-900/20" role="alert">
+          <div className="flex items-center gap-3 text-rose-400 font-bold mb-2">
+            <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">warning</span>
+            <span>SYSTEM DEGRADED: Edge Pricing Agent Offline</span>
+          </div>
+          <p className="text-sm text-slate-300">
+            The Go-Wasm pricing orchestrator is currently unresponsive. You are viewing static fallback prices. Live volatility algorithms and Eco-incentive discounts are temporarily disabled.
+          </p>
+        </div>
+      )}
+      <ProductBrowser initialProducts={serializableProducts} />
+    </>
+  );
   } catch (error) {
     console.error('Failed to execute GraphQL query:', error);
     return (

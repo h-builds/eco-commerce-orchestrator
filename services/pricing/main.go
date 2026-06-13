@@ -2,10 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"hash"
-	"hash/fnv"
 	"math"
-	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
@@ -46,11 +43,49 @@ type PricingResult struct {
 }
 
 /**
+ * Fast, zero-allocation FNV-64a hash algorithm.
+ */
+func fnv64a(productID string, currentHour int64, numBuf []byte) uint64 {
+	const offset64 = 14695981039346656037
+	const prime64 = 1099511628211
+
+	hash := uint64(offset64)
+	for i := 0; i < len(productID); i++ {
+		hash ^= uint64(productID[i])
+		hash *= prime64
+	}
+	hash ^= uint64('-')
+	hash *= prime64
+
+	numBuf = strconv.AppendInt(numBuf[:0], currentHour, 10)
+	for i := 0; i < len(numBuf); i++ {
+		hash ^= uint64(numBuf[i])
+		hash *= prime64
+	}
+	return hash
+}
+
+/**
+ * splitmix64 approximation of seeded PRNG. Matches TypeScript perfectly.
+ */
+func splitmix64(seed uint64) uint64 {
+	z := seed + 0x9e3779b97f4a7c15
+	z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9
+	z = (z ^ (z >> 27)) * 0x94d049bb133111eb
+	return z ^ (z >> 31)
+}
+
+func goFloat64(seed uint64) float64 {
+	mixed := splitmix64(seed)
+	return float64(mixed>>11) / (1 << 53)
+}
+
+/**
  * Deterministic pricing logic constrained for Wasm execution. Relies on 
  * localized operations to satisfy stateless node parity across the 
  * distributed Worker network.
  */
-func calculateDynamicPrice(args PricingArgs, currentHour int64, h hash.Hash64) PricingResult {
+func calculateDynamicPrice(args PricingArgs, currentHour int64, numBuf []byte) PricingResult {
 	baseCost := args.BasePrice * 0.4
 	maxPrice := args.BasePrice * 2.0
 
@@ -68,15 +103,9 @@ func calculateDynamicPrice(args PricingArgs, currentHour int64, h hash.Hash64) P
 	 * PERF: Hash key constructed via zero-alloc byte ops to avoid heap 
 	 * allocations and JS interop overhead within the hot loop.
 	 */
-	h.Reset()
-	h.Write([]byte(args.ProductID))
-	h.Write([]byte{'-'})
-	h.Write(strconv.AppendInt(nil, currentHour, 10))
-	hashSum := h.Sum64()
-	seed := int64(hashSum)
-	r := rand.New(rand.NewSource(seed))
+	hashSum := fnv64a(args.ProductID, currentHour, numBuf)
 
-	volatilityMultiplier := 0.95 + r.Float64()*(1.05-0.95)
+	volatilityMultiplier := 0.95 + goFloat64(hashSum)*(1.05-0.95)
 	currentPrice = currentPrice * volatilityMultiplier
 
 	if currentPrice < baseCost {
@@ -154,19 +183,24 @@ func rpcHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	if len(rpcReq.Params) > 25000 {
+		sendError(w, rpcReq.ID, -32602, "Batch size exceeds maximum limit of 25000")
+		return
+	}
+
 	start := time.Now()
 
 	/**
-	 * PERF: time.Now() and hasher allocation are hoisted outside the loop. 
+	 * PERF: time.Now() and numBuf allocation are hoisted outside the loop. 
 	 * Each time.Now() in Wasm triggers a JS interop boundary crossing; 
 	 * batching reduces this overhead from O(N) to O(1).
 	 */
-	currentHour := time.Now().Truncate(time.Hour).Unix()
-	h := fnv.New64a()
+	currentHour := time.Now().UTC().Truncate(time.Hour).Unix()
+	numBuf := make([]byte, 0, 32)
 
 	results := make([]PricingResult, len(rpcReq.Params))
 	for i, param := range rpcReq.Params {
-		results[i] = calculateDynamicPrice(param, currentHour, h)
+		results[i] = calculateDynamicPrice(param, currentHour, numBuf)
 	}
 
 	execTimeUs := time.Since(start).Microseconds()

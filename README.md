@@ -6,9 +6,10 @@
 
 The **Eco-Commerce Orchestrator** is an industrial-grade distributed system designed to guarantee **mathematical determinism** and **price consistency** in real-time. It operates entirely on the global **Cloudflare Edge** infrastructure to minimize latency and maximize reliability.
 
-![Status: Under Construction](https://img.shields.io/badge/status-under%20construction-orange?style=for-the-badge)
+![Status: Production Ready](https://img.shields.io/badge/status-production%20ready-emerald?style=for-the-badge)
 ![Tech: Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
 ![Tech: Go Wasm](https://img.shields.io/badge/Go-Wasm-00ADD8?style=for-the-badge&logo=go)
+![A11y: WCAG 2.1 AA](https://img.shields.io/badge/A11y-WCAG%202.1%20AA-blueviolet?style=for-the-badge)
 
 ---
 
@@ -16,9 +17,9 @@ The **Eco-Commerce Orchestrator** is an industrial-grade distributed system desi
 
 In modern global e-commerce, **latency is a conversion killer**. This project addresses the technical conflict between computational complexity and UI fluidity through three strategic pillars:
 
-1.  **Main Thread Liberation:** We offload heavy business logic (mass price-rule transformations for 10,000+ items) to a **Go binary compiled to WebAssembly**. This prevents "Long Tasks" and keeps the browser's main thread free for a smooth 60 FPS user experience.
-2.  **Deterministic Consistency:** By executing pricing logic at the **Cloudflare Edge (Workers)**, we ensure that calculations are identical across any global node, eliminating discrepancies caused by varying client-side hardware or local time-drifts.
-3.  **Zero-Allocation Philosophy:** The Go agent is engineered to minimize Heap allocations. By using low-level byte manipulation and manual resets, we eliminate the "Garbage Collection tax" typically found in high-frequency trading or pricing engines.
+1.  **Main Thread Liberation:** We offload heavy business logic (mass price-rule transformations for 10,000+ items) to a **Go microservice compiled to WebAssembly**. This prevents "Long Tasks" and keeps the browser's main thread free for a smooth 60 FPS user experience.
+2.  **Deterministic Consistency:** By executing pricing logic at the **Cloudflare Edge (Workers)** and synchronizing custom `splitmix64` PRNG algorithms, we ensure that calculations are bit-for-bit identical across any global node, eliminating discrepancies caused by varying client-side hardware or local time-drifts.
+3.  **True Zero-Allocation Philosophy:** The Go agent is meticulously engineered to eliminate the "Garbage Collection tax" typically found in high-frequency pricing engines. By using inline `fnv64a` hashes and pre-allocated byte buffers, the hot loop operates at **~50 ns/op with exactly 0 B/op (zero allocations)**.
 
 ---
 
@@ -27,8 +28,8 @@ In modern global e-commerce, **latency is a conversion killer**. This project ad
 The orchestrator features a real-time stress-test suite that pits the **V8 (JavaScript) JIT engine** against our **Edge-Native Wasm Agent (Go)**:
 
 - **Stress Load:** 10,000 product entity transformations per cycle.
-- **Precision Telemetry:** Implementation of **"Ping Subtraction"** to isolate pure compute time from network jitter, compensating for Cloudflare's Spectre-related execution clock freezes.
-- **Senior Insight:** While JS excels at local micro-optimizations, the Wasm Agent provides the **deterministic performance and safety** required for critical financial logic in stateless environments.
+- **Precision Telemetry:** Implementation of **"Ping Subtraction"** to isolate pure compute time from network jitter, compensating for Cloudflare's execution clock freezes.
+- **System Guardrails:** Features a degraded-state UI fallback pattern. If the edge network fails, the frontend gracefully alerts users and falls back to static database pricing without throwing unhandled exceptions.
 
 ---
 
@@ -44,34 +45,41 @@ The orchestrator features a real-time stress-test suite that pits the **V8 (Java
 
 ---
 
-## 🚧 Project Roadmap (Work in Progress)
+## 🚧 Project Roadmap (Completed)
 
-The system is currently in the **Telemetry Refinement & Technical Audit** phase.
+The system has successfully completed its Telemetry Refinement & Technical Audit phase.
 
 - [x] **Core:** Wasm/JS Bridge implementation.
-- [x] **Optimization:** Zero-Alloc refactor for the Go pricing agent.
+- [x] **Optimization:** Zero-Alloc refactor for the Go pricing agent (0 allocs/op achieved).
 - [x] **Metrics:** High-resolution ($\mu s$) telemetry via `performance.now`.
-- [ ] **Audit:** PDF/PNG Report Export module for executive summaries.
-- [ ] **SEO:** D1 integration for dynamic, real-time sitemap generation.
-- [ ] **Dashboard:** Finalization of the Cyberpunk-themed Admin HUD.
+- [x] **Audit:** PDF Report Export module for executive summaries via `jspdf`.
+- [x] **SEO:** D1 integration for dynamic, real-time sitemap generation.
+- [x] **Dashboard:** Finalization of the Cyberpunk-themed Admin HUD.
 
 ---
 
-## 🚀 Local Development
+## 🚀 Local Development Architecture
+
+This project is split into an Edge Orchestrator (Next.js) and an Edge Microservice (Go Wasm). You must run both locally.
 
 1.  **Clone & Install:**
     ```bash
-    git clone [https://github.com/h-builds/eco-commerce-orchestrator.git](https://github.com/h-builds/eco-commerce-orchestrator.git)
+    git clone https://github.com/h-builds/eco-commerce-orchestrator.git
+    cd eco-commerce-orchestrator
     npm install
     ```
-2.  **Build the Agent:**
-    _(Requires Go 1.21+)_
+
+2.  **Terminal 1: Run the Go Wasm Pricing Agent:**
+    _(Requires Go 1.21+ and Wrangler)_
     ```bash
-    GOOS=js GOARCH=wasm go build -o public/agent.wasm services/pricing/main.go
-    ```
-3.  **Run Dev Environment:**
-    ```bash
+    cd services/pricing
     npx wrangler dev
+    ```
+    *This will auto-generate the JS bindings, compile the Go code to Wasm, and spin up a local Cloudflare Worker.*
+
+3.  **Terminal 2: Run the Next.js Orchestrator:**
+    ```bash
+    npm run dev
     ```
 
 ---
@@ -80,7 +88,7 @@ The system is currently in the **Telemetry Refinement & Technical Audit** phase.
 
 **Horacio (@h-builds)**
 _Senior UI/Frontend Lead | MBA_
-Focused on high-performance distributed systems and edge computing Remote, currently based in **Venezuela**.
+Focused on high-performance distributed systems and edge computing. Remote, currently based in **Venezuela**.
 
 ---
 

@@ -138,7 +138,6 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
           </h3>
           <div
             className="flex flex-col items-end shrink-0"
-            role="region"
             aria-label={`Live Price: ${formattedPrice}`}>
             <div className="flex items-center gap-2">
               <span className="font-mono font-bold text-slate-900 dark:text-slate-100 text-lg">
@@ -147,14 +146,14 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
               <div 
                 className="group/badge relative flex items-center"
                 onMouseEnter={() => {
-                  document.getElementById('telemetry-hud')?.classList.add('ring-4', 'ring-cyan-500/50', 'scale-[1.02]');
+                  import('@/lib/hudTelemetry').then(({ triggerHUDHighlight }) => triggerHUDHighlight('cyan'));
                   const logs = WasmTelemetry.getLogs();
                   const ms = logs.length > 0 ? logs[0].executionTimeMs.toFixed(1) : getHUDMetrics().edgeRttMs;
                   const el = document.getElementById(`latency-${product.id}`);
                   if (el) el.textContent = `LATENCY: ${ms}ms`;
                 }}
                 onMouseLeave={() => {
-                  document.getElementById('telemetry-hud')?.classList.remove('ring-4', 'ring-cyan-500/50', 'scale-[1.02]');
+                  import('@/lib/hudTelemetry').then(({ clearHUDHighlight }) => clearHUDHighlight());
                 }}
               >
                 <span className="font-mono text-[9px] font-bold tracking-widest text-cyan-400 border border-cyan-400 rounded flex items-center gap-0.5 px-1 py-0.5 cursor-crosshair bg-transparent select-none">

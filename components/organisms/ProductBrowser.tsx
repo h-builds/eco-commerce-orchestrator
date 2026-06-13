@@ -163,9 +163,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
 
     const runReactiveBatch = async () => {
       // 1. Visual Feedback: Processing State
-      const hud = document.getElementById('telemetry-hud');
-      hud?.classList.remove('shadow-[0_0_20px_rgba(0,255,255,0.15)]');
-      hud?.classList.add('shadow-[0_0_20px_rgba(245,158,11,0.5)]', 'ring-2', 'ring-amber-500');
+      import('@/lib/hudTelemetry').then(({ triggerHUDHighlight }) => triggerHUDHighlight('amber'));
 
       try {
         const chunks = chunkArray(products, 500);
@@ -195,8 +193,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
       } finally {
         if (!isCancelled) {
           // Snap back to green/cyan when finalized
-          hud?.classList.remove('shadow-[0_0_20px_rgba(245,158,11,0.5)]', 'ring-2', 'ring-amber-500');
-          hud?.classList.add('shadow-[0_0_20px_rgba(0,255,255,0.15)]');
+          import('@/lib/hudTelemetry').then(({ clearHUDHighlight }) => clearHUDHighlight());
         }
       }
     };
@@ -205,9 +202,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
 
     return () => {
       isCancelled = true;
-      const hud = document.getElementById('telemetry-hud');
-      hud?.classList.remove('shadow-[0_0_20px_rgba(245,158,11,0.5)]', 'ring-2', 'ring-amber-500');
-      hud?.classList.add('shadow-[0_0_20px_rgba(0,255,255,0.15)]');
+      import('@/lib/hudTelemetry').then(({ clearHUDHighlight }) => clearHUDHighlight());
     };
   }, [products, simulatedHour]);
 

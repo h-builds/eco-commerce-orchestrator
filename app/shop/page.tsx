@@ -4,7 +4,6 @@ import { PricingStatus } from '@/components/molecules/PricingStatus';
 import { SimulationProvider } from '@/lib/SimulationContext';
 import { CompareProvider } from '@/lib/CompareContext';
 import { ComparisonModal } from '@/components/organisms/ComparisonModal';
-import { TelemetryHUD } from '@/components/molecules/TelemetryHUD';
 import Loading from './loading';
 
 import type { Metadata } from 'next';
@@ -69,7 +68,6 @@ export default function ShopPage() {
           </section>
         </div>
         <ComparisonModal />
-        <TelemetryHUD />
       </CompareProvider>
     </SimulationProvider>
   );

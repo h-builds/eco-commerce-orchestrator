@@ -6,6 +6,7 @@ import { DebugBridge } from "@/components/providers/DebugBridge";
 import { StressTestRegistryProvider } from "@/components/providers/StressTestRegistryProvider";
 import { TourProvider } from "@/components/providers/TourProvider";
 import { GlobalNav } from "@/components/organisms/GlobalNav";
+import { TelemetryHUD } from "@/components/molecules/TelemetryHUD";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -152,6 +153,7 @@ export default function RootLayout({
                 </footer>
               </div>
 
+              <TelemetryHUD />
               <DebugBridge />
             </StressTestRegistryProvider>
           </TelemetryProvider>

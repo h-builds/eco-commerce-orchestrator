@@ -74,6 +74,20 @@ export function TelemetryHUD() {
         batchRowRef.current.style.display = m.batchTotal > 0 ? 'flex' : 'none';
       }
 
+      // Highlight logic
+      if (containerRef.current) {
+        if (m.highlightColor === 'cyan') {
+          containerRef.current.classList.add('ring-4', 'ring-cyan-500/50', 'scale-[1.02]');
+        } else if (m.highlightColor === 'amber') {
+          containerRef.current.classList.remove('shadow-[0_0_20px_rgba(0,255,255,0.15)]');
+          containerRef.current.classList.add('shadow-[0_0_20px_rgba(245,158,11,0.5)]', 'ring-2', 'ring-amber-500');
+        } else {
+          containerRef.current.classList.remove('ring-4', 'ring-cyan-500/50', 'scale-[1.02]');
+          containerRef.current.classList.remove('shadow-[0_0_20px_rgba(245,158,11,0.5)]', 'ring-2', 'ring-amber-500');
+          containerRef.current.classList.add('shadow-[0_0_20px_rgba(0,255,255,0.15)]');
+        }
+      }
+
       paintRafRef.current = requestAnimationFrame(paint);
     }
 
@@ -89,7 +103,6 @@ export function TelemetryHUD() {
     <div
       id="telemetry-hud"
       ref={containerRef}
-      role="status"
       aria-label="Live telemetry dashboard"
       className="
         fixed bottom-6 left-6 z-50
@@ -117,6 +130,7 @@ export function TelemetryHUD() {
             onMouseLeave={hideTooltip}
             onFocus={showTooltip}
             onBlur={hideTooltip}
+            aria-describedby="hud-tooltip"
             aria-label="Technical information about main thread liberation"
             className="
               text-cyan-400 hover:text-cyan-300 transition-colors
@@ -132,6 +146,7 @@ export function TelemetryHUD() {
           {/* Tooltip */}
           {tooltipVisible && (
             <div
+              id="hud-tooltip"
               role="tooltip"
               className="
                 absolute bottom-7 left-0
@@ -167,7 +182,7 @@ export function TelemetryHUD() {
       {/* Price Validations */}
       <div className="flex items-center gap-2 text-slate-300 mt-0.5">
         <span className="text-slate-400">WASM_PROC:</span>
-        <span ref={wasmProcRef} className="text-cyan-400">
+        <span ref={wasmProcRef} className="text-cyan-400" aria-hidden="true">
           0 / 0
         </span>
       </div>
@@ -179,13 +194,13 @@ export function TelemetryHUD() {
         style={{ color: '#22c55e' }}
       >
         <span className="text-slate-400">UI_JITTER:</span>
-        <span ref={jitterRef}>0.0ms</span>
+        <span ref={jitterRef} aria-hidden="true">0.0ms</span>
       </div>
 
       {/* Edge Latency */}
       <div className="flex items-center gap-2 text-slate-300 mt-0.5">
         <span className="text-slate-400">EDGE_RTT:</span>
-        <span ref={rttRef} className="text-cyan-400">
+        <span ref={rttRef} className="text-cyan-400" aria-hidden="true">
           —ms
         </span>
       </div>
@@ -197,7 +212,7 @@ export function TelemetryHUD() {
         style={{ display: 'none' }}
       >
         <span className="text-slate-400">EDGE_BATCH:</span>
-        <span ref={batchRef} className="text-emerald-400 font-bold">
+        <span ref={batchRef} className="text-emerald-400 font-bold" aria-hidden="true">
           —
         </span>
       </div>

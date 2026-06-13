@@ -15,6 +15,7 @@ export interface HUDMetrics {
   edgeRttMs: number;
   batchCompleted: number;
   batchTotal: number;
+  highlightColor: string | null;
 }
 
 const metrics: HUDMetrics = {
@@ -25,6 +26,7 @@ const metrics: HUDMetrics = {
   edgeRttMs: 0,
   batchCompleted: 0,
   batchTotal: 0,
+  highlightColor: null,
 };
 
 let running = false;
@@ -108,4 +110,12 @@ export function stopHUDTelemetry(): void {
 
 export function getHUDMetrics(): HUDMetrics {
   return metrics;
+}
+
+export function triggerHUDHighlight(color: 'cyan' | 'amber'): void {
+  metrics.highlightColor = color;
+}
+
+export function clearHUDHighlight(): void {
+  metrics.highlightColor = null;
 }

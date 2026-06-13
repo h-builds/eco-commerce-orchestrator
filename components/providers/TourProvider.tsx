@@ -22,7 +22,7 @@ export function useTour() {
 const TOUR_STEPS: Step[] = [
   {
     target: '.tour-orchestrator',
-    content: "Welcome to the Edge. This system manages 1,000 products using Go-Wasm logic distributed across Cloudflare's global network.",
+    content: "Welcome to the Edge. This Next.js 16 system manages products hydrated from Cloudflare D1 (SQLite) and priced dynamically via Go-Wasm logic.",
     disableBeacon: true,
     title: "The Orchestrator",
     placement: 'bottom',
@@ -50,6 +50,18 @@ const TOUR_STEPS: Step[] = [
     content: "Press Ctrl+Shift+D anytime to see the 'Matrix'. Real-time telemetry logs directly from the Wasm binary.",
     title: "Debug Console",
     placement: 'top-start',
+  },
+  {
+    target: '.tour-stress-test',
+    content: "Trigger the Performance Duel. This stress-test pits the V8 engine against our zero-allocation Edge-Native Wasm agent by executing 10,000 transformations per cycle.",
+    title: "Performance Duel",
+    placement: 'bottom',
+  },
+  {
+    target: '.tour-executive-report',
+    content: "Generate a deterministic PDF audit using jspdf, summarizing real-time D1 metrics and Wasm telemetry.",
+    title: "PDF Report Export",
+    placement: 'bottom-end',
   }
 ];
 

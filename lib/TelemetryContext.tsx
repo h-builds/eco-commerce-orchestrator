@@ -48,6 +48,12 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
   const [pauseStream, setPauseStream] = useState(false);
 
   useEffect(() => {
+    // Sync state immediately in case logs were pushed between render and effect execution
+    if (!pauseStream) {
+      setLogs(WasmTelemetry.getLogs());
+      setSessionMetrics(WasmTelemetry.getSessionMetrics());
+    }
+
     const unsubscribe = WasmTelemetry.subscribe(() => {
       if (pauseStream) return;
       setLogs(WasmTelemetry.getLogs());

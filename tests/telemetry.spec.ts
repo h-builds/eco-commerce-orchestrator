@@ -25,11 +25,9 @@ test.describe('Wasm Telemetry Global Integration', () => {
   });
 
   test('Single product page pushes telemetry exactly once', async ({ page }) => {
-    // Navigate to shop and click the first product to guarantee a valid route
-    await page.goto('/shop');
-    const firstProduct = page.locator('a[href^="/shop/"]').first();
-    await firstProduct.waitFor({ state: 'visible' });
-    await firstProduct.click();
+    // Navigate directly to the product to catch hydration race conditions
+    // Using the mock-1 product guaranteed by our global.setup.ts
+    await page.goto('/shop/mock-product');
     
     // Wait for the single product telemetry component to mount and push
     await page.waitForTimeout(1500);

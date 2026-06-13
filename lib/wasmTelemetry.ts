@@ -30,8 +30,31 @@ export interface StressTestStatus {
 }
 
 const MAX_LOGS = 500;
-const logs: TelemetryEntry[] = [];
+const STORAGE_KEY = 'wasm_telemetry_logs';
+
+function loadInitialLogs(): TelemetryEntry[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch {
+    // Ignore parse errors
+  }
+  return [];
+}
+
+const logs: TelemetryEntry[] = loadInitialLogs();
 const subscribers = new Set<(entries: TelemetryEntry[]) => void>();
+
+function persistLogs() {
+  if (typeof window !== 'undefined') {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    } catch {
+      // Ignore quota errors
+    }
+  }
+}
 
 let stressTestState: StressTestStatus = {
   active: false,
@@ -83,6 +106,7 @@ export const WasmTelemetry = {
     if (logs.length > MAX_LOGS) {
       logs.splice(0, logs.length - MAX_LOGS);
     }
+    persistLogs();
     notify();
   },
 
@@ -99,6 +123,7 @@ export const WasmTelemetry = {
 
   clear(): void {
     logs.length = 0;
+    persistLogs();
     notify();
   },
 

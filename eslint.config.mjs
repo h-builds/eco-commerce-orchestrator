@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Vercel / Cloudflare build artifacts — minified bundles, Wasm shims
     ".vercel/**",
+    ".open-next/**",
     // Go microservice directory — wasm_exec.js & index.js are generated, not source
     "services/pricing/**",
   ]),

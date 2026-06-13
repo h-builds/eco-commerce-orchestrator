@@ -3,7 +3,8 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { runWasmBenchmarkChunk } from "@/lib/benchmarking";
-import { simulatePrice } from "@/lib/pricingEngine";
+import { simulatePrice, getSeedHex } from "@/lib/pricingEngine";
+import { WasmTelemetry, captureMemoryMb } from "@/lib/wasmTelemetry";
 import { toPng } from "html-to-image";
 
 const TOTAL_ITERATIONS = 10000;
@@ -83,6 +84,13 @@ export default function BenchmarksPage() {
         setWasmMetrics({
           timeMs: wasmTotalMs,
           internalTimeUs: wasmInternalTotalUs,
+        });
+
+        WasmTelemetry.pushEntry({
+          batchSize: BATCH_SIZE,
+          executionTimeMs: res.executionTimeMs,
+          seedHex: getSeedHex("bench-prod-0", null),
+          memoryMb: captureMemoryMb(),
         });
       } catch (err) {
         console.error("Wasm benchmark unexpected error:", err);

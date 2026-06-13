@@ -9,6 +9,7 @@ import { VolatilityChart } from '@/components/molecules/VolatilityChart';
 import { PredictivePriceAlert } from '@/components/molecules/PredictivePriceAlert';
 import { TechnicalAudit } from '@/components/molecules/TechnicalAudit';
 import { BackButton } from '@/components/molecules/BackButton';
+import { SingleProductTelemetry } from '@/components/molecules/SingleProductTelemetry';
 
 export const revalidate = 3600;
 
@@ -82,6 +83,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <div className="min-h-screen pt-24 pb-12 w-full flex justify-center">
       <div className="w-full px-6 md:px-12 lg:px-20">
         <BackButton />
+        <SingleProductTelemetry productId={product.id} latencyMs={wasmLatency} />
 
         <script
           type="application/ld+json"

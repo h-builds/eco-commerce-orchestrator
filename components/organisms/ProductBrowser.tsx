@@ -46,7 +46,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const { simulatedHour } = useSimulation();
-  const prevSimulatedHour = useRef<number | null>(simulatedHour);
+  const prevSimulatedHour = useRef<number | null | undefined>(undefined);
 
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [offset, setOffset] = useState(0);

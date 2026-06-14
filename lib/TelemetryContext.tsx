@@ -48,10 +48,15 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
   const [pauseStream, setPauseStream] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
     // Sync state immediately in case logs were pushed between render and effect execution
     if (!pauseStream) {
-      setLogs(WasmTelemetry.getLogs());
-      setSessionMetrics(WasmTelemetry.getSessionMetrics());
+      setTimeout(() => {
+        if (isMounted) {
+          setLogs(WasmTelemetry.getLogs());
+          setSessionMetrics(WasmTelemetry.getSessionMetrics());
+        }
+      }, 0);
     }
 
     const unsubscribe = WasmTelemetry.subscribe(() => {
@@ -59,7 +64,10 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
       setLogs(WasmTelemetry.getLogs());
       setSessionMetrics(WasmTelemetry.getSessionMetrics());
     });
-    return unsubscribe;
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, [pauseStream]);
 
   useEffect(() => {

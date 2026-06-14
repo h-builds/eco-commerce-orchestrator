@@ -8,6 +8,15 @@ import { SimulationProvider } from '../../../lib/SimulationContext';
 import { ReportDataProvider } from '../../../lib/ReportDataContext';
 import { BackButton } from '../../../components/molecules/BackButton';
 import { StressTestTrigger } from '../../../components/molecules/StressTestTrigger';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Admin Dashboard | Eco-Commerce',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export const dynamic = 'force-dynamic';
 

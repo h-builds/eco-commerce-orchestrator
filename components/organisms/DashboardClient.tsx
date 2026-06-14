@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSimulation } from "../../lib/SimulationContext";
 import { useReportData } from "../../lib/ReportDataContext";
 import { useStressTestRegistry } from "../providers/StressTestRegistryProvider";
-import { runPricingBatch } from "../../lib/runPricingBatch";
+import { pricingWorkerClient } from "../../lib/pricingWorkerClient";
+import type { RunPricingBatchResult } from "../../lib/runPricingBatch";
 import { PricingStatus } from "../molecules/PricingStatus";
 import { BigNumberMetric } from "../molecules/BigNumberMetric";
 import { EdgeMap } from "../molecules/EdgeMap";
@@ -36,6 +37,8 @@ export default function DashboardClient({
   const { setReportData, chartContainerRef } = useReportData();
   const { setProducts: setStressTestProducts } = useStressTestRegistry();
 
+  const [computedData, setComputedData] = useState<RunPricingBatchResult | null>(null);
+
   useEffect(() => {
     setStressTestProducts(initialProducts, simulatedHour);
   }, [initialProducts, simulatedHour, setStressTestProducts]);
@@ -45,20 +48,34 @@ export default function DashboardClient({
    * simulation consistency between client-side re-computation and Edge
    * Worker logs.
    */
-  const computedData = useMemo(() => {
-    return runPricingBatch(initialProducts, simulatedHour, true);
+  useEffect(() => {
+    let isMounted = true;
+    pricingWorkerClient.simulateBatchAsync(initialProducts, simulatedHour, true)
+      .then((data) => {
+        if (isMounted) setComputedData(data);
+      })
+      .catch((err) => {
+        console.error("Batch simulation failed", err);
+      });
+    return () => { isMounted = false; };
   }, [initialProducts, simulatedHour]);
 
   useEffect(() => {
-    setReportData({
-      totalSavings: computedData.totalSavings,
-      averageLatency: computedData.averageLatency,
-      peakDemandCount: computedData.peakDemandCount,
-      sustainableSurplusCount: computedData.sustainableSurplusCount,
-      neutralCount: computedData.neutralCount,
-    });
+    if (computedData) {
+      setReportData({
+        totalSavings: computedData.totalSavings,
+        averageLatency: computedData.averageLatency,
+        peakDemandCount: computedData.peakDemandCount,
+        sustainableSurplusCount: computedData.sustainableSurplusCount,
+        neutralCount: computedData.neutralCount,
+      });
+    }
     return () => setReportData(null);
   }, [computedData, setReportData]);
+
+  if (!computedData) {
+    return <div className="p-8 text-center text-cyan-400 font-mono animate-pulse">Initializing Edge Simulation...</div>;
+  }
 
   return (
     <div className="space-y-8">

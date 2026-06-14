@@ -12,11 +12,9 @@ export interface ExecutiveReportSnapshot {
   neutralCount: number;
 }
 
+const PAGE_WIDTH = 210;
 const MARGIN = 20;
-const PAGE_WIDTH = 210; // A4 mm
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
-const LINE_HEIGHT = 7;
-const SECTION_GAP = 10;
 
 function formatSimulatedHour(simulatedHour: number | null): string {
   if (simulatedHour === null) return 'Live';
@@ -41,7 +39,6 @@ export function generateExecutiveReport(
   const CYAN_500 = [6, 182, 212];
   const SLATE_50 = [248, 250, 252];
   const SLATE_300 = [203, 213, 225];
-  const SLATE_700 = [51, 65, 85];
   const TEXT_DARK = [20, 20, 30];
   const TEXT_MUTED = [100, 116, 139];
 

@@ -165,7 +165,7 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
       <div className="px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 flex gap-3 items-start">
         <span className="material-symbols-outlined notranslate text-slate-400 dark:text-slate-500 text-lg mt-0.5" aria-hidden="true" translate="no">info</span>
         <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-          This volatility is computed in real-time by our <strong className="text-slate-900 dark:text-slate-200">Go-Wasm agent</strong>. It simulates market fluctuations based on deterministic edge seeds.
+          This volatility is computed in real-time by our <strong className="text-slate-900 dark:text-slate-200">Go-Wasm engine</strong>. It simulates market fluctuations based on deterministic edge seeds.
         </p>
       </div>
     </div>

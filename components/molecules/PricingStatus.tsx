@@ -165,6 +165,7 @@ export function PricingStatus() {
             Next Price Shift
           </span>
           <span
+            role="timer"
             className="font-mono text-2xl font-bold text-cyan-400 tabular-nums tracking-tight"
             aria-live="polite"
             aria-atomic="true"
@@ -178,6 +179,7 @@ export function PricingStatus() {
             Global Price Seed
           </span>
           <span
+            role="text"
             className={`font-mono text-2xl font-bold tracking-tight transition-colors duration-300 ${isSimulating ? "text-amber-400" : "text-violet-400"}`}
             aria-label={`Deterministic edge price seed: 0x${hexSeed}`}>
             0x{hexSeed}

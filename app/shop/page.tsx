@@ -12,14 +12,23 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Shop eco-friendly products | Eco-Commerce',
-  description: 'Sustainable products priced in real-time by our Go Wasm AI agent. Every price reflects live supply & demand.',
+  description: 'Sustainable products priced in real-time by our Go Wasm pricing engine. Every price reflects live supply & demand.',
+  openGraph: {
+    title: 'Shop eco-friendly products | Eco-Commerce',
+    description: 'Sustainable products priced in real-time by our Go Wasm pricing engine.',
+    type: 'website',
+  },
+  twitter: {
+    title: 'Shop eco-friendly products | Eco-Commerce',
+    description: 'Sustainable products priced in real-time by our Go Wasm pricing engine.',
+  },
   alternates: {
     canonical: '/shop',
   },
 };
 
 /**
- * Negotiates real-time pricing via the edge-native Wasm agent. 
+ * Negotiates real-time pricing via the edge-native Wasm engine. 
  * Seeding is decoupled from standard Edge caching to ensure 
  * deterministic price consistency across distributed stateless workers.
  */
@@ -34,7 +43,7 @@ export default function ShopPage() {
               "@context": "https://schema.org",
               "@type": "CollectionPage",
               "name": "Shop eco-friendly products",
-              "description": "Sustainable products priced in real-time by our Go Wasm AI agent.",
+              "description": "Sustainable products priced in real-time by our Go Wasm pricing engine.",
               "url": "https://eco-commerce-orchestrator.pages.dev/shop"
             })
           }}

@@ -29,7 +29,7 @@ const TOUR_STEPS: Step[] = [
   },
   {
     target: '.tour-time-machine',
-    content: "Move this slider to travel through time. Watch how the deterministic Wasm agent re-calculates the entire market's pricing in real-time.",
+    content: "Move this slider to travel through time. Watch how the deterministic Wasm engine re-calculates the entire market's pricing in real-time.",
     title: "The Time Machine",
     placement: 'bottom',
   },
@@ -53,7 +53,7 @@ const TOUR_STEPS: Step[] = [
   },
   {
     target: '.tour-stress-test',
-    content: "Trigger the Performance Duel. This stress-test pits the V8 engine against our zero-allocation Edge-Native Wasm agent by executing 10,000 transformations per cycle.",
+    content: "Trigger the Performance Duel. This stress-test pits the V8 engine against our zero-allocation Edge-Native Wasm engine by executing 10,000 transformations per cycle.",
     title: "Performance Duel",
     placement: 'bottom',
   },

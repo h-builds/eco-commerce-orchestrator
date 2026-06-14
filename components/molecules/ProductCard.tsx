@@ -66,7 +66,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
 
   const verifiedLabel = isSimulating
     ? "Price seeded by simulated hour"
-    : "Price verified by Go-Wasm edge agent";
+    : "Price verified by Go-Wasm edge engine";
 
   const verifiedText = isSimulating
     ? "Sim: Go-Wasm Seed"
@@ -137,6 +137,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
             </Link>
           </h3>
           <div
+            role="group"
             className="flex flex-col items-end shrink-0"
             aria-label={`Live Price: ${formattedPrice}`}>
             <div className="flex items-center gap-2">
@@ -169,12 +170,13 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
             </div>
             {hasPriceChanged && (
               <span
+                role="text"
                 className="text-xs text-slate-500 line-through"
                 aria-label={`Original Price: ${formattedOriginalPrice}`}>
                 {formattedOriginalPrice}
               </span>
             )}
-            <span className={verifiedBadgeClass} aria-label={verifiedLabel}>
+            <span role="group" className={verifiedBadgeClass} aria-label={verifiedLabel}>
               <span className={verifiedDotClass} aria-hidden="true" />
               {verifiedText}
             </span>
@@ -183,14 +185,15 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
 
         <div className="flex items-center gap-2 mt-1">
           <span
+            role="group"
             className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 ${confidenceColor}`}
-            aria-label={`AI Pricing Agent Confidence: ${confidencePercent}%`}>
+            aria-label={`Pricing Engine Determinism: ${confidencePercent}%`}>
             <span
               className="material-symbols-outlined notranslate text-[10px]"
               aria-hidden="true" translate="no">
               auto_awesome
             </span>
-            AI Price • {confidencePercent}%
+            Deterministic • {confidencePercent}%
           </span>
         </div>
 
@@ -199,6 +202,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
         </p>
 
         <div
+          role="group"
           className="flex items-center gap-1 mt-2 text-amber-400"
           aria-label={`Rating: ${formattedRating} out of 5 stars in ${product.category}`}>
           <span

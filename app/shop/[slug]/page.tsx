@@ -37,9 +37,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return { title: 'Product Not Found' };
   }
 
+  const title = `${product.name} | Live Pricing`;
+
   return {
-    title: `${product.name} | Live Pricing`,
+    title,
     description: product.description,
+    openGraph: {
+      title,
+      description: product.description,
+      images: product.image_url ? [{ url: product.image_url }] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: product.description,
+      images: product.image_url ? [product.image_url] : [],
+    },
     alternates: {
       canonical: `/shop/${resolvedParams.slug}`,
     },
@@ -190,7 +204,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="bg-slate-900 text-white rounded-2xl p-6 shadow-2xl relative overflow-hidden flex items-center justify-between mb-8 border border-slate-800">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
               <div>
-                <p className="text-xs uppercase tracking-widest text-slate-400 mb-1 font-semibold">Current Agent Price</p>
+                <p className="text-xs uppercase tracking-widest text-slate-400 mb-1 font-semibold">Current Engine Price</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl font-black">${(livePrice ?? product.price).toFixed(2)}</span>
                   <span className="text-sm font-medium text-slate-400 line-through">${product.price.toFixed(2)}</span>

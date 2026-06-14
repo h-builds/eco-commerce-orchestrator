@@ -102,6 +102,7 @@ export function TelemetryHUD() {
   return (
     <div
       id="telemetry-hud"
+      role="region"
       ref={containerRef}
       aria-label="Live telemetry dashboard"
       className="

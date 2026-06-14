@@ -2,7 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Eco-Commerce Orchestrator — AI Production Stack",
+  title: "Eco-Commerce Orchestrator — Edge Production Stack",
+  openGraph: {
+    title: "Eco-Commerce Orchestrator — Edge Production Stack",
+  },
+  twitter: {
+    title: "Eco-Commerce Orchestrator — Edge Production Stack",
+  },
   alternates: {
     canonical: "/",
   },
@@ -17,7 +23,7 @@ const PILLARS = [
   },
   {
     icon: "ssid_chart",
-    label: "Go Wasm Pricing Agent",
+    label: "Go Wasm Pricing Engine",
     description:
       "Deterministic pricing microservice compiled to WebAssembly. Seed-based volatility guarantees bit-identical prices across all stateless Worker instances within the same hour.",
   },
@@ -38,14 +44,14 @@ const PILLARS = [
 const STATS = [
   { value: "OpenNext", label: "CF Workers Adapter" },
   { value: "React 19", label: "RSC + Compiler" },
-  { value: "Go Wasm", label: "Pricing Agent" },
+  { value: "Go Wasm", label: "Pricing Engine" },
   { value: "D1 + KV", label: "Edge Storage" },
 ] as const;
 
 /**
  * Static landing view demonstrating Edge-native patterns. 
  * Leveraging React 19 server components via OpenNext to minimize client-side bundle 
- * while explaining Wasm-agent interop and WCAG 2.1 AA compliance strategies.
+ * while explaining Wasm-engine interop and WCAG 2.1 AA compliance strategies.
  */
 export default function Home() {
   return (
@@ -86,13 +92,13 @@ export default function Home() {
             <h1
               id="hero-heading"
               className="mx-auto max-w-4xl text-5xl md:text-7xl font-black tracking-tight text-slate-900 dark:text-slate-50 leading-[1.05]">
-              The Future of <span className="text-primary">AI-Powered</span>{" "}
+              The Future of <span className="text-primary">Edge-Native</span>{" "}
               Commerce
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed">
               A production-grade orchestrator uniting React&nbsp;19 Server
-              Components, a deterministic Go&nbsp;Wasm pricing agent, and
+              Components, a deterministic Go&nbsp;Wasm pricing engine, and
               Cloudflare&nbsp;Workers via OpenNext — built to the highest
               standards for Senior &amp; Lead engineering roles.
             </p>
@@ -215,8 +221,8 @@ export default function Home() {
               Ready to explore?
             </h2>
             <p className="mt-3 text-slate-500 dark:text-slate-400">
-              Browse the live product catalog with AI-computed prices generated
-              by the Go&nbsp;Wasm agent on every request.
+              Browse the live product catalog with dynamically computed prices generated
+              by the Go&nbsp;Wasm engine on every request.
             </p>
             <Link
               href="/shop"

@@ -56,6 +56,33 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
     return { executionTimeMs: 0, internalExecTimeUs: 0, error: "Wasm Pricing Agent not available (env.PRICING_AGENT is undefined)" };
   }
 
+  const computePayload = JSON.stringify({
+    jsonrpc: "2.0",
+    method: "calculate_price",
+    params: mockData,
+    id: "benchmark-chunk",
+  });
+  const pingPayload = JSON.stringify({ jsonrpc: "2.0", method: "ping", id: 2 });
+
+  try {
+    await env.PRICING_AGENT.fetch("http://pricing-agent/rpc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: pingPayload,
+    });
+  } catch {}
+
+  const pingStart = performance.now();
+  try {
+    await env.PRICING_AGENT.fetch("http://pricing-agent/rpc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: pingPayload,
+    });
+  } catch {}
+  const pingEnd = performance.now();
+  const pingMs = Math.max(1, pingEnd - pingStart);
+
   const start = performance.now();
   
   let res;
@@ -66,12 +93,7 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
         "Content-Type": "application/json",
         Authorization: `Bearer ${env.INTERNAL_SECRET}`,
       },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        method: "calculate_price",
-        params: mockData,
-        id: "benchmark-chunk",
-      }),
+      body: computePayload,
     });
   } catch (error) {
     console.error("Fetch to PRICING_AGENT failed:", error);
@@ -83,6 +105,7 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
   }
 
   const end = performance.now();
+  const totalMs = end - start;
 
   if (!res.ok) {
     const errorText = await res.text().catch(() => "Unable to read error body");
@@ -109,20 +132,6 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
     };
   }
   
-  const pingStart = performance.now();
-  try {
-    await env.PRICING_AGENT.fetch("http://pricing-agent/rpc", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ jsonrpc: "2.0", method: "ping", id: 2 }),
-    });
-  } catch {
-  }
-  const pingEnd = performance.now();
-  
-  const totalMs = end - start;
-  const pingMs = pingEnd - pingStart;
-
   const deducedComputeUs = Math.max(1, (totalMs - pingMs) * 1000);
   const finalInternalUs = (data?.internal_exec_time_us && data.internal_exec_time_us > 0) 
     ? data.internal_exec_time_us 

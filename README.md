@@ -19,13 +19,13 @@ In modern global e-commerce, **latency is a conversion killer**. This project ad
 
 1.  **Main Thread Liberation:** We offload heavy business logic (mass price-rule transformations for 10,000+ items) to a **Go microservice compiled to WebAssembly**. This prevents "Long Tasks" and keeps the browser's main thread free for a smooth 60 FPS user experience.
 2.  **Deterministic Consistency:** By executing pricing logic at the **Cloudflare Edge (Workers)** and synchronizing custom `splitmix64` PRNG algorithms, we ensure that calculations are bit-for-bit identical across any global node, eliminating discrepancies caused by varying client-side hardware or local time-drifts.
-3.  **True Zero-Allocation Philosophy:** The Go agent is meticulously engineered to eliminate the "Garbage Collection tax" typically found in high-frequency pricing engines. By using inline `fnv64a` hashes and pre-allocated byte buffers, the hot loop operates at **~50 ns/op with exactly 0 B/op (zero allocations)**.
+3.  **True Zero-Allocation Philosophy:** The Go engine is meticulously engineered to eliminate the "Garbage Collection tax" typically found in high-frequency pricing engines. By using inline `fnv64a` hashes and pre-allocated byte buffers, the hot loop operates at **~50 ns/op with exactly 0 B/op (zero allocations)**.
 
 ---
 
 ## ⚡ Performance Duel (Live Benchmarking)
 
-The orchestrator features a real-time stress-test suite that pits the **V8 (JavaScript) JIT engine** against our **Edge-Native Wasm Agent (Go)**:
+The orchestrator features a real-time stress-test suite that pits the **V8 (JavaScript) JIT engine** against our **Edge-Native Wasm Engine (Go)**:
 
 - **Stress Load:** 10,000 product entity transformations per cycle.
 - **Precision Telemetry:** Implementation of **"Ping Subtraction"** to isolate pure compute time from network jitter, compensating for Cloudflare's execution clock freezes.
@@ -41,7 +41,7 @@ The orchestrator features a real-time stress-test suite that pits the **V8 (Java
 | **Logic Engine**  | **Go (WebAssembly)**        | Low-latency, type-safe, and deterministic computation.      |
 | **Runtime**       | **Cloudflare Workers**      | Global distribution with zero-cold-start performance.       |
 | **Persistence**   | **Cloudflare D1 (SQLite)**  | Native Edge-SQL for real-time inventory hydration.          |
-| **Interface**     | **Tailwind CSS**            | High-density "Command Center" aesthetic for data-heavy UIs. |
+| **Interface**     | **Tailwind CSS**            | Information-dense UI tailored for performance telemetry and data-heavy applications. |
 
 ---
 
@@ -50,11 +50,11 @@ The orchestrator features a real-time stress-test suite that pits the **V8 (Java
 The system has successfully completed its Telemetry Refinement & Technical Audit phase.
 
 - [x] **Core:** Wasm/JS Bridge implementation.
-- [x] **Optimization:** Zero-Alloc refactor for the Go pricing agent (0 allocs/op achieved).
+- [x] **Optimization:** Zero-Alloc refactor for the Go pricing engine (0 allocs/op achieved).
 - [x] **Metrics:** High-resolution ($\mu s$) telemetry via `performance.now`.
 - [x] **Audit:** PDF Report Export module for executive summaries via `jspdf`.
 - [x] **SEO:** D1 integration for dynamic, real-time sitemap generation.
-- [x] **Dashboard:** Finalization of the Cyberpunk-themed Admin HUD.
+- [x] **Dashboard:** Finalization of the Admin Telemetry Dashboard.
 
 ---
 
@@ -69,7 +69,7 @@ This project is split into an Edge Orchestrator (Next.js) and an Edge Microservi
     npm install
     ```
 
-2.  **Terminal 1: Run the Go Wasm Pricing Agent:**
+2.  **Terminal 1: Run the Go Wasm Pricing Engine:**
     _(Requires Go 1.21+ and Wrangler)_
     ```bash
     cd services/pricing
@@ -92,4 +92,4 @@ Focused on high-performance distributed systems and edge computing. Remote, curr
 
 ---
 
-> _"Built with human-led intent in a world of AI noise."_ 🦒✨
+> _"Engineered for strict zero-allocation determinism at the Edge."_ 🦒✨

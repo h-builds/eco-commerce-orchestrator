@@ -3,8 +3,9 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { runWasmBenchmarkChunk } from "@/lib/benchmarking";
-import { simulatePrice, getSeedHex } from "@/lib/pricingEngine";
+import { getSeedHex } from "@/lib/pricingEngine";
 import { WasmTelemetry, captureMemoryMb } from "@/lib/wasmTelemetry";
+import { pricingWorkerClient } from "@/lib/pricingWorkerClient";
 import { toPng } from "html-to-image";
 
 const TOTAL_ITERATIONS = 10000;
@@ -38,14 +39,6 @@ export default function BenchmarksPage() {
 
   const snapshotRef = useRef<HTMLDivElement>(null);
 
-  const runJSBatchLocally = (batchSize: number): number => {
-    const start = performance.now();
-    for (let i = 0; i < batchSize; i++) {
-      simulatePrice(`bench-prod-${i}`, 100.0, 50, null);
-    }
-    return performance.now() - start;
-  };
-
   const startBattle = async () => {
     setIsRunning(true);
     setIsFinished(false);
@@ -58,11 +51,17 @@ export default function BenchmarksPage() {
     let jsTotalMs = 0;
 
     for (let i = 0; i < BATCH_COUNT; i++) {
-      const batchMs = runJSBatchLocally(BATCH_SIZE);
-      jsTotalMs += batchMs;
-      setJsProgress((prev) => prev + BATCH_SIZE);
-      setJsMetrics({ timeMs: jsTotalMs });
-      await new Promise((r) => setTimeout(r, 0));
+      try {
+        const { executionTimeMs } = await pricingWorkerClient.simulateBenchmarkAsync(BATCH_SIZE);
+        jsTotalMs += executionTimeMs;
+        setJsProgress((prev) => prev + BATCH_SIZE);
+        setJsMetrics({ timeMs: jsTotalMs });
+      } catch (err) {
+        console.error("Worker benchmark failed:", err);
+        setBenchmarkError("JS Worker benchmark failed.");
+        setIsRunning(false);
+        return;
+      }
     }
 
     let wasmTotalMs = 0;

@@ -138,6 +138,9 @@ export function ComparisonModal() {
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="comparison-modal-title"
           initial={{ scale: 0.95, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.95, y: 20 }}
@@ -146,7 +149,7 @@ export function ComparisonModal() {
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-800 sticky top-0 bg-slate-900/95 backdrop-blur z-10">
             <div>
-              <h2 className="text-2xl font-black text-white flex items-center gap-2">
+              <h2 id="comparison-modal-title" className="text-2xl font-black text-white flex items-center gap-2">
                 <span
                   className="material-symbols-outlined notranslate text-emerald-500"
                   aria-hidden="true" translate="no">

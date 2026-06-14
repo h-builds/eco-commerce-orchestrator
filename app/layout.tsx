@@ -38,11 +38,11 @@ export const metadata: Metadata = {
     template: "%s | Eco-Commerce Orchestrator",
   },
   description:
-    "Production-grade AI pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers. Real-time deterministic edge pricing with WCAG 2.1 AA accessibility.",
+    "Production-grade deterministic pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers. Real-time deterministic edge pricing with WCAG 2.1 AA accessibility.",
   openGraph: {
     title: "Eco-Commerce Orchestrator",
     description:
-      "Production-grade AI pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers.",
+      "Production-grade deterministic pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers.",
     url: BASE_URL,
     siteName: "Eco-Commerce Orchestrator",
     type: "website",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Eco-Commerce Orchestrator",
     description:
-      "Production-grade AI pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers.",
+      "Production-grade deterministic pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers.",
   },
 };
 
@@ -141,12 +141,13 @@ export default function RootLayout({
                 </main>
 
                 <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 mt-auto">
-                  <div className="mx-auto w-full px-4 md:px-10 lg:px-20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+                  <div className="mx-auto w-full px-4 md:px-10 lg:px-20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
                     <p>
                       &copy; 2026 Eco-Commerce Orchestrator. Orchestrated via Next.js&nbsp;16, 
                       Go&nbsp;Wasm runtime, and Cloudflare Workers.
                     </p>
-                    <p aria-label="WCAG 2.1 AA compliance status">
+                    <p>
+                      <span className="sr-only">WCAG 2.1 AA compliance status: </span>
                       WCAG 2.1 AA Compliant
                     </p>
                   </div>

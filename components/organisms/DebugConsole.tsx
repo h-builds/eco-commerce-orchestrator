@@ -53,6 +53,7 @@ function LogList({ logs }: { logs: TelemetryEntry[] }) {
   const parentRef = useRef<HTMLDivElement>(null);
   const useVirtual = logs.length > VIRTUAL_THRESHOLD;
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: logs.length,
     getScrollElement: () => parentRef.current,

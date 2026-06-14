@@ -60,9 +60,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
     ? "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 animate-pulse border border-transparent"
     : "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950 animate-pulse border border-transparent";
 
-  const verifiedDotClass = isSimulating
-    ? "size-1.5 rounded-full bg-slate-900 shrink-0"
-    : "size-1.5 rounded-full bg-slate-900 shrink-0";
+  const verifiedDotClass = "size-1.5 rounded-full bg-slate-900 shrink-0";
 
   const verifiedLabel = isSimulating
     ? "Price seeded by simulated hour"
@@ -86,15 +84,15 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
         <button
-          className={`absolute top-4 right-4 z-20 flex size-8 items-center justify-center rounded-full  transition-all focus:outline-none focus-visible:ring-4 ${
+          className={`absolute top-4 right-4 z-20 flex size-8 items-center justify-center rounded-full transition-all focus:outline-none focus-visible:ring-4 hidden group-hover:flex md:flex ${
             isSelected
               ? "bg-emerald-500 text-white hover:bg-emerald-600 focus-visible:ring-emerald-500/30"
               : "bg-white/80 dark:bg-slate-900/80 text-slate-400 hover:text-emerald-500 hover:bg-white dark:hover:bg-slate-900 focus-visible:ring-emerald-500/30 backdrop-blur"
           } ${
             !isSelected && !canSelectMore
-              ? "opacity-50 cursor-not-allowed hidden group-hover:flex"
-              : "hidden group-hover:flex"
-          } md:flex`}
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          }`}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

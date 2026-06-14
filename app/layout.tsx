@@ -77,7 +77,7 @@ export default function RootLayout({
                "name": "Eco-Commerce Orchestrator",
                "url": BASE_URL,
                "logo": `${BASE_URL}/eco-logo.png`,
-             })
+             }).replace(/</g, '\\u003c')
           }}
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

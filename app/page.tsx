@@ -64,7 +64,7 @@ export default function Home() {
             "@type": "WebSite",
             "name": "Eco-Commerce Orchestrator",
             "url": "https://eco-commerce-orchestrator.pages.dev/",
-          })
+          }).replace(/</g, '\\u003c')
         }}
       />
       <section

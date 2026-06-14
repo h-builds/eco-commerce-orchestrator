@@ -125,7 +125,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   "item": `https://eco-commerce-orchestrator.pages.dev/shop/${product.slug}`
                 }
               ]
-            })
+            }).replace(/</g, '\\u003c')
           }}
         />
 
@@ -150,7 +150,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                  "ratingValue": product.rating.toString(),
                  "reviewCount": "10"
                }
-             })
+             }).replace(/</g, '\\u003c')
           }}
         />
 

@@ -45,7 +45,7 @@ export default function ShopPage() {
               "name": "Shop eco-friendly products",
               "description": "Sustainable products priced in real-time by our Go Wasm pricing engine.",
               "url": "https://eco-commerce-orchestrator.pages.dev/shop"
-            })
+            }).replace(/</g, '\\u003c')
           }}
         />
         <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12 px-4 md:px-10 lg:px-20">

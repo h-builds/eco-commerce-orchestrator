@@ -45,7 +45,7 @@ type PricingResult struct {
 /**
  * Fast, zero-allocation FNV-64a hash algorithm.
  */
-func fnv64a(productID string, currentHour int64, numBuf []byte) uint64 {
+func fnv64a(productID string, currentHour int64) uint64 {
 	const offset64 = 14695981039346656037
 	const prime64 = 1099511628211
 
@@ -57,7 +57,8 @@ func fnv64a(productID string, currentHour int64, numBuf []byte) uint64 {
 	hash ^= uint64('-')
 	hash *= prime64
 
-	numBuf = strconv.AppendInt(numBuf[:0], currentHour, 10)
+	var buf [32]byte
+	numBuf := strconv.AppendInt(buf[:0], currentHour, 10)
 	for i := 0; i < len(numBuf); i++ {
 		hash ^= uint64(numBuf[i])
 		hash *= prime64
@@ -85,7 +86,7 @@ func goFloat64(seed uint64) float64 {
  * localized operations to satisfy stateless node parity across the 
  * distributed Worker network.
  */
-func calculateDynamicPrice(args PricingArgs, currentHour int64, numBuf []byte) PricingResult {
+func CalculateDynamicPrice(args PricingArgs, currentHour int64) PricingResult {
 	baseCost := args.BasePrice * 0.4
 	maxPrice := args.BasePrice * 2.0
 
@@ -103,7 +104,7 @@ func calculateDynamicPrice(args PricingArgs, currentHour int64, numBuf []byte) P
 	 * PERF: Hash key constructed via zero-alloc byte ops to avoid heap 
 	 * allocations and JS interop overhead within the hot loop.
 	 */
-	hashSum := fnv64a(args.ProductID, currentHour, numBuf)
+	hashSum := fnv64a(args.ProductID, currentHour)
 
 	volatilityMultiplier := 0.95 + goFloat64(hashSum)*(1.05-0.95)
 	currentPrice = currentPrice * volatilityMultiplier
@@ -196,11 +197,10 @@ func rpcHandler(w http.ResponseWriter, req *http.Request) {
 	 * batching reduces this overhead from O(N) to O(1).
 	 */
 	currentHour := time.Now().UTC().Truncate(time.Hour).Unix()
-	numBuf := make([]byte, 0, 32)
 
 	results := make([]PricingResult, len(rpcReq.Params))
 	for i, param := range rpcReq.Params {
-		results[i] = calculateDynamicPrice(param, currentHour, numBuf)
+		results[i] = CalculateDynamicPrice(param, currentHour)
 	}
 
 	execTimeUs := time.Since(start).Microseconds()

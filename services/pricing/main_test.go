@@ -5,11 +5,10 @@ import (
 )
 
 func TestFNV64a(t *testing.T) {
-	numBuf := make([]byte, 0, 32)
-	hash := fnv64a("prod-123", 1700000000, numBuf)
+	hash := fnv64a("prod-123", 1700000000)
 	// Expected hash for "prod-123-1700000000"
 	// Let's just ensure it's stable.
-	hash2 := fnv64a("prod-123", 1700000000, numBuf)
+	hash2 := fnv64a("prod-123", 1700000000)
 	if hash != hash2 {
 		t.Errorf("Expected fnv64a to be deterministic, got different hashes")
 	}
@@ -30,11 +29,10 @@ func TestCalculateDynamicPrice(t *testing.T) {
 		BasePrice: 100.0,
 		Stock:     50,
 	}
-	numBuf := make([]byte, 0, 32)
 	hour := int64(1700000000)
 
-	result1 := calculateDynamicPrice(args, hour, numBuf)
-	result2 := calculateDynamicPrice(args, hour, numBuf)
+	result1 := CalculateDynamicPrice(args, hour)
+	result2 := CalculateDynamicPrice(args, hour)
 
 	if result1.LivePrice != result2.LivePrice {
 		t.Errorf("Expected deterministic LivePrice, got %f and %f", result1.LivePrice, result2.LivePrice)
@@ -52,13 +50,12 @@ func BenchmarkCalculateDynamicPrice(b *testing.B) {
 		BasePrice: 150.00,
 		Stock:     75,
 	}
-	numBuf := make([]byte, 0, 32)
 	hour := int64(1700000000)
 
 	b.ResetTimer()
 	b.ReportAllocs()
 
 	for i := 0; i < b.N; i++ {
-		_ = calculateDynamicPrice(args, hour, numBuf)
+		_ = CalculateDynamicPrice(args, hour)
 	}
 }

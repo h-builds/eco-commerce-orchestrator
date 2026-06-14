@@ -1,0 +1,12 @@
+# Ignore Cloudflare Workers / Wasm generated shim files
+services/pricing/out/
+services/pricing/build/
+services/pricing/wasm_exec.js
+
+# Next.js build output
+.next/
+out/
+.open-next/
+
+# Node modules
+node_modules/

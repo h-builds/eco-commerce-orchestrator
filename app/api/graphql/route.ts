@@ -97,10 +97,10 @@ const resolvers = {
           stock: p.stock,
         }));
 
-        const pricingMap: Record<
+        const pricingMap = new Map<
           string,
           { live_price: number; agent_confidence: number }
-        > = {};
+        >();
 
         try {
           if (pricingRequests.length > 0 && env.PRICING_AGENT) {
@@ -138,10 +138,10 @@ const resolvers = {
                   };
                   if (data?.result && Array.isArray(data.result)) {
                     for (const pr of data.result) {
-                      pricingMap[pr.product_id] = {
+                      pricingMap.set(pr.product_id, {
                         live_price: pr.live_price,
                         agent_confidence: pr.agent_confidence,
-                      };
+                      });
                     }
                   }
                   pricingSucceeded = true;
@@ -172,7 +172,7 @@ const resolvers = {
         }
 
         const productsWithLivePrices = (results as DBProduct[]).map((p) => {
-          const liveData = pricingMap[p.id] || {
+          const liveData = pricingMap.get(p.id) || {
             live_price: p.price,
             agent_confidence: 0.0,
           };

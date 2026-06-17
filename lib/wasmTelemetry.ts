@@ -3,16 +3,19 @@
  * No React imports; consumed by TelemetryContext and runPricingBatch.
  */
 
-export interface TelemetryEntry {
-  id: string;
-  timestamp: number;
-  batchSize: number;
-  executionTimeMs: number;
-  seedHex?: string;
-  memoryMb?: number;
-  /** When set, LogLine renders this as a system message instead of timing data */
-  message?: string;
-}
+import { z } from 'zod';
+
+export const TelemetryEntrySchema = z.object({
+  id: z.string(),
+  timestamp: z.number(),
+  batchSize: z.number(),
+  executionTimeMs: z.number(),
+  seedHex: z.string().optional(),
+  memoryMb: z.number().optional(),
+  message: z.string().optional(),
+});
+
+export type TelemetryEntry = z.infer<typeof TelemetryEntrySchema>;
 
 export interface SessionMetrics {
   totalBatches: number;
@@ -36,7 +39,10 @@ function loadInitialLogs(): TelemetryEntry[] {
   if (typeof window === 'undefined') return [];
   try {
     const saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return z.array(TelemetryEntrySchema).parse(parsed);
+    }
   } catch {
   }
   return [];
@@ -72,9 +78,13 @@ function notifyStress(): void {
   });
 }
 
+interface PerfWithMemory extends Performance {
+  memory?: { usedJSHeapSize: number };
+}
+
 function getMemoryMb(): number | undefined {
   if (typeof performance === 'undefined') return undefined;
-  const mem = (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory;
+  const mem = (performance as PerfWithMemory).memory;
   if (mem?.usedJSHeapSize != null) {
     return Math.round((mem.usedJSHeapSize / 1024 / 1024) * 100) / 100;
   }

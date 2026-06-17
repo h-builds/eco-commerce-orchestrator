@@ -3,6 +3,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Fetcher } from "@cloudflare/workers-types";
 import { type SimulatedPricing, simulatePrice } from "./pricingEngine";
+import { PricingResponseSchema } from "./contracts";
 
 /**
  * Delegates real-time pricing to the Go-Wasm agent via Cloudflare Service 
@@ -35,9 +36,7 @@ export async function getLivePrice(productId: string, basePrice: number, stock: 
     });
 
     if (res.ok) {
-      const data = (await res.json()) as { 
-        result?: { live_price: number; agent_confidence: number }[]; 
-      };
+      const data = PricingResponseSchema.parse(await res.json());
       if (data?.result && data.result.length > 0) {
         return {
           live_price: data.result[0].live_price,
@@ -90,12 +89,10 @@ export async function batchLivePrices(products: { id: string; price: number; sto
     });
 
     if (res.ok) {
-      const data = (await res.json()) as {
-        result?: { product_id: string; live_price: number; agent_confidence: number }[];
-      };
+      const data = PricingResponseSchema.parse(await res.json());
       if (data?.result && Array.isArray(data.result)) {
-        return data.result.map((r) => ({
-          id: r.product_id,
+        return data.result.filter(r => r.product_id != null).map((r) => ({
+          id: r.product_id as string,
           live_price: r.live_price,
           agent_confidence: r.agent_confidence,
         }));

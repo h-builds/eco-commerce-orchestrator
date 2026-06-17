@@ -1,6 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { D1Database } from "@cloudflare/workers-types";
 import type { Product } from "@/components/molecules/ProductCard";
+import { ProductSchema } from "./contracts";
 
 /**
  * Resolves the D1 database binding via OpenNext's Cloudflare context. 
@@ -18,11 +19,11 @@ export async function getDb(): Promise<D1Database> {
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const db = await getDb();
   const { results } = await db.prepare("SELECT * FROM products WHERE slug = ?").bind(slug).all();
-  return results.length > 0 ? (results[0] as unknown as Product) : null;
+  return results.length > 0 ? ProductSchema.parse(results[0]) : null;
 }
 
 export async function getTopProducts(limit: number): Promise<Product[]> {
   const db = await getDb();
   const { results } = await db.prepare("SELECT * FROM products ORDER BY rating DESC LIMIT ?").bind(limit).all();
-  return results as unknown as Product[];
+  return results.map(r => ProductSchema.parse(r));
 }

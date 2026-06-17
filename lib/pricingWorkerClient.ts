@@ -9,9 +9,16 @@ interface BaseProduct {
   name?: string;
 }
 
+type WorkerPayload = 
+  | { productId: string; basePrice: number; stock: number; simulatedHour: number | null }
+  | { products: BaseProduct[]; simulatedHour: number | null; reportToTelemetry: boolean }
+  | { batchSize: number };
+
+type WorkerResult = SimulatedPricing | RunPricingBatchResult | { executionTimeMs: number };
+
 class PricingWorkerClient {
   private worker: Worker | null = null;
-  private pendingRequests: Map<string, { resolve: (val: unknown) => void; reject: (err: unknown) => void }> = new Map();
+  private pendingRequests: Map<string, { resolve: (val: WorkerResult) => void; reject: (err: Error) => void }> = new Map();
   private messageIdCounter = 0;
 
   constructor() {
@@ -51,7 +58,7 @@ class PricingWorkerClient {
     }
   }
 
-  private dispatch<T>(type: string, payload: unknown, timeoutMs: number = 3000): Promise<T> {
+  private dispatch<T extends WorkerResult>(type: string, payload: WorkerPayload, timeoutMs: number = 3000): Promise<T> {
     if (!this.worker) {
       return Promise.reject(new Error('Worker not initialized'));
     }

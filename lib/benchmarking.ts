@@ -3,6 +3,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Fetcher } from "@cloudflare/workers-types";
 import { simulatePrice } from "./pricingEngine";
+import { BenchmarkingResponseSchema } from "./contracts";
 
 export interface BenchmarkResult {
   executionTimeMs: number;
@@ -123,10 +124,7 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
 
   let data;
   try {
-    data = (await res.json()) as { 
-      result?: unknown[];
-      internal_exec_time_us?: number;
-    };
+    data = BenchmarkingResponseSchema.parse(await res.json());
   } catch (error) {
     console.error("Failed to parse PRICING_AGENT response:", error);
     return { 

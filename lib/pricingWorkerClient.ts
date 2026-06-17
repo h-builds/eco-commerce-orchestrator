@@ -86,7 +86,6 @@ class PricingWorkerClient {
   }
 
   simulateBatchAsync(products: BaseProduct[], simulatedHour: number | null, reportToTelemetry: boolean): Promise<RunPricingBatchResult> {
-    // 5 seconds timeout for batch
     return this.dispatch('SIMULATE_BATCH', { products, simulatedHour, reportToTelemetry }, 5000);
   }
 

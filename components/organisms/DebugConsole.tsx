@@ -11,7 +11,6 @@ const VIRTUAL_THRESHOLD = 100;
 const CONSOLE_FONT = 'JetBrains Mono, ui-monospace, monospace';
 
 function LogLine({ entry }: { entry: TelemetryEntry }) {
-  // System/info messages (e.g. pipeline-init sentinel)
   if (entry.message) {
     return (
       <div
@@ -166,7 +165,6 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
       role="region"
       aria-label="Developer Debug Console"
     >
-      {/* Header — color indicates stress test active */}
       <div
         className={`flex items-center justify-between border-b px-4 py-2 ${
           stressTestStatus.active
@@ -193,7 +191,6 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
         </button>
       </div>
 
-      {/* Stress test progress bar */}
       {stressTestStatus.active && (
         <div className="border-b border-red-500/30 bg-slate-950/90 px-4 py-2">
           <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
@@ -213,7 +210,6 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
         </div>
       )}
 
-      {/* Post-test summary */}
       {stressTestStatus.summary && !stressTestStatus.active && (
         <div className="border-b border-emerald-500/30 bg-emerald-950/20 px-4 py-2">
           <p
@@ -225,12 +221,10 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
         </div>
       )}
 
-      {/* Terminal area */}
       <div className="min-h-[200px] max-h-[320px] overflow-hidden border-b border-cyan-500/20 bg-black">
         <LogList logs={logs} />
       </div>
 
-      {/* Controls */}
       <div className="flex flex-wrap items-center gap-2 border-t border-cyan-500/20 bg-slate-950/90 px-4 py-2">
         <button
           type="button"

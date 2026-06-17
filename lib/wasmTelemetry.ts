@@ -38,7 +38,6 @@ function loadInitialLogs(): TelemetryEntry[] {
     const saved = sessionStorage.getItem(STORAGE_KEY);
     if (saved) return JSON.parse(saved);
   } catch {
-    // Ignore parse errors
   }
   return [];
 }
@@ -51,7 +50,6 @@ function persistLogs() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
     } catch {
-      // Ignore quota errors
     }
   }
 }
@@ -70,7 +68,6 @@ function notifyStress(): void {
     try {
       fn(snapshot);
     } catch {
-      // ignore
     }
   });
 }
@@ -90,7 +87,6 @@ function notify(): void {
     try {
       fn(snapshot);
     } catch {
-      // ignore subscriber errors
     }
   });
 }

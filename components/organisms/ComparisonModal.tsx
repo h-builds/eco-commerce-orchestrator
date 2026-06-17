@@ -146,7 +146,6 @@ export function ComparisonModal() {
           exit={{ scale: 0.95, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           className="bg-slate-900 border border-slate-700/60 rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto shadow-2xl shadow-emerald-500/10 flex flex-col">
-          {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-800 sticky top-0 bg-slate-900/95 backdrop-blur z-10">
             <div>
               <h2 id="comparison-modal-title" className="text-2xl font-black text-white flex items-center gap-2">
@@ -171,7 +170,6 @@ export function ComparisonModal() {
             </button>
           </div>
 
-          {/* Body */}
           <div className="p-6 flex-1 flex flex-col gap-8">
             {isLoading ? (
               <div className="h-[400px] w-full flex items-center justify-center space-x-2">
@@ -185,7 +183,6 @@ export function ComparisonModal() {
               </div>
             ) : (
               <>
-                {/* The Chart */}
                 <div className="bg-slate-950/50 rounded-xl p-4 border border-slate-800 relative">
                   <ComparisonChart
                     products={selectedProducts}
@@ -193,9 +190,7 @@ export function ComparisonModal() {
                   />
                 </div>
 
-                {/* Info Cards Row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Best Value Summary */}
                   <div className="bg-slate-800/30 rounded-xl p-5 border border-slate-700/50 flex flex-col justify-center">
                     <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">
                       Best Value @ {activeHour % 12 || 12}:00{" "}
@@ -220,7 +215,6 @@ export function ComparisonModal() {
                     )}
                   </div>
 
-                  {/* Correlation Index Card */}
                   {correlationIndex !== null ? (
                     <div className="bg-slate-800/30 rounded-xl p-5 border border-slate-700/50 flex flex-col justify-center">
                       <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 flex items-center gap-1">

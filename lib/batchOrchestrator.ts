@@ -60,7 +60,6 @@ export async function orchestrateBatches<T, R>(
     chunks.map(async (chunk, batchIndex) => {
       const tBatch = performance.now();
 
-      // First attempt
       try {
         const result = await processFn(chunk, batchIndex);
         batchLatencies.push(performance.now() - tBatch);

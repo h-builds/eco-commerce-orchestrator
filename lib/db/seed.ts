@@ -35,7 +35,6 @@ export async function seedDatabase(db: D1Database, count = 1000): Promise<{ mess
     };
   }
 
-  // Determine how many to insert
   const toInsert = count - (countResult ? countResult.count : 0);
 
   const products: ProductInsert[] = Array.from({ length: toInsert }).map(() => {

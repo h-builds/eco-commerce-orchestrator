@@ -36,7 +36,6 @@ export function TelemetryHUD() {
     function paint() {
       const m = getHUDMetrics();
 
-      // WASM status indicator
       if (wasmDotRef.current) {
         wasmDotRef.current.style.color = m.wasmActive ? '#22c55e' : '#64748b';
       }
@@ -45,13 +44,11 @@ export function TelemetryHUD() {
         wasmLabelRef.current.style.color = m.wasmActive ? '#22c55e' : '#64748b';
       }
 
-      // WASM processed counter
       if (wasmProcRef.current) {
         const formatted = m.wasmProcessed.toLocaleString();
         wasmProcRef.current.textContent = `${formatted} / ${formatted}`;
       }
 
-      // Frame jitter
       if (jitterRef.current) {
         jitterRef.current.textContent = `${m.jitterMs.toFixed(1)}ms`;
       }
@@ -59,12 +56,10 @@ export function TelemetryHUD() {
         jitterRowRef.current.style.color = m.jitterMs < 2 ? '#22c55e' : '#f59e0b';
       }
 
-      // Edge RTT
       if (rttRef.current) {
         rttRef.current.textContent = `${m.edgeRttMs}ms`;
       }
 
-      // Batch progress
       if (batchRef.current) {
         batchRef.current.textContent = m.batchTotal > 0
           ? `${m.batchCompleted} / ${m.batchTotal}`
@@ -74,7 +69,6 @@ export function TelemetryHUD() {
         batchRowRef.current.style.display = m.batchTotal > 0 ? 'flex' : 'none';
       }
 
-      // Highlight logic
       if (containerRef.current) {
         if (m.highlightColor === 'cyan') {
           containerRef.current.classList.add('ring-4', 'ring-cyan-500/50', 'scale-[1.02]');
@@ -117,13 +111,11 @@ export function TelemetryHUD() {
         min-w-[260px] transition-all duration-300
       "
     >
-      {/* Header */}
       <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-cyan-500/10">
         <span className="text-cyan-400 font-bold text-[10px] uppercase tracking-widest">
           Live Telemetry
         </span>
 
-        {/* Technical Info icon */}
         <div className="relative">
           <button
             type="button"
@@ -144,7 +136,6 @@ export function TelemetryHUD() {
             </span>
           </button>
 
-          {/* Tooltip */}
           {tooltipVisible && (
             <div
               id="hud-tooltip"
@@ -165,7 +156,6 @@ export function TelemetryHUD() {
         </div>
       </div>
 
-      {/* WASM Engine Status */}
       <div className="flex items-center gap-2 text-slate-300">
         <span className="text-slate-400">WASM_ENGINE:</span>
         <span
@@ -180,7 +170,6 @@ export function TelemetryHUD() {
         </span>
       </div>
 
-      {/* Price Validations */}
       <div className="flex items-center gap-2 text-slate-300 mt-0.5">
         <span className="text-slate-400">WASM_PROC:</span>
         <span ref={wasmProcRef} className="text-cyan-400" aria-hidden="true">
@@ -188,7 +177,6 @@ export function TelemetryHUD() {
         </span>
       </div>
 
-      {/* Main Thread Jitter */}
       <div
         ref={jitterRowRef}
         className="flex items-center gap-2 mt-0.5"
@@ -198,7 +186,6 @@ export function TelemetryHUD() {
         <span ref={jitterRef} aria-hidden="true">0.0ms</span>
       </div>
 
-      {/* Edge Latency */}
       <div className="flex items-center gap-2 text-slate-300 mt-0.5">
         <span className="text-slate-400">EDGE_RTT:</span>
         <span ref={rttRef} className="text-cyan-400" aria-hidden="true">
@@ -206,7 +193,6 @@ export function TelemetryHUD() {
         </span>
       </div>
 
-      {/* Batch Progress — hidden when no stress test has run */}
       <div
         ref={batchRowRef}
         className="flex items-center gap-2 text-slate-300 mt-0.5"

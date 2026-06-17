@@ -155,7 +155,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
     let isCancelled = false;
 
     const runReactiveBatch = async () => {
-      // 1. Visual Feedback: Processing State
       import('@/lib/hudTelemetry').then(({ triggerHUDHighlight }) => triggerHUDHighlight('amber'));
 
       try {
@@ -172,7 +171,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
             await batchLivePrices(chunk.map(p => ({ id: p.id, price: p.price, stock: p.stock })));
             const executionTimeMs = performance.now() - t0;
             
-            // 2. Telemetry Sync: populate WASM_PROC config
             WasmTelemetry.pushEntry({
               batchSize: chunk.length,
               executionTimeMs,
@@ -185,7 +183,6 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
         );
       } finally {
         if (!isCancelled) {
-          // Snap back to green/cyan when finalized
           import('@/lib/hudTelemetry').then(({ clearHUDHighlight }) => clearHUDHighlight());
         }
       }

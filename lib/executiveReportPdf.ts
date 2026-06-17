@@ -33,7 +33,6 @@ export function generateExecutiveReport(
 ): void {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   
-  // Custom Colors
   const SLATE_900 = [15, 23, 42];
   const EMERALD_500 = [16, 185, 129];
   const CYAN_500 = [6, 182, 212];
@@ -42,11 +41,9 @@ export function generateExecutiveReport(
   const TEXT_DARK = [20, 20, 30];
   const TEXT_MUTED = [100, 116, 139];
 
-  // 1. Executive Header Banner
   doc.setFillColor(SLATE_900[0], SLATE_900[1], SLATE_900[2]);
   doc.rect(0, 0, PAGE_WIDTH, 45, 'F');
   
-  // Header Accent Line
   doc.setFillColor(EMERALD_500[0], EMERALD_500[1], EMERALD_500[2]);
   doc.rect(0, 45, PAGE_WIDTH, 2, 'F');
 
@@ -70,21 +67,18 @@ export function generateExecutiveReport(
 
   let y = 65;
 
-  // Helper to draw a section title
   const drawSectionTitle = (title: string, yPos: number) => {
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(TEXT_DARK[0], TEXT_DARK[1], TEXT_DARK[2]);
     doc.text(title.toUpperCase(), MARGIN, yPos);
     
-    // Sub-line
     doc.setDrawColor(SLATE_300[0], SLATE_300[1], SLATE_300[2]);
     doc.setLineWidth(0.5);
     doc.line(MARGIN, yPos + 3, PAGE_WIDTH - MARGIN, yPos + 3);
     return yPos + 12;
   };
 
-  // Helper to draw a KPI Box
   const drawKpiBox = (label: string, value: string, xPos: number, yPos: number, width: number) => {
     doc.setDrawColor(SLATE_300[0], SLATE_300[1], SLATE_300[2]);
     doc.setFillColor(250, 250, 250);
@@ -101,7 +95,6 @@ export function generateExecutiveReport(
     doc.text(value, xPos + 5, yPos + 18);
   };
 
-  // 2. System Metadata & KPIs Row
   y = drawSectionTitle('System Overview & Returns', y);
   
   const boxWidth = (CONTENT_WIDTH - 10) / 3;
@@ -121,7 +114,6 @@ export function generateExecutiveReport(
   
   y += 35;
 
-  // 3. Wasm Execution Latency chart image
   y = drawSectionTitle('Wasm Telemetry & Demand', y);
 
   if (chartImageDataUrl) {
@@ -133,7 +125,6 @@ export function generateExecutiveReport(
       const h = Math.min(chartHeight, maxChartHeight);
       const w = chartHeight <= maxChartHeight ? chartWidth : (imgProps.width * h) / imgProps.height;
 
-      // Wrap chart in a border
       doc.setDrawColor(SLATE_300[0], SLATE_300[1], SLATE_300[2]);
       doc.rect(MARGIN - 1, y - 1, w + 2, h + 2, 'S');
       doc.addImage(chartImageDataUrl, 'PNG', MARGIN, y, w, h);
@@ -150,7 +141,6 @@ export function generateExecutiveReport(
     y += 28;
   }
 
-  // 4. Demand Distribution summary
   const distBoxWidth = (CONTENT_WIDTH - 10) / 3;
   drawKpiBox('PEAK DEMAND NODES', `${snapshot.peakDemandCount}`, MARGIN, y, distBoxWidth);
   drawKpiBox('SUSTAINABLE SURPLUS', `${snapshot.sustainableSurplusCount}`, MARGIN + distBoxWidth + 5, y, distBoxWidth);
@@ -158,7 +148,6 @@ export function generateExecutiveReport(
 
   y += 30;
 
-  // 5. Footer
   const pageHeight = doc.internal.pageSize.getHeight();
   doc.setDrawColor(SLATE_300[0], SLATE_300[1], SLATE_300[2]);
   doc.setLineWidth(0.5);

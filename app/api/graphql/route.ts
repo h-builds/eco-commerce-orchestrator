@@ -203,7 +203,6 @@ const yoga = createYoga({
   fetchAPI: { Response: globalThis.Response },
 });
 
-// Next.js App Router context type
 interface NextContext {
   params: Promise<Record<string, string>>;
 }

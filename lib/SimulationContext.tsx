@@ -7,9 +7,6 @@ import {
   type ReactNode,
 } from 'react';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 interface SimulationContextValue {
   /** null = live system time; 0-23 = simulated hour override */
@@ -17,18 +14,12 @@ interface SimulationContextValue {
   setSimulatedHour: (hour: number | null) => void;
 }
 
-// ---------------------------------------------------------------------------
-// Context
-// ---------------------------------------------------------------------------
 
 const SimulationContext = createContext<SimulationContextValue>({
   simulatedHour: null,
   setSimulatedHour: () => {},
 });
 
-// ---------------------------------------------------------------------------
-// Provider
-// ---------------------------------------------------------------------------
 
 export function SimulationProvider({ children }: { children: ReactNode }) {
   const [simulatedHour, setSimulatedHour] = useState<number | null>(null);
@@ -40,9 +31,6 @@ export function SimulationProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Hook
-// ---------------------------------------------------------------------------
 
 export function useSimulation(): SimulationContextValue {
   return useContext(SimulationContext);

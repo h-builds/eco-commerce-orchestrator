@@ -79,9 +79,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
       const completed = localStorage.getItem('tour_completed') === 'true';
       setIsTourCompleted(completed);
       
-      // Auto-start if not completed and on dashboard
       if (!completed && pathname === '/admin/dashboard') {
-        // Small timeout to ensure components are mounted
         setTimeout(() => {
           if (mounted) setRun(true);
         }, 500);
@@ -130,11 +128,11 @@ export function TourProvider({ children }: { children: ReactNode }) {
           callback={handleJoyrideCallback}
           styles={{
             options: {
-              arrowColor: '#0f172a', // slate-900
-              backgroundColor: '#0f172a', // slate-900
+              arrowColor: '#0f172a',
+              backgroundColor: '#0f172a',
               overlayColor: 'rgba(0, 0, 0, 0.7)',
-              primaryColor: '#10b981', // emerald-500
-              textColor: '#f8fafc', // slate-50
+              primaryColor: '#10b981',
+              textColor: '#f8fafc',
               zIndex: 10000,
             },
             tooltipContainer: {
@@ -144,27 +142,27 @@ export function TourProvider({ children }: { children: ReactNode }) {
               fontSize: '18px',
               fontFamily: 'Inter, sans-serif',
               fontWeight: 700,
-              color: '#34d399', // emerald-400
+              color: '#34d399',
               marginBottom: '10px'
             },
             tooltipContent: {
               padding: '10px 0',
               fontFamily: 'Inter, sans-serif',
-              color: '#cbd5e1', // slate-300
+              color: '#cbd5e1',
               lineHeight: 1.5,
             },
             buttonNext: {
-              backgroundColor: '#10b981', // emerald-500
+              backgroundColor: '#10b981',
               fontFamily: 'Inter, sans-serif',
               fontWeight: 600,
             },
             buttonBack: {
-              color: '#94a3b8', // slate-400
+              color: '#94a3b8',
               marginRight: '10px',
               fontFamily: 'Inter, sans-serif',
             },
             buttonSkip: {
-              color: '#64748b', // slate-500
+              color: '#64748b',
               fontFamily: 'Inter, sans-serif',
             }
           }}

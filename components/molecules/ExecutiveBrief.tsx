@@ -18,7 +18,6 @@ export function ExecutiveBrief() {
 
   const [displayValue, setDisplayValue] = useState(targetEfficiency);
   const displayRef = useRef(targetEfficiency);
-  // TODO: displayRef.current = displayValue;
 
   useEffect(() => {
     const from = displayRef.current;

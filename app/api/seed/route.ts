@@ -1,4 +1,3 @@
-// app/api/seed/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { seedDatabase } from "@/lib/db/seed";
 import { getCloudflareContext } from "@opennextjs/cloudflare";

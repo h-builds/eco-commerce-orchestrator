@@ -70,7 +70,9 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
       headers: { "Content-Type": "application/json" },
       body: pingPayload,
     });
-  } catch {}
+  } catch (e) {
+    console.warn("Wasm agent warmup ping 1 failed:", e);
+  }
 
   const pingStart = performance.now();
   try {
@@ -79,7 +81,9 @@ export async function runWasmBenchmarkChunk(chunkSize: number): Promise<Benchmar
       headers: { "Content-Type": "application/json" },
       body: pingPayload,
     });
-  } catch {}
+  } catch (e) {
+    console.warn("Wasm agent warmup ping 2 failed:", e);
+  }
   const pingEnd = performance.now();
   const pingMs = Math.max(1, pingEnd - pingStart);
 

@@ -46,7 +46,7 @@ export async function getLivePrice(productId: string, basePrice: number, stock: 
       }
     }
   } catch (e) {
-    console.error("Error fetching from pricing agent:", e);
+    console.warn("Wasm agent fetch failed, falling back to base price:", e);
   }
 
   return { live_price: basePrice, agent_confidence: 0 };
@@ -104,7 +104,7 @@ export async function batchLivePrices(products: { id: string; price: number; sto
        console.warn(`batchLivePrices Wasm fetch failed: status ${res.status}`);
     }
   } catch (e) {
-    console.error("Error fetching from pricing agent in batchLivePrices:", e);
+    console.warn("Wasm agent batch fetch failed, falling back to base prices:", e);
   }
 
   return products.map((p) => ({

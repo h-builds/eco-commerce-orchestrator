@@ -74,7 +74,8 @@ export async function orchestrateBatches<T, R>(
         });
 
         return { ok: true as const, data: result };
-      } catch {
+      } catch (firstError) {
+        console.warn(`[BatchOrchestrator] Batch ${batchIndex} failed on first attempt, retrying:`, firstError);
         // Single-retry policy
         try {
           const result = await processFn(chunk, batchIndex);

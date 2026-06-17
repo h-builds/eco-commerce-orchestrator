@@ -37,6 +37,10 @@ body {
   font-family: var(--font-sans);
 }
 
+button, a {
+  cursor: pointer;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

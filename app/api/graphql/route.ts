@@ -2,6 +2,7 @@ import { createSchema, createYoga } from "graphql-yoga";
 import { NextRequest } from "next/server";
 import type { D1Database, Fetcher } from "@cloudflare/workers-types";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { type ProductDTO, PricingResponseSchema } from "../../../lib/contracts";
 
 const typeDefs = /* GraphQL */ `
   type Product {
@@ -84,14 +85,7 @@ const resolvers = {
          * via Service Bindings. Maintains 0-copy overhead where possible while 
          * enforcing deterministic price parity across worker nodes.
          */
-        interface DBProduct {
-          id: string;
-          price: number;
-          stock: number;
-          [key: string]: unknown;
-        }
-
-        const pricingRequests = (results as DBProduct[]).map((p) => ({
+        const pricingRequests = (results as ProductDTO[]).map((p) => ({
           product_id: p.id,
           base_price: p.price,
           stock: p.stock,
@@ -129,15 +123,10 @@ const resolvers = {
                 );
 
                 if (res.ok) {
-                  const data = (await res.json()) as {
-                    result?: {
-                      product_id: string;
-                      live_price: number;
-                      agent_confidence: number;
-                    }[];
-                  };
+                  const data = PricingResponseSchema.parse(await res.json());
                   if (data?.result && Array.isArray(data.result)) {
                     for (const pr of data.result) {
+                      if (!pr.product_id) continue;
                       pricingMap.set(pr.product_id, {
                         live_price: pr.live_price,
                         agent_confidence: pr.agent_confidence,
@@ -171,7 +160,7 @@ const resolvers = {
           );
         }
 
-        const productsWithLivePrices = (results as DBProduct[]).map((p) => {
+        const productsWithLivePrices = (results as ProductDTO[]).map((p) => {
           const liveData = pricingMap.get(p.id) || {
             live_price: p.price,
             agent_confidence: 0.0,
@@ -212,13 +201,13 @@ interface NextContext {
  * compatibility with Cloudflare Worker memory and execution limits. 
  */
 export async function GET(request: NextRequest, ctx: NextContext) {
-  return yoga.handleRequest(request, ctx as unknown as Record<string, unknown>);
+  return yoga.handleRequest(request, ctx as unknown as Record<string, string>);
 }
 
 export async function POST(request: NextRequest, ctx: NextContext) {
-  return yoga.handleRequest(request, ctx as unknown as Record<string, unknown>);
+  return yoga.handleRequest(request, ctx as unknown as Record<string, string>);
 }
 
 export async function OPTIONS(request: NextRequest, ctx: NextContext) {
-  return yoga.handleRequest(request, ctx as unknown as Record<string, unknown>);
+  return yoga.handleRequest(request, ctx as unknown as Record<string, string>);
 }

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import type { D1Database } from '@cloudflare/workers-types';
 import DashboardClient from '../../../components/organisms/DashboardClient';
+import { type ProductDTO } from '../../../lib/contracts';
 import { ExecutiveBrief } from '../../../components/molecules/ExecutiveBrief';
 import { DownloadExecutiveReportButton } from '../../../components/molecules/DownloadExecutiveReportButton';
 import { SimulationProvider } from '../../../lib/SimulationContext';
@@ -35,11 +36,11 @@ export default async function DashboardPage() {
     throw new Error('Database connection is not configured.');
   }
 
-  let results: Array<Record<string, unknown>> = [];
+  let results: Array<ProductDTO> = [];
   try {
     const res = await db.prepare('SELECT id, price, stock, name FROM products').all();
     if (res.success) {
-      results = res.results;
+      results = res.results as ProductDTO[];
     }
   } catch (error) {
     console.warn('Failed to fetch dashboard products (expected during build/prerender):', error);

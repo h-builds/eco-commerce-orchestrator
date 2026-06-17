@@ -63,7 +63,7 @@ export default function Home() {
             "@context": "https://schema.org",
             "@type": "WebSite",
             "name": "Eco-Commerce Orchestrator",
-            "url": "https://eco-commerce-orchestrator.pages.dev/",
+            "url": "https://eco-commerce-orchestrator.achegideas.workers.dev/",
           }).replace(/</g, '\\u003c')
         }}
       />
@@ -97,7 +97,7 @@ export default function Home() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed">
-              A production-grade orchestrator uniting React&nbsp;19 Server
+              A portfolio-grade orchestrator uniting React&nbsp;19 Server
               Components, a deterministic Go&nbsp;Wasm pricing engine, and
               Cloudflare&nbsp;Workers via OpenNext — built to the highest
               standards for Senior &amp; Lead engineering roles.

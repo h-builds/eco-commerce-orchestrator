@@ -29,7 +29,7 @@ const geistMono = Geist_Mono({
 const MATERIAL_SYMBOLS_HREF =
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block";
 
-const BASE_URL = "https://eco-commerce-orchestrator.pages.dev";
+const BASE_URL = "https://eco-commerce-orchestrator.achegideas.workers.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -38,11 +38,11 @@ export const metadata: Metadata = {
     template: "%s | Eco-Commerce Orchestrator",
   },
   description:
-    "Production-grade deterministic pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers. Real-time deterministic edge pricing with WCAG 2.1 AA accessibility.",
+    "Portfolio-grade deterministic pricing demo built with React 19, Go WebAssembly, and Cloudflare Workers. Real-time edge pricing with WCAG 2.1 AA accessibility practices.",
   openGraph: {
     title: "Eco-Commerce Orchestrator",
     description:
-      "Production-grade deterministic pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers.",
+      "Portfolio-grade deterministic pricing demo built with React 19, Go WebAssembly, and Cloudflare Workers.",
     url: BASE_URL,
     siteName: "Eco-Commerce Orchestrator",
     type: "website",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Eco-Commerce Orchestrator",
     description:
-      "Production-grade deterministic pricing platform built with React 19, Go WebAssembly, and Cloudflare Workers.",
+      "Portfolio-grade deterministic pricing demo built with React 19, Go WebAssembly, and Cloudflare Workers.",
   },
 };
 
@@ -147,8 +147,8 @@ export default function RootLayout({
                       Go&nbsp;Wasm runtime, and Cloudflare Workers.
                     </p>
                     <p>
-                      <span className="sr-only">WCAG 2.1 AA compliance status: </span>
-                      WCAG 2.1 AA Compliant
+                      <span className="sr-only">WCAG 2.1 AA accessibility status: </span>
+                      Designed for WCAG 2.1 AA
                     </p>
                   </div>
                 </footer>

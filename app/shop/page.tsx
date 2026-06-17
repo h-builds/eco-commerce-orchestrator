@@ -44,7 +44,7 @@ export default function ShopPage() {
               "@type": "CollectionPage",
               "name": "Shop eco-friendly products",
               "description": "Sustainable products priced in real-time by our Go Wasm pricing engine.",
-              "url": "https://eco-commerce-orchestrator.pages.dev/shop"
+              "url": "https://eco-commerce-orchestrator.achegideas.workers.dev/shop"
             }).replace(/</g, '\\u003c')
           }}
         />

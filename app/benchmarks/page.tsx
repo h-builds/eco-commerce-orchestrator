@@ -149,9 +149,9 @@ export default function BenchmarksPage() {
         />
 
         <div className="flex justify-between items-center z-10">
-          <h2 className="text-2xl font-black text-white tracking-widest uppercase">
+          <h3 className="text-2xl font-black text-white tracking-widest uppercase">
             {label}
-          </h2>
+          </h3>
           <span className={`text-xl font-mono font-bold ${textGlow}`}>
             {progress.toLocaleString()} / {TOTAL_ITERATIONS.toLocaleString()}
           </span>

@@ -13,6 +13,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/api/"],
       },
     ],
-    sitemap: "https://eco-commerce-orchestrator.pages.dev/sitemap.xml",
+    sitemap: "https://eco-commerce-orchestrator.achegideas.workers.dev/sitemap.xml",
   };
 }

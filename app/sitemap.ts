@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getTopProducts } from "@/lib/db";
 
-const BASE_URL = "https://eco-commerce-orchestrator.pages.dev";
+const BASE_URL = "https://eco-commerce-orchestrator.achegideas.workers.dev";
 
 /**
  * Leverages Edge DB (D1) for real-time SEO footprint hydration. 

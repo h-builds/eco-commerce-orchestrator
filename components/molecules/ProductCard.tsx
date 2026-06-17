@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { memo } from "react";
+import React, { memo } from "react";
 import { useCompare } from "@/lib/CompareContext";
 import { WasmTelemetry } from "@/lib/wasmTelemetry";
 import { getHUDMetrics } from "@/lib/hudTelemetry";
@@ -93,7 +93,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
               ? "opacity-50 cursor-not-allowed"
               : ""
           }`}
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
             e.stopPropagation();
             toggleProduct(product);

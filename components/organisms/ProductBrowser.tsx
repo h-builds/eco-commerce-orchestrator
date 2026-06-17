@@ -12,6 +12,7 @@ import { WasmTelemetry, captureMemoryMb } from '@/lib/wasmTelemetry';
 import { useSimulation } from '@/lib/SimulationContext';
 import { orchestrateBatches, chunkArray } from '@/lib/batchOrchestrator';
 import { batchLivePrices } from '@/lib/pricing';
+import { SearchGraphQLResponseSchema } from '@/lib/contracts';
 
 const SEARCH_QUERY = `
   query SearchProducts($search: String, $offset: Int) {
@@ -85,11 +86,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
         }),
       });
       
-      interface SearchGraphQLResponse {
-        data?: { products?: Product[] };
-        errors?: Array<{ message: string }>;
-      }
-      const result = (await response.json()) as SearchGraphQLResponse;
+      const result = SearchGraphQLResponseSchema.parse(await response.json());
       
       const newProducts = result.data?.products ?? [];
       

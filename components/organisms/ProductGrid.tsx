@@ -1,7 +1,7 @@
 import { ProductBrowser } from '@/components/organisms/ProductBrowser';
-import { type Product } from '@/components/molecules/ProductCard';
 import { graphql } from 'graphql';
 import { schema } from '@/app/api/graphql/route';
+import { SearchGraphQLResponseSchema } from '@/lib/contracts';
 
 const GET_PRODUCTS_QUERY = `
   query GetFirstProducts {
@@ -45,7 +45,7 @@ export async function ProductGrid() {
       );
     }
 
-    const { data } = result as unknown as { data?: { products: Product[] } };
+    const { data } = SearchGraphQLResponseSchema.parse(result);
     const products = data?.products ?? null;
 
   if (!products || products.length === 0) {

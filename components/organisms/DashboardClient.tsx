@@ -55,7 +55,7 @@ export default function DashboardClient({
       .then((data) => {
         if (isMounted) setComputedData(data);
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         console.error("Batch simulation failed", err);
         if (isMounted) setError("Failed to run Edge Simulation. The pricing agent might be down.");
       });

@@ -28,7 +28,7 @@ export function SearchBar({ value, onChange, isPending }: SearchBarProps) {
         className="block w-full pl-12 pr-14 py-4 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-3xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm hover:shadow-md focus:shadow-lg"
         placeholder="Search sustainable products..."
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         aria-label="Search products"
       />
       {value && (

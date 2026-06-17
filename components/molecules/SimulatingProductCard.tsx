@@ -52,7 +52,7 @@ export function SimulatingProductCard({ product, priority = false }: SimulatingP
         setDisplayProduct({ ...product, live_price: res.live_price, agent_confidence: res.agent_confidence });
         setAriaMessage(`Price updated to $${res.live_price.toFixed(2)}.`);
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         if (!isMounted) return;
         console.error('Worker simulation failed:', err);
         setDisplayProduct(product);

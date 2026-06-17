@@ -133,7 +133,7 @@ export function PredictivePriceAlert({
               type="number"
               step="0.01"
               value={targetPrice}
-              onChange={(e) => {
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setTargetPrice(parseFloat(e.target.value));
                 setScanResult(null);
               }}

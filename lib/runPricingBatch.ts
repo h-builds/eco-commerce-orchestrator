@@ -43,7 +43,7 @@ export function runPricingBatch(
   let peakDemandCount = 0;
   let sustainableSurplusCount = 0;
   let neutralCount = 0;
-  let totalLatency = 0;
+  let totalExecutionMs = 0;
 
   for (let i = 0; i < products.length; i += BATCH_SIZE) {
     const chunk = products.slice(i, i + BATCH_SIZE);
@@ -68,9 +68,6 @@ export function runPricingBatch(
         neutralCount++;
       }
 
-      const simulatedLatency = 0.6 + (Math.random() * 0.4);
-      totalLatency += simulatedLatency;
-
       nodes.push({
         id: p.id,
         name: p.name ?? `Product ${p.id.slice(0, 8)}`,
@@ -82,6 +79,7 @@ export function runPricingBatch(
     }
 
     const executionTimeMs = performance.now() - t0;
+    totalExecutionMs += executionTimeMs;
 
     if (reportToTelemetry && chunk.length > 0) {
       const seedHex = getSeedHex(chunk[0].id, simulatedHour);
@@ -95,7 +93,7 @@ export function runPricingBatch(
     }
   }
 
-  const averageLatency = products.length > 0 ? totalLatency / products.length : 0;
+  const averageLatency = products.length > 0 ? totalExecutionMs / products.length : 0;
 
   return {
     nodes,

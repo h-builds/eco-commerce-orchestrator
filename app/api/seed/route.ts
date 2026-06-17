@@ -39,6 +39,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result);
   } catch (error: unknown) {
     console.error("Seeding failure:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return NextResponse.json({ error: "Database hydration failed during transaction." }, { status: 500 });
   }
 }

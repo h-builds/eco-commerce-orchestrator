@@ -186,7 +186,7 @@ const resolvers = {
         return productsWithLivePrices;
       } catch (e) {
         console.error("Resolver error:", e);
-        throw new Error(`Internal Server Error fetching products: ${e instanceof Error ? e.message : String(e)}`);
+        throw new Error("Unable to retrieve product catalog at this time.");
       }
     },
   },

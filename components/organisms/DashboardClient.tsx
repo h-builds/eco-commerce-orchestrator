@@ -38,6 +38,7 @@ export default function DashboardClient({
   const { setProducts: setStressTestProducts } = useStressTestRegistry();
 
   const [computedData, setComputedData] = useState<RunPricingBatchResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setStressTestProducts(initialProducts, simulatedHour);
@@ -56,6 +57,7 @@ export default function DashboardClient({
       })
       .catch((err) => {
         console.error("Batch simulation failed", err);
+        if (isMounted) setError("Failed to run Edge Simulation. The pricing agent might be down.");
       });
     return () => { isMounted = false; };
   }, [initialProducts, simulatedHour]);
@@ -72,6 +74,20 @@ export default function DashboardClient({
     }
     return () => setReportData(null);
   }, [computedData, setReportData]);
+
+  if (error) {
+    return (
+      <div className="p-8 text-center border border-red-500/30 rounded-2xl bg-red-500/10">
+        <p className="text-red-400 font-mono mb-4">{error}</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg transition-colors font-mono text-sm"
+        >
+          Retry Connection
+        </button>
+      </div>
+    );
+  }
 
   if (!computedData) {
     return <div className="p-8 text-center text-cyan-400 font-mono animate-pulse">Initializing Edge Simulation...</div>;

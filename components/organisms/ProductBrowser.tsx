@@ -53,6 +53,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   
   const [isFetchingInitial, setIsFetchingInitial] = useState(false);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const isPendingSearch = searchTerm !== deferredSearchTerm || searchTerm !== debouncedSearchTerm || isFetchingInitial;
 
@@ -64,6 +65,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
   }, [deferredSearchTerm]);
 
   const fetchProducts = useCallback(async (currentSearch: string, currentOffset: number, isInitial: boolean) => {
+    setError(null);
     if (isInitial) {
       setIsFetchingInitial(true);
     } else {
@@ -105,6 +107,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
 
     } catch (err) {
       console.error('Fetch failed:', err);
+      setError("We couldn't load the products right now. Please try again later.");
       if (isInitial) setProducts([]);
     } finally {
       if (isInitial) setIsFetchingInitial(false);
@@ -203,7 +206,19 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
       </div>
       
       <div className={`transition-opacity duration-300 ${isPendingSearch ? 'opacity-50' : 'opacity-100'}`}>
-        {!products || products.length === 0 ? (
+        {error ? (
+          <div className="p-8 mt-12 text-center text-red-500 flex flex-col items-center gap-4 bg-red-500/10 rounded-2xl border border-red-500/20">
+            <span className="material-symbols-outlined notranslate text-6xl" aria-hidden="true" translate="no">error</span>
+            <p className="text-xl font-medium">Connection Error</p>
+            <p className="text-sm">{error}</p>
+            <button 
+              onClick={() => fetchProducts(debouncedSearchTerm, 0, true)} 
+              className="mt-4 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : !products || products.length === 0 ? (
           <div className="p-8 mt-12 text-center text-slate-500 flex flex-col items-center gap-4">
             <span className="material-symbols-outlined notranslate text-6xl text-slate-300 dark:text-slate-700" aria-hidden="true" translate="no">search_off</span>
             <p className="text-xl font-medium">No results found.</p>

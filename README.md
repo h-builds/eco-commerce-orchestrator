@@ -6,9 +6,9 @@
 
 A portfolio-grade distributed pricing system that demonstrates **mathematical determinism** and **price consistency** across stateless Cloudflare Edge Workers. Built to showcase Senior Frontend Lead competencies: performance engineering, edge architecture, accessibility practices, and business-impact awareness.
 
-![Status: Portfolio Demo](https://img.shields.io/badge/status-portfolio%20demo-blue?style=for-the-badge)
+![Status: Portfolio Demo](https://img.shields.io/badge/status-portfolio_demo-blue?style=for-the-badge)
 ![Tech: Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
-![Tech: Go Wasm](https://img.shields.io/badge/Go-Wasm-00ADD8?style=for-the-badge&logo=go)
+![Tech: Go Wasm](https://img.shields.io/badge/Go-Wasm-%2300ADD8?style=for-the-badge&logo=go)
 ![A11y: WCAG 2.1 AA](https://img.shields.io/badge/A11y-WCAG%202.1%20AA-blueviolet?style=for-the-badge)
 
 ---

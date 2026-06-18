@@ -2,7 +2,7 @@
  * Deterministic hex seed — mirrors the Go agent's hourly seed derivation.
  * Input: "YYYY-MM-DD-HH" string → djb2-style hash → 8-char uppercase hex.
  */
-export function deriveHexSeed(dateHourKey: string): string {
+function deriveHexSeed(dateHourKey: string): string {
   let hash = 5381;
   for (let i = 0; i < dateHourKey.length; i++) {
     // djb2: hash = hash * 33 ^ char

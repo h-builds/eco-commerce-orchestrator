@@ -2,7 +2,6 @@
 
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Fetcher } from "@cloudflare/workers-types";
-import { simulatePrice } from "./pricingEngine";
 import { BenchmarkingResponseSchema } from "./contracts";
 
 export interface BenchmarkResult {
@@ -21,23 +20,6 @@ function generateMockData(size: number) {
     });
   }
   return data;
-}
-
-/**
- * Measures local V8 execution performance to establish a baseline for 
- * JIT-optimized JavaScript logic. Complements Edge Wasm benchmarks to 
- * quantify deterministic compute offsets.
- */
-export async function runJSBenchmarkChunk(chunkSize: number): Promise<BenchmarkResult> {
-  const mockData = generateMockData(chunkSize);
-  
-  const start = performance.now();
-  for (const item of mockData) {
-    simulatePrice(item.product_id, item.base_price, item.stock, null);
-  }
-  const end = performance.now();
-  
-  return { executionTimeMs: end - start };
 }
 
 /**

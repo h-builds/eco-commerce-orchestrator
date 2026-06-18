@@ -5,7 +5,7 @@
 
 import { z } from 'zod';
 
-export const TelemetryEntrySchema = z.object({
+const TelemetryEntrySchema = z.object({
   id: z.string(),
   timestamp: z.number(),
   batchSize: z.number(),

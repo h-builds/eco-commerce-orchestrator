@@ -8,7 +8,7 @@ import { ProductSchema } from "./contracts";
  * Bridges the Next.js edge runtime directly to the persistence layer 
  * without Node.js polyfill overhead.
  */
-export async function getDb(): Promise<D1Database> {
+async function getDb(): Promise<D1Database> {
   const env = (await getCloudflareContext({ async: true })).env as unknown as {
     eco_db: D1Database;
   };

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import type { D1Database } from '@cloudflare/workers-types';
 
-export interface ProductInsert {
+interface ProductInsert {
   id: string;
   name: string;
   slug: string;

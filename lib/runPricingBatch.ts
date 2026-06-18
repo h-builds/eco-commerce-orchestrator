@@ -8,7 +8,7 @@ import { WasmTelemetry, captureMemoryMb } from './wasmTelemetry';
 
 const BATCH_SIZE = 20;
 
-export interface PricingNode {
+interface PricingNode {
   id: string;
   name: string;
   basePrice: number;

@@ -36,6 +36,10 @@ export function StressTestTrigger({ products }: StressTestTriggerProps) {
 
   const handleLaunch = () => {
     if (!canRun) return;
+
+    localStorage.setItem('isConsoleOpen', 'true');
+    window.dispatchEvent(new StorageEvent('storage', { key: 'isConsoleOpen' }));
+
     startTransition(() => {
       triggerGlobalRevaluation(products, simulatedHour);
     });

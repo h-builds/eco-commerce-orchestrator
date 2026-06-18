@@ -42,16 +42,18 @@ export function GlobalNav() {
           <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
         </span>
       </Link>
-      <Link
-        href="/shop"
-        className="inline-flex items-center gap-2 rounded-full bg-primary px-3 md:px-5 py-2 text-sm font-bold text-white transition-all hover:brightness-110 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
-        title="Enter Shop"
-      >
-        <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">
-          shopping_bag
-        </span>
-        <span className="hidden sm:inline">Enter Shop</span>
-      </Link>
+      {!pathname.startsWith('/shop') && (
+        <Link
+          href="/shop"
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-3 md:px-5 py-2 text-sm font-bold text-white transition-all hover:brightness-110 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
+          title="Enter Shop"
+        >
+          <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">
+            shopping_bag
+          </span>
+          <span className="hidden sm:inline">Enter Shop</span>
+        </Link>
+      )}
     </nav>
   );
 }

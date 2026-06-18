@@ -96,7 +96,7 @@ export function PredictivePriceAlert({
             </span>
             Predictive Price Alert
           </h3>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-300 text-sm">
             Set your target price. The Orchestrator will scan tomorrow&apos;s
             deterministic vectors.
           </p>
@@ -105,7 +105,7 @@ export function PredictivePriceAlert({
         {bestTime && (
           <div className="text-right shrink-0 ml-4 hidden sm:block">
             <div className="inline-flex flex-col items-end bg-slate-800/50 border border-slate-700/50 px-3 py-1.5 rounded-lg">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">
+              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-0.5">
                 Best Time To Buy
               </span>
               <span className="text-emerald-400 font-mono font-bold text-sm">
@@ -121,7 +121,7 @@ export function PredictivePriceAlert({
         <div className="w-full sm:w-1/2">
           <label
             htmlFor="target-price"
-            className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">
+            className="block text-xs font-semibold text-slate-300 uppercase tracking-widest mb-2">
             Target Price ($)
           </label>
           <div className="relative">
@@ -192,7 +192,7 @@ export function PredictivePriceAlert({
             </div>
           )}
           {!scanResult && !isPending && (
-            <span className="text-xs text-slate-500 font-mono italic">
+            <span className="text-xs text-slate-300 font-mono italic">
               Waiting for target input...
             </span>
           )}
@@ -201,7 +201,7 @@ export function PredictivePriceAlert({
 
       {bestTime && (
         <div className="mt-4 sm:hidden bg-slate-800/50 border border-slate-700/50 rounded-lg p-3 text-center">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+          <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider block mb-1">
             Best Time To Buy
           </span>
           <span className="text-emerald-400 font-mono font-bold text-sm">

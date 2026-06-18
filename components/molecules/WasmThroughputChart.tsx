@@ -54,15 +54,15 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
   if (averageLatency < 5) {
     themeColor = "#10b981";
     themeClass = "text-emerald-500";
-    glowClass = "text-emerald-500/60";
+    glowClass = "text-emerald-400";
   } else if (averageLatency < 15) {
     themeColor = "#f59e0b";
     themeClass = "text-amber-500";
-    glowClass = "text-amber-500/60";
+    glowClass = "text-amber-400";
   } else {
     themeColor = "#f43f5e";
     themeClass = "text-rose-500";
-    glowClass = "text-rose-500/60";
+    glowClass = "text-rose-400";
   }
 
   const pathD = useMemo(() => {
@@ -86,7 +86,7 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
   return (
     <div className="w-full h-full pb-6 pt-4 relative flex flex-col">
        <div className="flex-1 w-full relative">
-         <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] text-slate-500 font-mono -ml-2 h-full z-10 pointer-events-none">
+         <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] text-slate-400 font-mono -ml-2 h-full z-10 pointer-events-none">
            <span>3ms</span>
            <span>2ms</span>
            <span>1ms</span>
@@ -132,14 +132,14 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
              <span className={`text-xl font-black tabular-nums ${themeClass}`} title="Execution time of the Go-Wasm logic at the Edge">
                {averageLatency.toFixed(2)}<span className={`text-sm font-bold ml-0.5 ${glowClass}`}>ms</span>
              </span>
-             <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Avg Latency</span>
+             <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Avg Latency</span>
            </div>
            
            <div className="flex flex-col text-right">
              <span className="text-sm font-bold text-slate-300 tabular-nums">
                100%
              </span>
-             <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Wasm Determinism</span>
+             <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Wasm Determinism</span>
            </div>
        </div>
     </div>

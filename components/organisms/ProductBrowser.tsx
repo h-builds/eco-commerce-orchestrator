@@ -244,7 +244,7 @@ export function ProductBrowser({ initialProducts }: ProductBrowserProps) {
                 {!isFetchingNextPage && <span className="sr-only">Scroll down to load more products</span>}
               </div>
             ) : (
-              <div className="w-full py-12 mt-8 text-center border-t border-slate-200/50 dark:border-slate-800/50 text-slate-500 dark:text-slate-400">
+              <div className="w-full py-12 mt-8 text-center border-t border-slate-200/50 dark:border-slate-800/50 text-slate-700 dark:text-slate-300">
                 <span className="material-symbols-outlined notranslate text-2xl mb-2 inline-block opacity-50" aria-hidden="true" translate="no">eco</span>
                 <p>You&apos;ve reached the end of our sustainable catalog.</p>
               </div>

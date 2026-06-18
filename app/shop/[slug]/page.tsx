@@ -188,7 +188,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
 
           <div className="flex flex-col justify-start">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest mb-4 w-max">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-emerald-900 dark:text-emerald-300 text-[10px] font-black uppercase tracking-widest mb-4 w-max">
               <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">category</span>
               {product.category || 'Eco-Friendly'}
             </div>
@@ -204,10 +204,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="bg-slate-900 text-white rounded-2xl p-6 shadow-2xl relative overflow-hidden flex items-center justify-between mb-8 border border-slate-800">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
               <div>
-                <p className="text-xs uppercase tracking-widest text-slate-400 mb-1 font-semibold">Current Engine Price</p>
+                <p className="text-xs uppercase tracking-widest text-slate-300 mb-1 font-semibold">Current Engine Price</p>
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl font-black">${(livePrice ?? product.price).toFixed(2)}</span>
-                  <span className="text-sm font-medium text-slate-400 line-through">${product.price.toFixed(2)}</span>
+                  <span className="text-sm font-medium text-slate-300 line-through">${product.price.toFixed(2)}</span>
                 </div>
               </div>
               <div className="text-right">

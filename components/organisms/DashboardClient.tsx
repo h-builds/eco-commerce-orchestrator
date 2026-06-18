@@ -133,7 +133,7 @@ export default function DashboardClient({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 flex flex-col">
-          <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase mb-4 shrink-0">
+          <h3 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4 shrink-0">
             Network Edge Map
           </h3>
           <div className="flex-1">
@@ -143,7 +143,7 @@ export default function DashboardClient({
         <div
           ref={chartContainerRef}
           className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 flex flex-col">
-          <h3 className="text-sm font-bold tracking-widest text-slate-500 uppercase mb-4 shrink-0">
+          <h3 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4 shrink-0">
             Wasm Execution Latency Simulation
           </h3>
           <div className="flex-1 overflow-hidden">

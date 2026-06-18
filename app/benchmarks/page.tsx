@@ -149,9 +149,9 @@ export default function BenchmarksPage() {
         />
 
         <div className="flex justify-between items-center z-10">
-          <h3 className="text-2xl font-black text-white tracking-widest uppercase">
+          <h2 className="text-2xl font-black text-white tracking-widest uppercase">
             {label}
-          </h3>
+          </h2>
           <span className={`text-xl font-mono font-bold ${textGlow}`}>
             {progress.toLocaleString()} / {TOTAL_ITERATIONS.toLocaleString()}
           </span>
@@ -168,32 +168,32 @@ export default function BenchmarksPage() {
 
         <div className="grid grid-cols-2 gap-4 mt-2 z-10">
           <div className="flex flex-col">
-            <span className="text-slate-400 text-sm uppercase tracking-wider font-bold">
+            <span className="text-slate-200 text-sm uppercase tracking-wider font-bold">
               Total Time
             </span>
             <span className="text-white text-2xl font-mono">
               {timeMs.toFixed(1)}{" "}
-              <span className="text-sm text-slate-500">ms</span>
+              <span className="text-sm text-slate-300">ms</span>
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="text-slate-400 text-sm uppercase tracking-wider font-bold">
+            <span className="text-slate-200 text-sm uppercase tracking-wider font-bold">
               Latency/Item
             </span>
             <span className="text-white text-2xl font-mono">
               {progress > 0 ? ((timeMs * 1000) / progress).toFixed(2) : "0.00"}{" "}
-              <span className="text-sm text-slate-500">μs</span>
+              <span className="text-sm text-slate-300">μs</span>
             </span>
           </div>
         </div>
 
         <div className="mt-2 text-center p-4 bg-slate-900/60 rounded-xl border border-slate-800 z-10">
-          <span className="block text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">
+          <span className="block text-slate-300 text-xs font-bold uppercase tracking-widest mb-1">
             Operations / Second
           </span>
           <span className={`text-4xl font-black tracking-tighter ${textGlow}`}>
             {ops.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-            <span className="text-lg opacity-60 ml-1">ops/s</span>
+            <span className="text-lg opacity-90 ml-1">ops/s</span>
           </span>
         </div>
       </div>
@@ -294,7 +294,7 @@ export default function BenchmarksPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="mb-8 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-400"
+            className="mb-8 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-200"
             role="alert">
             <span className="material-symbols-outlined notranslate shrink-0" aria-hidden="true" translate="no">
               error
@@ -325,7 +325,7 @@ export default function BenchmarksPage() {
         <button
           onClick={startBattle}
           disabled={isRunning}
-          className="relative overflow-hidden group bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all duration-300 disabled:shadow-none hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] flex items-center gap-3">
+          className="relative overflow-hidden group bg-cyan-800 hover:bg-cyan-700 disabled:bg-slate-700 disabled:text-slate-500 text-white font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all duration-300 disabled:shadow-none hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] flex items-center gap-3">
           {isRunning ? (
             <span className="material-symbols-outlined notranslate animate-spin text-xl" aria-hidden="true" translate="no">
               progress_activity
@@ -375,12 +375,12 @@ export default function BenchmarksPage() {
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-500 rounded-full blur-[100px] opacity-10 pointer-events-none" />
 
               <div className="px-8 py-6 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md">
-                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <span className="material-symbols-outlined notranslate text-cyan-400" aria-hidden="true" translate="no">
                     analytics
                   </span>
                   Deep Dive Analysis
-                </h3>
+                </h2>
               </div>
 
               {isFinished && (

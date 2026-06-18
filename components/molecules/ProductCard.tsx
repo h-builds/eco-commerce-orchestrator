@@ -57,10 +57,10 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
         : "bg-rose-400 text-slate-950";
 
   const verifiedBadgeClass = isSimulating
-    ? "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 animate-pulse border border-transparent"
-    : "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950 animate-pulse border border-transparent";
+    ? "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 border border-transparent"
+    : "mt-1 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950 border border-transparent";
 
-  const verifiedDotClass = "size-1.5 rounded-full bg-slate-900 shrink-0";
+  const verifiedDotClass = "size-1.5 rounded-full bg-slate-900 shrink-0 animate-pulse";
 
   const verifiedLabel = isSimulating
     ? "Price seeded by simulated hour"
@@ -129,11 +129,11 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
 
       <div className="p-4 flex flex-col flex-1 gap-2">
         <div className="flex items-start justify-between gap-4">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-500 transition-colors">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-500 transition-colors">
             <Link href={`/shop/${product.slug}`} prefetch={false} className="before:absolute before:inset-0 before:z-10 focus:outline-none">
               {product.name}
             </Link>
-          </h3>
+          </h2>
           <div
             role="group"
             className="flex flex-col items-end shrink-0"
@@ -155,7 +155,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
                   import('@/lib/hudTelemetry').then(({ clearHUDHighlight }) => clearHUDHighlight());
                 }}
               >
-                <span className="font-mono text-[9px] font-bold tracking-widest text-cyan-400 border border-cyan-400 rounded flex items-center gap-0.5 px-1 py-0.5 cursor-crosshair bg-transparent select-none">
+                <span className="font-mono text-[9px] font-bold tracking-widest text-cyan-900 dark:text-cyan-300 border border-cyan-900 dark:border-cyan-300 rounded flex items-center gap-0.5 px-1 py-0.5 cursor-crosshair bg-transparent select-none">
                   <span className="material-symbols-outlined notranslate text-[10px]" aria-hidden="true" translate="no">memory</span>
                   [WASM_VALIDATED]
                 </span>
@@ -169,7 +169,7 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
             {hasPriceChanged && (
               <span
                 role="text"
-                className="text-xs text-slate-500 line-through"
+                className="text-xs text-slate-700 dark:text-slate-300 line-through"
                 aria-label={`Original Price: ${formattedOriginalPrice}`}>
                 {formattedOriginalPrice}
               </span>
@@ -213,13 +213,13 @@ function ProductCardBase({ product, isSimulating = false, priority = false }: Pr
             aria-hidden="true">
             {formattedRating}
           </span>
-          <span className="text-xs text-slate-500 ml-1" aria-hidden="true">
+          <span className="text-xs text-slate-700 dark:text-slate-300 ml-1" aria-hidden="true">
             ({product.category})
           </span>
         </div>
 
         <div className="mt-4 flex flex-col gap-2 relative">
-          <div className="flex items-center justify-between px-4 py-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 border border-emerald-500/20">
+          <div className="flex items-center justify-between px-4 py-2 bg-emerald-100 dark:bg-emerald-500/10 text-emerald-900 dark:text-emerald-300 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 border border-emerald-500/20">
             <span className="flex items-center gap-2">
               <span className="material-symbols-outlined notranslate text-sm animate-pulse" aria-hidden="true" translate="no">
                 query_stats

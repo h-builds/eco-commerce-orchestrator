@@ -86,13 +86,13 @@ export function VolatilityChart({ dataPromise }: VolatilityChartProps) {
             </h4>
             <div className="flex items-baseline gap-2 mt-2">
               <span className="text-3xl font-black text-white">${activeData?.price.toFixed(2)}</span>
-              <span className="text-xs font-mono font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 Demand Factor: {(activeData?.confidence * 100).toFixed(0)}%
               </span>
             </div>
           </div>
           <div className="text-right flex flex-col items-end">
-             <span className="text-slate-400 text-xs font-mono font-medium bg-slate-800/50 px-2 py-1 rounded-md border border-slate-700/50">
+             <span className="text-slate-300 text-xs font-mono font-medium bg-slate-800/50 px-2 py-1 rounded-md border border-slate-700/50">
                 {activeData?.hour.toString().padStart(2, '0')}:00 UTC {hoveredIdx !== null ? '(Simulated)' : '(Live)'}
              </span>
           </div>

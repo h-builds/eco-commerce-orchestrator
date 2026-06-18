@@ -50,7 +50,7 @@ export default function ShopPage() {
         />
         <div className="relative flex h-auto w-full flex-col overflow-x-hidden pt-12 px-4 md:px-10 lg:px-20">
           <header className="mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-4">
               <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">eco</span>
               New Arrivals
             </div>

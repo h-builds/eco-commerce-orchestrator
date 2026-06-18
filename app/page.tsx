@@ -96,7 +96,7 @@ export default function Home() {
               Commerce
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-300 leading-relaxed">
               A portfolio-grade orchestrator uniting React&nbsp;19 Server
               Components, a deterministic Go&nbsp;Wasm pricing engine, and
               Cloudflare&nbsp;Workers via OpenNext — built to the highest
@@ -155,7 +155,7 @@ export default function Home() {
                   <dt className="text-3xl font-black text-slate-900 dark:text-slate-50">
                     {value}
                   </dt>
-                  <dd className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                  <dd className="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">
                     {label}
                   </dd>
                 </div>
@@ -174,7 +174,7 @@ export default function Home() {
                 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-50">
                 Architectural Pillars
               </h2>
-              <p className="mt-3 text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
+              <p className="mt-3 text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
                 Every layer of the stack is purpose-built for correctness,
                 performance, and accessibility.
               </p>
@@ -197,7 +197,7 @@ export default function Home() {
                   <h3 className="text-base font-bold text-slate-900 dark:text-slate-50">
                     {label}
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     {description}
                   </p>
                 </li>
@@ -220,7 +220,7 @@ export default function Home() {
               className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-50">
               Ready to explore?
             </h2>
-            <p className="mt-3 text-slate-500 dark:text-slate-400">
+            <p className="mt-3 text-slate-600 dark:text-slate-300">
               Browse the live product catalog with dynamically computed prices generated
               by the Go&nbsp;Wasm engine on every request.
             </p>

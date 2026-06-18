@@ -152,17 +152,18 @@ export function TourProvider({ children }: { children: ReactNode }) {
               lineHeight: 1.5,
             },
             buttonNext: {
-              backgroundColor: '#10b981',
+              backgroundColor: '#047857',
+              color: '#ffffff',
               fontFamily: 'Inter, sans-serif',
               fontWeight: 600,
             },
             buttonBack: {
-              color: '#94a3b8',
+              color: '#cbd5e1',
               marginRight: '10px',
               fontFamily: 'Inter, sans-serif',
             },
             buttonSkip: {
-              color: '#64748b',
+              color: '#cbd5e1',
               fontFamily: 'Inter, sans-serif',
             }
           }}

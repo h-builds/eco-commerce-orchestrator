@@ -150,7 +150,7 @@ export function EdgeMap({ nodes }: EdgeMapProps) {
         )}
       </AnimatePresence>
 
-      <div className="mt-4 flex items-center justify-between text-xs text-slate-500 font-mono px-2">
+      <div className="mt-4 flex items-center justify-between text-xs text-slate-300 font-mono px-2">
         <div className="flex items-center gap-2 border border-white/10 rounded bg-white/5 backdrop-blur-md px-2 py-1">
           <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_4px_rgba(52,211,153,0.8)] block" />
           <span>Surplus</span>

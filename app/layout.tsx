@@ -121,16 +121,17 @@ export default function RootLayout({
 
               <div className="flex min-h-screen flex-col border-x border-white/5 relative">
                 <header className="sticky top-0 z-40 mx-4 rounded-2xl border border-white/10 bg-slate-500/5 backdrop-blur-xl">
-                  <div className="mx-auto flex h-16 w-full items-center justify-between px-4 md:px-10 lg:px-20">
+                  <div className="mx-auto flex h-16 w-full items-center justify-between px-2 sm:px-4 md:px-10 lg:px-20">
                     <Link
                       href="/"
-                      className="flex items-center gap-2 text-primary font-black text-lg tracking-tight hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 rounded-lg">
+                      aria-label="Eco-Commerce Home"
+                      className="flex items-center gap-2 text-emerald-950 dark:text-emerald-400 font-black text-lg tracking-tight hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/30 rounded-lg">
                       <span
                         className="material-symbols-outlined notranslate"
                         aria-hidden="true" translate="no">
                         eco
                       </span>
-                      Eco-Commerce
+                      <span className="hidden sm:inline">Eco-Commerce</span>
                     </Link>
                     <GlobalNav />
                   </div>
@@ -141,7 +142,7 @@ export default function RootLayout({
                 </main>
 
                 <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 mt-auto">
-                  <div className="mx-auto w-full px-4 md:px-10 lg:px-20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+                  <div className="mx-auto w-full px-4 md:px-10 lg:px-20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-300">
                     <p>
                       &copy; 2026 Eco-Commerce Orchestrator. Orchestrated via Next.js&nbsp;16, 
                       Go&nbsp;Wasm runtime, and Cloudflare Workers.

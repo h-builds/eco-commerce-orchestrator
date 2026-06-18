@@ -76,7 +76,7 @@ function LogList({ logs }: { logs: TelemetryEntry[] }) {
 
   if (!useVirtual) {
     return (
-      <div className="flex flex-col gap-0 p-2">
+      <div className="flex flex-col gap-0 p-2" role="list">
         {logs.map((entry) => (
           <LogLine key={entry.id} entry={entry} />
         ))}
@@ -92,6 +92,7 @@ function LogList({ logs }: { logs: TelemetryEntry[] }) {
           width: '100%',
           position: 'relative',
         }}
+        role="list"
       >
         {virtualizer.getVirtualItems().map((virtualRow) => (
           <div
@@ -105,6 +106,7 @@ function LogList({ logs }: { logs: TelemetryEntry[] }) {
               transform: `translateY(${virtualRow.start}px)`,
             }}
             className="flex items-center px-2"
+            role="presentation"
           >
             <LogLine entry={logs[virtualRow.index]} />
           </div>
@@ -156,10 +158,10 @@ export function DebugConsole({ isConsoleOpen, setConsoleOpen }: DebugConsoleProp
 
   return (
     <div
-      className={`fixed bottom-0 z-[9999] flex w-[min(100vw,600px)] flex-col rounded-tl-2xl bg-white/5 backdrop-blur-md shadow-2xl ${
+      className={`fixed bottom-0 z-[9999] flex w-[min(100vw,600px)] flex-col rounded-tl-2xl bg-slate-900/95 dark:bg-slate-950/95 backdrop-blur-md shadow-2xl ${
         stressTestStatus.active
           ? 'border-2 border-red-500/80 shadow-red-500/20'
-          : 'border border-white/10 shadow-black/50'
+          : 'border border-slate-700/50 dark:border-white/10 shadow-black/50'
       }`}
       style={{ fontFamily: CONSOLE_FONT, right: 'max(0px, calc(50vw - 720px))' }}
       role="region"

@@ -142,7 +142,7 @@ export function PricingStatus() {
           className={`text-xs font-black uppercase tracking-[0.2em] transition-colors duration-300 ${labelColor}`}>
           {isSimulating ? "Simulation Mode" : "Edge Pricing Engine"}
         </span>
-        <span className="ml-auto text-[10px] uppercase font-bold tracking-widest text-slate-400 border border-slate-700 bg-slate-900 px-2 py-1 rounded-full">
+        <span className="ml-auto text-[10px] uppercase font-bold tracking-widest text-slate-200 border border-slate-700 bg-slate-900 px-2 py-1 rounded-full">
           Go-Wasm Core
         </span>
       </div>
@@ -293,7 +293,7 @@ export function PricingStatus() {
             className={`font-mono text-lg font-black tracking-widest transition-colors duration-300 rounded border px-4 py-1.5 ${
               isSimulating
                 ? "text-amber-400 border-amber-500/30 bg-amber-500/10"
-                : "text-slate-400 border-slate-700 bg-slate-800"
+                : "text-slate-200 border-slate-700 bg-slate-800"
             }`}
             aria-live="polite"
             aria-atomic="true">

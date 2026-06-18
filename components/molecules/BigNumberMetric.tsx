@@ -39,7 +39,7 @@ export function BigNumberMetric({ value }: { value: number }) {
     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-md shadow-2xl h-full flex flex-col justify-center group">
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
       
-      <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">Total Live Savings</h2>
+      <h2 className="text-sm font-bold tracking-widest uppercase text-slate-400 mb-2">Total Live Savings</h2>
       
       <div className="flex items-baseline gap-2">
          <span className={`text-[80px] font-black tabular-nums tracking-tighter leading-none transition-colors duration-500 ${isPositive ? 'text-emerald-400' : 'text-slate-200'}`}>

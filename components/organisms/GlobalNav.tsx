@@ -12,22 +12,24 @@ export function GlobalNav() {
 
   return (
     <nav aria-label="Primary navigation" className="flex items-center gap-2 md:gap-4">
-      <Link
-        href="/admin/dashboard"
-        className="relative inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 md:px-5 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
-        title="Dashboard"
-      >
-        <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">
-          query_stats
-        </span>
-        <span className="hidden md:inline">Dashboard</span>
-        {showGlowingBadge && (
-          <span className="absolute -top-1 -right-1 flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+      {!pathname.startsWith('/admin/dashboard') && (
+        <Link
+          href="/admin/dashboard"
+          className="relative inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 md:px-5 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
+          title="Dashboard"
+        >
+          <span className="material-symbols-outlined notranslate text-sm" aria-hidden="true" translate="no">
+            query_stats
           </span>
-        )}
-      </Link>
+          <span className="hidden md:inline">Dashboard</span>
+          {showGlowingBadge && (
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+            </span>
+          )}
+        </Link>
+      )}
       {pathname !== '/benchmarks' && (
         <Link
           href="/benchmarks"

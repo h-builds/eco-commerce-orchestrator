@@ -31,6 +31,10 @@ export interface RunPricingBatchResult {
   sustainableSurplusCount: number;
   neutralCount: number;
   averageLatency: number;
+  totalBasePrice: number;
+  averageConfidence: number;
+  fallbackCount: number;
+  totalProducts: number;
 }
 
 export function runPricingBatch(
@@ -44,6 +48,9 @@ export function runPricingBatch(
   let sustainableSurplusCount = 0;
   let neutralCount = 0;
   let totalExecutionMs = 0;
+  let totalBasePrice = 0;
+  let totalConfidence = 0;
+  let fallbackCount = 0;
 
   for (let i = 0; i < products.length; i += BATCH_SIZE) {
     const chunk = products.slice(i, i + BATCH_SIZE);
@@ -59,6 +66,9 @@ export function runPricingBatch(
 
       const savings = p.price - live_price;
       totalSavings += savings;
+      totalBasePrice += p.price;
+      totalConfidence += agent_confidence;
+      if (agent_confidence === 0) fallbackCount++;
 
       if (live_price > p.price) {
         peakDemandCount++;
@@ -94,6 +104,7 @@ export function runPricingBatch(
   }
 
   const averageLatency = products.length > 0 ? totalExecutionMs / products.length : 0;
+  const averageConfidence = products.length > 0 ? totalConfidence / products.length : 0;
 
   return {
     nodes,
@@ -102,5 +113,9 @@ export function runPricingBatch(
     sustainableSurplusCount,
     neutralCount,
     averageLatency,
+    totalBasePrice,
+    averageConfidence,
+    fallbackCount,
+    totalProducts: products.length,
   };
 }

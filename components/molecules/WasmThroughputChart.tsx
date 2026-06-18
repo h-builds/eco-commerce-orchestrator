@@ -20,7 +20,9 @@ interface Point {
  * SVG-based sparkline with quadratic curve interpolation to preserve 
  * main-thread capacity for real-time Edge compute orchestration.
  */
-export function WasmThroughputChart({ averageLatency }: { averageLatency: number }) {
+export function WasmThroughputChart({ averageLatency, averageConfidence }: { averageLatency: number, averageConfidence?: number }) {
+  const confidencePercent = averageConfidence !== undefined ? (averageConfidence * 100).toFixed(0) + '%' : '100%';
+
   const points = useMemo(() => {
     const pts: Point[] = [];
     const width = 800;
@@ -137,7 +139,7 @@ export function WasmThroughputChart({ averageLatency }: { averageLatency: number
            
            <div className="flex flex-col text-right">
              <span className="text-sm font-bold text-slate-300 tabular-nums">
-               100%
+               {confidencePercent}
              </span>
              <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Wasm Determinism</span>
            </div>

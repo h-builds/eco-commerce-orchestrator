@@ -36,11 +36,13 @@ export async function getLivePrice(productId: string, basePrice: number, stock: 
     });
 
     if (res.ok) {
+      const cacheStatus = res.headers.get("cf-cache-status") || "DYNAMIC";
       const data = PricingResponseSchema.parse(await res.json());
       if (data?.result && data.result.length > 0) {
         return {
           live_price: data.result[0].live_price,
           agent_confidence: data.result[0].agent_confidence,
+          cache_status: cacheStatus,
         };
       }
     }

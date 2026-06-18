@@ -3,7 +3,7 @@
 import { use } from 'react';
 
 interface TechnicalAuditProps {
-  cacheStatus: "HIT" | "MISS" | "STALE" | "BYPASS" | "ISR (1h)";
+  cacheStatus: string;
   latencyPromise: Promise<number>;
 }
 

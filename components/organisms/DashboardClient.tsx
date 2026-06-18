@@ -108,6 +108,9 @@ export default function DashboardClient({
             efficiencyScore={getEfficiencyForHour(
               simulatedHour !== null ? simulatedHour : new Date().getHours(),
             )}
+            totalBasePrice={computedData.totalBasePrice}
+            fallbackCount={computedData.fallbackCount}
+            totalProducts={computedData.totalProducts}
           />
           <Link
             href="/benchmarks"
@@ -147,7 +150,7 @@ export default function DashboardClient({
             Wasm Execution Latency Simulation
           </h3>
           <div className="flex-1 overflow-hidden">
-            <WasmThroughputChart averageLatency={computedData.averageLatency} />
+            <WasmThroughputChart averageLatency={computedData.averageLatency} averageConfidence={computedData.averageConfidence} />
           </div>
         </div>
       </div>

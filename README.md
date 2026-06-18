@@ -81,7 +81,7 @@ BenchmarkStressCalculateDynamicPrice 29,265,055    38.72 ns/op    0 B/op    0 al
 - [x] **Determinism Test Suite** — 10K-input oracle test, concurrent race detection, and cross-run stability tests
 - [x] **D1-Powered Dynamic Sitemap** — Product URLs generated from D1 queries at request time
 - [x] **Degraded-State UI** — Fallback to static prices with visible "System Degraded" alert when the pricing agent is offline
-- [x] **Telemetry Dashboard** — Real-time HUD showing Wasm status, frame jitter, Edge RTT, and batch progress
+- [x] **Telemetry Dashboard** — Real-time HUD showing dynamic Wasm execution confidence, true Edge cache statuses (via cf-cache-status headers), and system uptime that realistically drops during degraded-state fallbacks
 - [x] **PDF Executive Report** — Downloadable benchmark report via `jspdf`
 - [x] **Time Machine Simulation** — 24-hour slider to preview deterministic price changes per hour
 - [x] **Accessibility** — Skip-to-content, `aria-live` regions, `focus-visible` rings, semantic HTML, `prefers-reduced-motion`

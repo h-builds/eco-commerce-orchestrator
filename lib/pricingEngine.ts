@@ -75,6 +75,7 @@ function goFloat64(seed: bigint): number {
 export interface SimulatedPricing {
   live_price: number;
   agent_confidence: number;
+  cache_status?: string;
 }
 
 /**

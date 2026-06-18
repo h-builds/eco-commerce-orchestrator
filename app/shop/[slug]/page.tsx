@@ -217,7 +217,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </div>
             </div>
 
-            <TechnicalAudit cacheStatus="ISR (1h)" latencyPromise={latencyPromise} />
+            <TechnicalAudit cacheStatus={livePriceData.cache_status || "DYNAMIC"} latencyPromise={latencyPromise} />
           </div>
         </div>
       </div>

@@ -63,7 +63,7 @@ export default async function DashboardPage() {
           </div>
 
           <div className="relative z-10 mx-auto w-full px-4 md:px-10 lg:px-20">
-            <BackButton />
+            <BackButton label="Back to Home" />
 
             <header className="tour-orchestrator mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
               <div>

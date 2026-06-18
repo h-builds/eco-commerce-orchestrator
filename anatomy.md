@@ -2,8 +2,10 @@
 .
 ├── .env.example
 ├── .env.local
+├── .eslintignore
 ├── .gitignore
 ├── .npmrc
+├── CONTEXT.md
 ├── README.md
 ├── anatomy.md
 ├── app
@@ -16,6 +18,7 @@
 │   │   └── seed
 │   │       └── route.ts
 │   ├── benchmarks
+│   │   ├── layout.tsx
 │   │   └── page.tsx
 │   ├── favicon.ico
 │   ├── globals.css
@@ -28,6 +31,7 @@
 │   │   ├── loading.tsx
 │   │   └── page.tsx
 │   └── sitemap.ts
+├── commit-guide.md
 ├── components
 │   ├── atoms
 │   │   └── AnimatedCounter.tsx
@@ -44,6 +48,7 @@
 │   │   ├── ProductSkeleton.tsx
 │   │   ├── SearchBar.tsx
 │   │   ├── SimulatingProductCard.tsx
+│   │   ├── SingleProductTelemetry.tsx
 │   │   ├── StressTestTrigger.tsx
 │   │   ├── SuccessMetricsCards.tsx
 │   │   ├── TechnicalAudit.tsx
@@ -62,7 +67,6 @@
 │       ├── DebugBridge.tsx
 │       ├── StressTestRegistryProvider.tsx
 │       └── TourProvider.tsx
-├── error_hint.txt
 ├── eslint.config.mjs
 ├── hooks
 │   └── useIntersectionObserver.ts
@@ -76,6 +80,7 @@
 │   ├── TelemetryContext.tsx
 │   ├── batchOrchestrator.ts
 │   ├── benchmarking.ts
+│   ├── contracts.ts
 │   ├── db
 │   │   ├── schema.sql
 │   │   └── seed.ts
@@ -86,24 +91,58 @@
 │   ├── hudTelemetry.ts
 │   ├── pricing.ts
 │   ├── pricingEngine.ts
+│   ├── pricingWorkerClient.ts
 │   ├── runPricingBatch.ts
 │   ├── stressTest.ts
-│   └── wasmTelemetry.ts
+│   ├── wasmTelemetry.ts
+│   └── workers
+│       └── pricing.worker.ts
 ├── next-env.d.ts
 ├── next.config.ts
 ├── open-next.config.ts
+├── package-lock.json
 ├── package.json
+├── playwright.config.ts
 ├── postcss.config.mjs
+├── public
+│   ├── _headers
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── pricing-agent.wasm
+│   ├── vercel.svg
+│   └── window.svg
 ├── services
 │   └── pricing
+│       ├── bench_test.go
+│       ├── build
+│       │   ├── app.wasm
+│       │   ├── runtime.mjs
+│       │   ├── wasm_exec.js
+│       │   └── worker.mjs
 │       ├── go.mod
 │       ├── go.sum
 │       ├── main
 │       ├── main.go
+│       ├── main_test.go
+│       ├── oracle_test.go
+│       ├── pricing-agent.test
+│       ├── race_test.go
+│       ├── stress_bench_test.go
+│       ├── stress_test.go
+│       ├── test_determinism_test.go
+│       ├── test_gofloat_test.go
 │       └── wrangler.toml
-├── skills-lock.json
-├── tail.log
+├── tests
+│   ├── global.setup.ts
+│   ├── responsive-audit.spec.ts
+│   ├── telemetry.spec.ts
+│   ├── tier1.spec.ts
+│   ├── tier3.spec.ts
+│   └── tier4.spec.ts
 ├── tsconfig.json
 ├── tsconfig.tsbuildinfo
 └── wrangler.toml
+
+24 directories, 119 files
 ```

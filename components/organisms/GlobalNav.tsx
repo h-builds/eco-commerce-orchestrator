@@ -28,20 +28,22 @@ export function GlobalNav() {
           </span>
         )}
       </Link>
-      <Link
-        href="/benchmarks"
-        className="relative inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 md:px-5 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-500/30"
-        title="Runtime Duel"
-      >
-        <span className="material-symbols-outlined notranslate text-sm text-cyan-500" aria-hidden="true" translate="no">
-          bolt
-        </span>
-        <span className="hidden md:inline">Runtime Duel</span>
-        <span className="absolute -top-1 -right-1 flex h-3 w-3 motion-reduce:hidden" aria-hidden="true">
-          <span className="animate-ping motion-reduce:animate-none absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
-        </span>
-      </Link>
+      {pathname !== '/benchmarks' && (
+        <Link
+          href="/benchmarks"
+          className="relative inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 md:px-5 py-2 text-sm font-bold text-slate-700 dark:text-slate-200 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-500/30"
+          title="Runtime Duel"
+        >
+          <span className="material-symbols-outlined notranslate text-sm text-cyan-500" aria-hidden="true" translate="no">
+            bolt
+          </span>
+          <span className="hidden md:inline">Runtime Duel</span>
+          <span className="absolute -top-1 -right-1 flex h-3 w-3 motion-reduce:hidden" aria-hidden="true">
+            <span className="animate-ping motion-reduce:animate-none absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
+          </span>
+        </Link>
+      )}
       {!pathname.startsWith('/shop') && (
         <Link
           href="/shop"

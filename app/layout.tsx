@@ -120,7 +120,7 @@ export default function RootLayout({
               </a>
 
               <div className="flex min-h-screen flex-col border-x border-white/5 relative">
-                <header className="sticky top-0 z-40 mx-4 rounded-2xl border border-white/10 bg-slate-500/5 backdrop-blur-xl">
+                <header className="sticky top-0 z-40 mx-4 rounded-2xl border border-slate-200/50 dark:border-white/10 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-xl shadow-sm">
                   <div className="mx-auto flex h-16 w-full items-center justify-between px-2 sm:px-4 md:px-10 lg:px-20">
                     <Link
                       href="/"

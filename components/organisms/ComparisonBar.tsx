@@ -28,7 +28,7 @@ export function ComparisonBar() {
             <div className="flex items-center gap-4 flex-1">
               <div className="text-white text-sm font-bold flex flex-col">
                 <span>Compare Products</span>
-                <span className="text-slate-400 text-xs font-normal">
+                <span className="text-slate-300 text-xs font-normal">
                   {selectedProducts.length} of 3 selected
                 </span>
               </div>
@@ -63,7 +63,7 @@ export function ComparisonBar() {
             <div className="flex items-center gap-3">
               <button
                 onClick={clearComparison}
-                className="text-slate-400 hover:text-white text-sm px-3 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 rounded-lg"
+                className="text-slate-300 hover:text-white text-sm px-3 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 rounded-lg"
               >
                 Clear
               </button>

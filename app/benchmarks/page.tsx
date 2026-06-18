@@ -386,7 +386,7 @@ export default function BenchmarksPage() {
               {isFinished && (
               <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
                 <div className="flex flex-col gap-2">
-                  <span className="text-slate-400 font-bold text-sm tracking-widest uppercase">
+                  <span className="text-slate-300 font-bold text-sm tracking-widest uppercase">
                     Total Operations
                   </span>
                   <span className="text-3xl font-black text-white">
@@ -395,7 +395,7 @@ export default function BenchmarksPage() {
                 </div>
 
                 <div className="flex flex-col gap-2 relative">
-                  <span className="text-slate-400 font-bold text-sm tracking-widest uppercase">
+                  <span className="text-slate-300 font-bold text-sm tracking-widest uppercase">
                     Compute Ratio (Wasm vs JS)
                   </span>
                   <div className="flex items-center gap-2">
@@ -412,14 +412,14 @@ export default function BenchmarksPage() {
                     </span>
                   )}
                   {jsWins && (
-                    <span className="text-xs text-yellow-500/80 leading-snug">
+                    <span className="text-xs text-yellow-400 leading-snug">
                       JS JIT optimization excels in simple local loops, while Edge Wasm provides deterministic global consistency.
                     </span>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-2 border-l-0 lg:border-l border-slate-800 lg:pl-8">
-                  <span className="text-slate-400 font-bold text-sm tracking-widest uppercase">
+                  <span className="text-slate-300 font-bold text-sm tracking-widest uppercase">
                     Wasm Compute Time
                   </span>
                   <span className="text-3xl font-black text-white">
@@ -432,7 +432,7 @@ export default function BenchmarksPage() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <span className="text-slate-400 font-bold text-sm tracking-widest uppercase">
+                  <span className="text-slate-300 font-bold text-sm tracking-widest uppercase">
                     JS Total Time
                   </span>
                   <span className="text-3xl font-black text-white">
@@ -528,7 +528,7 @@ export default function BenchmarksPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               className="mt-8 flex flex-col items-center gap-4">
-              <span className="text-slate-500 text-xs font-bold uppercase tracking-[0.2em]">
+              <span className="text-slate-300 text-xs font-bold uppercase tracking-[0.2em]">
                 Export Audit Report
               </span>
               <div className="flex gap-4">
@@ -541,7 +541,7 @@ export default function BenchmarksPage() {
                   </span>
                   <span className="flex flex-col items-start">
                     <span className="text-sm">{isExporting ? "Rendering..." : "Export PNG"}</span>
-                    <span className="text-[10px] text-slate-500 font-normal">High-res snapshot</span>
+                    <span className="text-[10px] text-slate-300 font-normal">High-res snapshot</span>
                   </span>
                   {isExporting && (
                     <span className="material-symbols-outlined notranslate animate-spin text-sm absolute top-1 right-1 text-cyan-400/50" aria-hidden="true" translate="no">
@@ -558,7 +558,7 @@ export default function BenchmarksPage() {
                   </span>
                   <span className="flex flex-col items-start">
                     <span className="text-sm">Export JSON</span>
-                    <span className="text-[10px] text-slate-500 font-normal">Raw benchmark data</span>
+                    <span className="text-[10px] text-slate-300 font-normal">Raw benchmark data</span>
                   </span>
                 </button>
               </div>

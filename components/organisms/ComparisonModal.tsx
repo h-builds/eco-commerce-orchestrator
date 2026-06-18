@@ -156,13 +156,13 @@ export function ComparisonModal() {
                 </span>
                 Product Comparison
               </h2>
-              <p className="text-sm text-slate-400 mt-1">
+              <p className="text-sm text-slate-300 mt-1">
                 24-Hour Deterministic Edge Pricing Trajectories
               </p>
             </div>
             <button
               onClick={() => setIsCompareModalOpen(false)}
-              className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+              className="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
               aria-label="Close comparison modal">
               <span className="material-symbols-outlined notranslate" aria-hidden="true" translate="no">
                 close
@@ -192,7 +192,7 @@ export function ComparisonModal() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-slate-800/30 rounded-xl p-5 border border-slate-700/50 flex flex-col justify-center">
-                    <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-slate-300 mb-2">
                       Best Value @ {activeHour % 12 || 12}:00{" "}
                       {activeHour >= 12 ? "PM" : "AM"}
                     </h3>
@@ -205,30 +205,24 @@ export function ComparisonModal() {
                           <p className="text-white font-bold text-lg line-clamp-1">
                             {bestValueProduct.product.name}
                           </p>
-                          <p className="text-sm text-slate-400 line-clamp-1">
+                          <p className="text-sm text-slate-300 line-clamp-1">
                             {bestValueProduct.product.category}
                           </p>
                         </div>
                       </div>
                     ) : (
-                      <div className="text-slate-500 italic">No data</div>
+                      <div className="text-slate-300 italic">No data</div>
                     )}
                   </div>
 
                   {correlationIndex !== null ? (
                     <div className="bg-slate-800/30 rounded-xl p-5 border border-slate-700/50 flex flex-col justify-center">
-                      <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 flex items-center gap-1">
-                        Correlation Index
-                        <span
-                          className="material-symbols-outlined notranslate text-xs"
-                          title="Pearson correlation coefficient"
-                          aria-hidden="true" translate="no">
-                          info
-                        </span>
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-slate-300 mb-2 flex items-center gap-1">
+                        Correlation Index (Pearson)
                       </h3>
                       <div className="flex items-center gap-4">
                         <div
-                          className={`text-4xl font-black ${correlationIndex > 0.5 ? "text-blue-400" : correlationIndex < -0.5 ? "text-rose-400" : "text-slate-400"}`}>
+                          className={`text-4xl font-black ${correlationIndex > 0.5 ? "text-blue-400" : correlationIndex < -0.5 ? "text-rose-400" : "text-slate-300"}`}>
                           {correlationIndex.toFixed(2)}
                         </div>
                         <div className="flex-1">
@@ -243,7 +237,7 @@ export function ComparisonModal() {
                                     ? "Moderately Inversely Correlated"
                                     : "Highly Inversely Correlated"}
                           </p>
-                          <p className="text-xs text-slate-400 mt-1 leading-tight">
+                          <p className="text-xs text-slate-300 mt-1 leading-tight">
                             {correlationIndex > 0
                               ? "Prices move together. Substituting might not yield large savings."
                               : "Prices move in opposite directions. Great opportunity to buy the cheaper one."}
@@ -254,11 +248,11 @@ export function ComparisonModal() {
                   ) : selectedProducts.length > 2 ? (
                     <div className="bg-slate-800/30 rounded-xl p-5 border border-slate-700/50 flex flex-col justify-center text-center">
                       <span
-                        className="material-symbols-outlined notranslate text-slate-500 text-3xl mb-2"
+                        className="material-symbols-outlined notranslate text-slate-300 text-3xl mb-2"
                         aria-hidden="true" translate="no">
                         ssid_chart
                       </span>
-                      <p className="text-slate-400 text-sm">
+                      <p className="text-slate-300 text-sm">
                         Correlation index requires exactly 2 products.
                       </p>
                     </div>

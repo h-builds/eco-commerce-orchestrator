@@ -125,13 +125,13 @@ export default function RootLayout({
                     <Link
                       href="/"
                       aria-label="Eco-Commerce Home"
-                      className="flex items-center gap-2 text-emerald-950 dark:text-emerald-400 font-black text-lg tracking-tight hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/30 rounded-lg">
+                      className="flex items-center gap-2 text-emerald-900 dark:text-emerald-400 font-black text-lg tracking-tight hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/30 rounded-lg">
                       <span
                         className="material-symbols-outlined notranslate"
                         aria-hidden="true" translate="no">
                         eco
                       </span>
-                      <span className="hidden sm:inline">Eco-Commerce</span>
+                      <span className="hidden sm:inline text-emerald-900 dark:text-emerald-400">Eco-Commerce</span>
                     </Link>
                     <GlobalNav />
                   </div>
